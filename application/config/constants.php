@@ -92,12 +92,12 @@ define("URL", "https://restaurant60-be-prod-xtpocjmkpa-uw.a.run.app/");
 //     define("TEMPNAME", $_GET['tempName']); // Restaurant - template11 , resale -- template1, template2
 //     define("TEMPCOLOR", '#'.$_GET['tempColor']); //#356AB1 
 // } else {
-//     define("RESTID", '239'); // Restaurant - 280 , UsedCar -- 239
+//     define("RESTID", 'Restaurant object (239)'); // Restaurant - 280 , UsedCar -- 239
 //     define("TEMPNAME", 'template1'); // Restaurant - template11 , resale -- template1, template2
 //     define("TEMPCOLOR", ''); //#356AB1 
 // }
 
-define("RESTID", '239'); // Restaurant - 280 , UsedCar -- 239
+define("RESTID", 'Restaurant object (239)'); // Restaurant - 280 , UsedCar -- 239
 define("TEMPNAME", 'template21'); // Resale --> template 1-10, Restaurant -> template 11-20 , Veges -> 21-30
 define("TEMPCOLOR", ''); //#356AB1 
 // define("Logo", ''); //#356AB1 
