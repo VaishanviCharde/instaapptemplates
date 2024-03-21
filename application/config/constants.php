@@ -84,7 +84,7 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-define("URL", "https://restaurant60-be-prod-xtpocjmkpa-uw.a.run.app/"); 
+define("URL", "https://restaurant60-be-dev-xtpocjmkpa-uw.a.run.app/"); 
 // Prod Url --  https://restaurant60-be-prod-xtpocjmkpa-uw.a.run.app/
 
 // if ($_GET['restId'] && $_GET['tempName'] && $_GET['tempColor']) { // Car - 1
@@ -97,7 +97,7 @@ define("URL", "https://restaurant60-be-prod-xtpocjmkpa-uw.a.run.app/");
 //     define("TEMPCOLOR", ''); //#356AB1 
 // }
 
-define("RESTID", '645'); // Restaurant - 280 , UsedCar -- 239
+define("RESTID", '645'); // Restaurant - 280 , UsedCar -- 239 , dev-veges - 645
 define("TEMPNAME", 'template21'); // Resale --> template 1-10, Restaurant -> template 11-20 , Veges -> 21-30
 define("TEMPCOLOR", ''); //#356AB1 
 // define("Logo", ''); //#356AB1 
