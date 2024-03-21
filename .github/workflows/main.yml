@@ -1,7 +1,7 @@
-on: 
+on:
   push:
-    branches:
-      - main
+    paths:
+      - .github/workflows/main.yml
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
