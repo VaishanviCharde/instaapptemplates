@@ -9,9 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Place favicon.png in the root directory -->
-    <?php if(isset(TEMP_1['HEAD']['TEMP_FAVICON']) && TEMP_1['HEAD']['TEMP_FAVICON'] != NULL && TEMP_1['HEAD']['TEMP_FAVICON'] != "") { ?>
+    <?php /*if(isset(TEMP_1['HEAD']['TEMP_FAVICON']) && TEMP_1['HEAD']['TEMP_FAVICON'] != NULL && TEMP_1['HEAD']['TEMP_FAVICON'] != "") { ?>
         <link rel="shortcut icon" href="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/<?php if(isset(TEMP_1['HEAD']['TEMP_FAVICON']) && TEMP_1['HEAD']['TEMP_FAVICON'] != NULL && TEMP_1['HEAD']['TEMP_FAVICON'] != "") { echo TEMP_1['HEAD']['TEMP_FAVICON']; } else { echo ""; } ?>" type="image/x-icon" />
-    <?php } ?>
+    <?php }*/ ?>
+    <link rel="shortcut icon" href="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/-img.png" type="image/x-icon" />
+
     <!-- Font Icons css -->
     <link rel="stylesheet" href="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/css/font-icons.css">
     <!-- plugins css -->
@@ -121,13 +123,20 @@
         <div class="ltn__header-middle-area">
             <div class="container">
                 <div class="row">
-                    <?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
+                    <?php /*if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
                         <div class="col">
                             <div class="site-logo">
                                 <a href="<?= site_url(); ?>"><img src="<?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { echo TEMP_1['HEAD']['TEMP_LOGO']; } else { echo ""; } ?>" class="logo-img" alt="Logo"></a>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php }*/ ?>
+                    
+                    <div class="col">
+                        <div class="site-logo">
+                            <a href="<?= site_url(); ?>"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/logo_img.png" class="logo-img" alt="Logo"></a>
+                        </div>
+                    </div>
+                    
                     <div class="col header-contact-serarch-column d-none d-lg-block">
                         <div class="header-contact-search">
                             <!-- header-feature-item -->
@@ -212,13 +221,19 @@
             <div class="container">
                 <div class="row">
                     <div class="col header-menu-column justify-content-center">
-                        <?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
+                        <?php /*if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
                         <div class="sticky-logo site-logo">
                             <div class="site-logo">
                                 <a href="<?php site_url(); ?>"><img src="<?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { echo TEMP_1['HEAD']['TEMP_LOGO']; } else { echo ""; } ?>" class="logo-img" alt="Logo"></a>
                             </div>
                         </div>
-                        <?php } ?>
+                        <?php }*/ ?>
+                        <div class="sticky-logo site-logo">
+                            <div class="site-logo">
+                                <a href="<?php site_url(); ?>"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/logo_img.png" class="logo-img" alt="Logo"></a>
+                            </div>
+                        </div>
+                        
                         <div class="header-menu header-menu-2">
                             <nav>
                                 <div class="ltn__main-menu">
