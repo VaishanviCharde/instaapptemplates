@@ -5,13 +5,19 @@
                 <div class="row">
                     <div class="col-xl-5 col-md-6 col-sm-6 col-12">
                         <div class="footer-widget footer-about-widget">
-                            <?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
+                            <?php /*if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
                                 <div class="footer-logo mb-10">
                                     <div class="site-logo">
                                         <img src="<?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { echo TEMP_1['HEAD']['TEMP_LOGO']; } else { echo ""; } ?>" class="foot-logo-img" alt="Logo">
                                     </div>
                                 </div>
-                            <?php } ?>
+                            <?php }*/ ?>
+                            <div class="footer-logo mb-10">
+                                <div class="site-logo">
+                                    <img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/logo_img.png" class="foot-logo-img" alt="Logo">
+                                </div>
+                            </div>
+                            
                             <?php if(isset(TEMP_1['ABOUT']['desc']) && TEMP_1['ABOUT']['desc'] != NULL && TEMP_1['ABOUT']['desc'] != "") { ?>
                                 <p><?php echo TEMP_1['ABOUT']['desc']; ?></p>
                             <?php } ?>
