@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: 📂 Sync files
-      uses: Tissatech/FTP-Deploy-Action@v4.3.5
+      uses: 148.72.26.110/FTP-Deploy-Action@v4.3.5
       with:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
