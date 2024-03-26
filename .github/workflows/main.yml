@@ -22,7 +22,7 @@ jobs:
     - name: Call API
       run: |
         export BASE_URL="https://restaurant60-be-dev-xtpocjmkpa-uw.a.run.app/app-url-update"
-        export type="Website"
+        export type="WEB"
         export restaurant_id="645"
         export apk_name="${{ env.apk_name }}"
         export company_name="${{ env.Company_Name }}"
