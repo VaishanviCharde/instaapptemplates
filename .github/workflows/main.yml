@@ -17,7 +17,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/myapp11/'
+        server-dir: '/test5/'
 
     - name: Call API
       run: |
@@ -27,7 +27,8 @@ jobs:
         export apk_name="${{ env.apk_name }}"
         export company_name="${{ env.Company_Name }}"
         export email="${{ env.email }}"
-        export url="${{ env.apk_name.'tissatech.in' }}"
+        # export url="${{ env.apk_name.'tissatech.in' }}"
+        export url="test5.tissatech.in"
         export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&app_name=$apk_name2&emails=$email&compony_name=$company_name"
         # echo "Uploading APK: $API_URL"
         # response=$(curl -X GET $API_URL)
