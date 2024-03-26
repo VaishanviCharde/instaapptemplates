@@ -18,3 +18,17 @@ jobs:
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
         server-dir: '/ufresh/'
+
+        - name: Call API
+        run: |
+          export BASE_URL="https://restaurant60-be-dev-xtpocjmkpa-uw.a.run.app/app-url-update"
+          export type="Website"
+          export restaurant_id="645"
+          export apk_name2="${{ env.apk_name }}"
+          export company_name="${{ env.Company_Name }}"
+          export email="${{ env.email }}"
+          export url="${{ env.apk_name.'tissatech.in' }}"
+          export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&app_name=$apk_name2&emails=$email&compony_name=$company_name"
+          echo "Uploading APK: $API_URL"
+          response=$(curl -X GET $API_URL)
+          echo "API Response: $response"
