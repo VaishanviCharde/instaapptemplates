@@ -35,5 +35,5 @@ jobs:
         export company_name="${{ env.company_Name }}"
         export email="${{ env.email }}"
         export url="${{ env.apk_name }}.tissatech.in"  # Concatenate dynamically
-        export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&app_name=$apk_name2&emails=$email&compony_name=$company_name"
+        export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&app_name=$apk_name&emails=$email&compony_name=$company_name"
         echo "1"
