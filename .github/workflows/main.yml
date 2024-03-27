@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: demoapp767
+      apk_name: app11
       company_Name: Veggies
       restaurant_id: 645
       email: vaishnavi.charde@tissatech.com,roshan.shendre@tissatech.com
