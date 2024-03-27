@@ -7,6 +7,13 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+
+    env:
+      apk_name: test11
+      company_Name: Veggies
+      restaurant_id: 645
+      email: vaishnavi.charde@tissatech.com, vaishnavicharde627@gmail.com
+      
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
@@ -17,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/myapp134/'
+        server-dir: '/${{ env.apk_name }}/'
 
     - name: Call API
       run: |
@@ -25,7 +32,8 @@ jobs:
         export type="WEB"
         export restaurant_id="645"
         export apk_name="${{ env.apk_name }}"
-        export company_name="${{ env.Company_Name }}"
+        export company_name="${{ env.company_Name }}"
         export email="${{ env.email }}"
         export url="${{ env.apk_name }}.tissatech.in"  # Concatenate dynamically
         export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&app_name=$apk_name2&emails=$email&compony_name=$company_name"
+        echo 1
