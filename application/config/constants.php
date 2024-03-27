@@ -97,7 +97,7 @@ define("URL", "https://restaurant60-be-dev-xtpocjmkpa-uw.a.run.app/");
 //     define("TEMPCOLOR", ''); //#356AB1 
 // }
 
-define("RESTID", '239'); // Restaurant - 280 , UsedCar -- 239 , dev-veges - 645
+define("RESTID", '645'); // Restaurant - 280 , UsedCar -- 239 , dev-veges - 645
 define("TEMPNAME", 'template21'); // Resale --> template 1-10, Restaurant -> template 11-20 , Veges -> 21-30
 define("TEMPCOLOR", ''); //#356AB1 
 // define("Logo", ''); //#356AB1 
