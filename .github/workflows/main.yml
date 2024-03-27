@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/freshievegie999/'
+        server-dir: '/test22/'
 
     - name: Call API
       run: |
