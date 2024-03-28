@@ -34,7 +34,7 @@ jobs:
         export apk_name2="${{ env.apk_name }}"
         export company_name="${{ env.company_Name }}"
         export email="${{ env.email }}"
-        export url="https://${{ env.apk_name }}.tissatech.in"
+        export url="http://${{ env.apk_name }}.tissatech.in"
         # export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&app_name=$apk_name2&emails=$email&compony_name=$company_name"
         export API_URL="$BASE_URL/?url=$url&type=$type&restaurant_id=$restaurant_id&apk_name=$apk_name2&emails=$email&company_name=$company_name"
         echo "Uploading APK: $url"
