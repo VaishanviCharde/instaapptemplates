@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: restaurantapp
+      apk_name: vegetable1
       company_Name: Veggies
-      restaurant_id: 804
+      restaurant_id: 806
       email: vaishnavi.charde@tissatech.com,vaishnavicharde627@gmail.com
       
     steps:
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/restaurantapp/'
+        server-dir: '/vegetable1/'
 
     - name: Call API
       run: |
