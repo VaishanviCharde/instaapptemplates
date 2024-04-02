@@ -55,6 +55,8 @@ if (defined('TEMPNAME') && TEMPNAME == 'template1') { // Car - 1
     $route['default_controller'] = 'Home2'; 
 } else if (defined('TEMPNAME') && TEMPNAME == 'template11') { // Restaurant - 11
     $route['default_controller'] = 'Home11'; 
+} else if (defined('TEMPNAME') && TEMPNAME == 'template12') { // Restaurant - 11
+    $route['default_controller'] = 'Home12'; 
 } else if (defined('TEMPNAME') && TEMPNAME == 'template21') { // Restaurant - 11
     $route['default_controller'] = 'Home21'; 
 } else {
@@ -83,6 +85,7 @@ $route['get-products-by-category'] = $route['default_controller'].'/getProductsB
 $route['get-single-product'] = $route['default_controller'].'/getSingleProduct';
 
 $route['add-to-cart'] = $route['default_controller'].'/addToCart';
+$route['delete-cart-item'] = $route['default_controller'].'/deleteCartItem';
 
 // $route['book-now-action'] = $route['default_controller'].'/placeOrder';
 /** /. MY Routes */

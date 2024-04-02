@@ -87,23 +87,8 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define("URL", "https://restaurant60-be-dev-xtpocjmkpa-uw.a.run.app/"); 
 // Prod Url --  https://restaurant60-be-prod-xtpocjmkpa-uw.a.run.app/
 
-// if ($_GET['restId'] && $_GET['tempName'] && $_GET['tempColor']) { // Car - 1
-//     define("RESTID", $_GET['restId']); // Restaurant - 280 , UsedCar -- 239
-//     define("TEMPNAME", $_GET['tempName']); // Restaurant - template11 , resale -- template1, template2
-//     define("TEMPCOLOR", '#'.$_GET['tempColor']); //#356AB1 
-// } else {
-//     define("RESTID", 'Restaurant object (239)'); // Restaurant - 280 , UsedCar -- 239
-//     define("TEMPNAME", 'template1'); // Restaurant - template11 , resale -- template1, template2
-//     define("TEMPCOLOR", ''); //#356AB1 
-// }
-
-<<<<<<< HEAD
-define("RESTID", '645'); // Restaurant - 280 , UsedCar -- 239 , dev-veges - 645
-=======
-define("RESTID", '803'); // Restaurant - 280 , UsedCar -- 239 , dev-veges - 645
->>>>>>> 3d93a73b5e57b64dddf72734235acfbe91482a1c
+define("RESTID", '645'); // Restaurant - 280 , UsedCar -- 239, biryani - 225, veggies -645, 441
 define("TEMPNAME", 'template21'); // Resale --> template 1-10, Restaurant -> template 11-20 , Veges -> 21-30
 define("TEMPCOLOR", ''); //#356AB1 
-// define("Logo", ''); //#356AB1 
 
 // New Url -- http://localhost/Tissa-Technology/LOCAL/TissaTech-IN/Insta-Templates/?restId=239&tempName=template1&tempColor=#356AB1

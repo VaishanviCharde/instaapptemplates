@@ -100,51 +100,55 @@ class Home21 extends CI_Controller {
 			}
 			// session_start();
 			$this->session->set_userdata('pre_login_data', $data);
-			$customerId = 0;
-			if(isset($_SESSION['login_data'])) {
-				$customerId = $_SESSION['login_data']['customer_id'];
-			}
+			// $customerId = 0;
+			// if(isset($_SESSION['login_data'])) {
+			// 	$customerId = $_SESSION['login_data']['customer_id'];
+			// }
 
 			/* Check Cart Available */
-				$method2 = 'GET';
-				$url2 = $api.'cart/?customer_id='.$customerId.'&restaurant='.$tempId;
+				// $method2 = 'GET';
+				// $url2 = $api.'cart/?customer_id='.$customerId.'&restaurant='.$tempId;
+				// $header2 = array(
+				// 	'action: cart',
+				// 	'Content-Type: application/json',
+				// 	'Authorization:  Token '.$token
+				// );
+				// $apiResponse2 = $this->Home_model21->CallAPI($method2, $url2, $header2);
+				// $apiDecodedResponse2 = json_decode($apiResponse2);
 
-				$header2 = array(
-					'action: cart',
-					'Content-Type: application/json',
-					'Authorization:  Token '.$token
-				);
-				$apiResponse2 = $this->Home_model21->CallAPI($method2, $url2, $header2);
-				$apiDecodedResponse2 = json_decode($apiResponse2);
+				// $cartData = array();
+				// if(isset($apiDecodedResponse2->status) && $apiDecodedResponse2->status == 200 && $apiDecodedResponse2->status != NULL && $apiDecodedResponse2->status != ""){
+				// 	$apiResData2 = $apiDecodedResponse2->response;
+				// 	$cartData = $apiResData2->results;
+				// }
 
-				$cartData = array();
-				if(isset($apiDecodedResponse2->status) && $apiDecodedResponse2->status == 200 && $apiDecodedResponse2->status != NULL && $apiDecodedResponse2->status != ""){
-					$apiResData2 = $apiDecodedResponse2->response;
-					$cartData = $apiResData2->results;
-				}
-				if(empty($cartData)) {
-					/* Create cart api */
-					$method3 = 'POST';
-					$url3 = $api.'cart/';
-					$header3 = array(
-						'action: cart',
-						'Content-Type: application/json',
-						'Authorization:  Token '.$token,
-						'user_id: '.$customerId
-					);
-					$cart_data = array("customer_id"=>$customerId, "restaurant"=> $tempId);
-					$details3 = $this->Home_model21->CallAPI($method3, $url3, $header3,json_encode($cart_data));
-					$apiDecodedResponse3 = json_decode($details3);
-					$cartDataId = '';
-					if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200 && $apiDecodedResponse3->status != NULL && $apiDecodedResponse3->status != ""){
-						$apiResData3 = $apiDecodedResponse3->response;
-						$cartDataId = $apiResData3->results->id;
-					}
-					$sessiondata['cartId'] = $cartDataId;
-				} else {
-					$sessiondata['cartId'] = $cartData[0]->id;
-				}
-				$this->session->set_userdata($sessiondata);
+				// if(empty($cartData)) {
+
+				// 	/* Create cart api */
+				// 	$method3 = 'POST';
+				// 	$url3 = $api.'cart/';
+				// 	$header3 = array(
+				// 		'action: cart',
+				// 		'Content-Type: application/json',
+				// 		'Authorization:  Token '.$token,
+				// 		'user_id: '.$customerId
+				// 	);
+				// 	$cart_data = array("customer_id"=>$customerId, "restaurant"=> $tempId);
+				// 	print_r($cart_data);echo "<pre>";
+				// 	$details3 = $this->Home_model21->CallAPI($method3, $url3, $header3,json_encode($cart_data));
+				// 	$apiDecodedResponse3 = json_decode($details3);
+				// 	print_r($apiDecodedResponse3);echo "<pre>";
+				// 	$cartDataId = '';
+				// 	if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200 && $apiDecodedResponse3->status != NULL && $apiDecodedResponse3->status != ""){
+				// 		$apiResData3 = $apiDecodedResponse3->response;
+				// 		$cartDataId = $apiResData3->results->id;
+				// 	}
+				// 	$sessiondata['cartId'] = $cartDataId;
+				// } else {
+				// 	$sessiondata['cartId'] = $cartData[0]->id;
+				// }
+				// print_r($sessiondata);exit;
+				// $this->session->set_userdata($sessiondata);
 			
 				// $cartId = 0;
 				// if(isset($_SESSION['cartId'])) {
@@ -219,7 +223,7 @@ class Home21 extends CI_Controller {
 				'TEMP_LOGO' => $appLogo,
 				'TEMP_TITLE' => $appName.' - '.ucfirst($tempIndType),
 				'TEMP_MDES' => $appName.' - '.ucfirst($tempIndType),
-				'TEMP_FAVICON' => 'Yashaswini-Logo.png',
+				'TEMP_FAVICON' => $appLogo,
 			),
 			'DETAILS' => array(
 				'TEMP_EMAIL' => $appEmail,
@@ -374,6 +378,55 @@ class Home21 extends CI_Controller {
 			$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/index', $data);
 		}
 
+		/** Get cart Data */
+		public function getCartDataByCustId($customerId) {
+			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+			$token = $this->session->userdata('pre_login_data')['token'];
+
+			$api = URL;
+			$method2 = 'GET';
+			$url2 = $api.'cart/?customer_id='.$customerId.'&restaurant='.$tempId;
+			$header2 = array(
+				'action: cart',
+				'Content-Type: application/json',
+				'Authorization:  Token '.$token
+			);
+			$apiResponse2 = $this->Home_model21->CallAPI($method2, $url2, $header2);
+			$apiDecodedResponse2 = json_decode($apiResponse2);
+
+			$cartData = array();
+			if(isset($apiDecodedResponse2->status) && $apiDecodedResponse2->status == 200 && $apiDecodedResponse2->status != NULL && $apiDecodedResponse2->status != ""){
+				$apiResData2 = $apiDecodedResponse2->response;
+				$cartData = $apiResData2->results;
+			}
+
+			if(empty($cartData)) {
+
+				/* Create cart api */
+				$method3 = 'POST';
+				$url3 = $api.'cart/';
+				$header3 = array(
+					'action: cart',
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token,
+					'user_id: '.$customerId
+				);
+				$cart_data = array("customer_id"=>$customerId, "restaurant"=> $tempId);
+				$details3 = $this->Home_model21->CallAPI($method3, $url3, $header3,json_encode($cart_data));
+				$apiDecodedResponse3 = json_decode($details3);
+				$cartDataId = '';
+				if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200 && $apiDecodedResponse3->status != NULL && $apiDecodedResponse3->status != ""){
+					$apiResData3 = $apiDecodedResponse3->response;
+					$cartDataId = $apiResData3->results->id;
+				}
+				$sessiondata['cartId'] = $cartDataId;
+			} else {
+				$sessiondata['cartId'] = $cartData[0]->id;
+			}
+			$this->session->set_userdata($sessiondata);
+		}
+		/** /. Get cart Data */
+
 		/** Sign Up / Sign In / Guest Login Action */
 			public function signUpAction() {
 				$api = URL;
@@ -436,6 +489,8 @@ class Home21 extends CI_Controller {
 			}
 
 			public function signInAction() {
+				// $this->checklogin();
+				
 				$username = $this->input->post('username');
 				$password = $this->input->post('password');
 				$rememberme = $this->input->post('rememberme');
@@ -467,10 +522,40 @@ class Home21 extends CI_Controller {
 					$data1['customer_id'] = $apiResData->id;
 					$data1['login_token'] = $apiResData->token;
 					$this->session->set_userdata('login_data',$data1);
-
+					$this->getCartDataByCustId($apiResData->id);
+					/** Get Cart Count & Other Details */
+					$cart_id = 0;
+					if(isset($_SESSION['cartId'])) {
+						$cart_id = $_SESSION['cartId'];
+					}
+					$token = $this->session->userdata('pre_login_data')['token'];
+					$method = 'GET';
+					$url = $api.'cart-items-x/?cart_id='.$cart_id.'&restaurant_id='.$restaurantId;
+					$header = array(
+						'action: cart-item',
+						'Content-Type: application/json',
+						'Authorization:  Token '.$token,
+						'cart_id: '.$cart_id,
+						'user_id: '.$apiResData->id
+					);
+					$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header);
+					$apiDecodedResponse3 = json_decode($cart_list_details);
+					$cartList = array();
+					$sess['cartCount'] = $_SESSION['pre_login_data']['appCurrencySymbol'].'0';
+					$sess['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].'0.00';
+					if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200){
+						$apiResponse3 = $apiDecodedResponse3->response;
+						$cartList = $apiResponse3->results;
+						$sess['cartCount'] = $apiResponse3->count;
+						$sess['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].number_format($apiResponse3->total_cost, 2, '.', '');
+						$this->session->set_userdata($sess);
+					}
 					$response['customer_name'] = $username;
 					$response['customer_id'] = $apiResData->id;
 					$response['login_token'] = $apiResData->token;
+					$response['cartCount'] = $sess['cartCount'];
+					$response['total_cost'] = $sess['total_cost'];
+					$response['cartDataId'] = $cart_id;
 					$response['success'] = 1;
 					$response['message'] = 'Login successful';
 				} else {
@@ -700,6 +785,7 @@ class Home21 extends CI_Controller {
 				$data['categoryData'] = $categoryData;
 				$data['pIdList'] = array_unique($pIdList);
 				$data['catId'] = $catId;
+				$data['cartId'] = $cartId;
 				$data['productData'] = $productData;
 				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
 				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/product', $data);	
@@ -853,7 +939,7 @@ class Home21 extends CI_Controller {
 				$custId = $this->input->post('custId');
 				$cartId = $this->input->post('cartId');
 				$prdInstruction = isset($_POST['prdInstruction']) ? $_POST['prdInstruction'] : '';
-				$quantity = 1;
+				$quantity = $this->input->post('prdQty');
 
 				$token = $this->session->userdata('pre_login_data')['token'];
 				$tempId = $this->session->userdata('pre_login_data')['tempId'];
@@ -868,21 +954,40 @@ class Home21 extends CI_Controller {
 
 				$cart_item_arr = array(
 					'product_id' => $prdId,
-					'price' => $price,
+					'price' => ($price * $quantity),
 					'quantity' => $quantity,
 					'extra' => $prdInstruction,
 					'cart_id' => $cartId
 				);
-
 				$apiResponse = $this->Home_model21->CallAPI($method, $url, $header,json_encode($cart_item_arr));
 				
 				$apiDecodedResponse = json_decode($apiResponse);
 				$productDetails = array();
+				$cartListHtml = '';
 				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 201) {
 					$apiResData = $apiDecodedResponse->response;
 					$productList = $apiResData->results;
-					$response['productDetails'] = $productList;
+
+					/** Append Cart List */
+					foreach($productList as $cartPrdList) {
+						$qPrice = ($cartPrdList->quantity * $cartPrdList->product->price);
+						$qytPrice = number_format($qPrice, 2, '.', '');
+						$cartListHtml .= '<div class="mini-cart-item clearfix">
+							<div class="mini-cart-img">
+								<a href="#"><img src="'.$cartPrdList->product->product_url.'" alt="Image"></a>
+								<span class="mini-cart-item-delete" data-key="'.base64_encode($cartPrdList->cart_item_id).'"><i class="icon-cancel"></i></span>
+							</div>
+							<div class="mini-cart-info">
+								<h6><a href="#">'.$cartPrdList->product->product_name.'</a></h6>
+								<span class="mini-cart-quantity">'.$cartPrdList->quantity.' x '.$_SESSION['pre_login_data']['appCurrencySymbol'].$cartPrdList->product->price.'</span>
+								<div class="float-right mr-20">'.$_SESSION['pre_login_data']['appCurrencySymbol'].$qytPrice.'</div>
+							</div>
+						</div>';
+					}
+					/** /.Append Cart List */
+					$response['cartList'] = $cartListHtml;
 					$response['cartCount'] = $apiResData->count;
+					$response['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].number_format($apiResData->total_cost, 2, '.', '');
 					$response['success'] = 1;
 					$response['message'] = "Item successfully added to cart";
 				} else {
@@ -891,6 +996,93 @@ class Home21 extends CI_Controller {
 				}
 				echo json_encode($response);exit;
 
+			}
+
+			/** Delete cart Items */
+			public function deleteCartItem() {
+				$pId = base64_decode($this->input->post('pId'));
+
+				$token = $this->session->userdata('pre_login_data')['token'];
+				$tempId = $this->session->userdata('pre_login_data')['tempId'];
+				$api = URL;
+
+				$method = 'DELETE';
+				$url = $api.'cart-item-x/'.$pId.'/';
+				$header = array(
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token
+				);
+				$apiResponse = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse = json_decode($apiResponse);
+				// $productDetails = array();
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 204) {
+					$apiResData = $apiDecodedResponse->response;
+					/** Get cart list */
+					$customerId = 0;
+					if(isset($_SESSION['login_data']['customer_id'])) {
+						$customerId = $_SESSION['login_data']['customer_id'];
+					}
+
+					$cart_id = 0;
+					if(isset($_SESSION['cartId'])) {
+						$cart_id = $_SESSION['cartId'];
+					}
+					$method = 'GET';
+					$url = $api.'cart-items-x/?cart_id='.$cart_id.'&restaurant_id='.$tempId;
+
+					$header = array(
+						'action: cart-item',
+						'Content-Type: application/json',
+						'Authorization:  Token '.$token,
+						'cart_id: '.$cart_id,
+						'user_id: '.$customerId
+					);
+
+					$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header);
+					
+					$apiDecodedResponse1 = json_decode($cart_list_details);
+					$cartList = array();
+					$data['cartCount'] = '0';
+					$data['total_cost'] = number_format(0.00, 2, '.', '');
+					$cartListHtml = '';
+					if(isset($apiDecodedResponse1->status) && $apiDecodedResponse1->status == 200 && $apiDecodedResponse1->status != NULL && $apiDecodedResponse1->status != ""){
+						$apiResponse1 = $apiDecodedResponse1->response;
+						$cartList = $apiResponse1->results;
+
+						/** Append Cart List */
+						foreach($cartList as $cartPrdList) {
+							$qPrice = ($cartPrdList->quantity * $cartPrdList->product->price);
+							$qytPrice = number_format($qPrice, 2, '.', '');
+							$cartListHtml .= '<div class="mini-cart-item clearfix">
+							<div class="mini-cart-img">
+								<a href="#"><img src="'.$cartPrdList->product->product_url.'" alt="Image"></a>
+								<span class="mini-cart-item-delete" data-key="'.base64_encode($cartPrdList->cart_item_id).'"><i class="icon-cancel"></i></span>
+							</div>
+							<div class="mini-cart-info">
+								<h6><a href="#">'.$cartPrdList->product->product_name.'</a></h6>
+								<span class="mini-cart-quantity">'.$cartPrdList->quantity.' x '.$_SESSION['pre_login_data']['appCurrencySymbol'].$cartPrdList->product->price.'</span>
+								<div class="float-right mr-20">'.$_SESSION['pre_login_data']['appCurrencySymbol'].$qytPrice.'</div>
+							</div>
+						</div>';
+						}
+						/** /.Append Cart List */
+
+						$data['cartCount'] = $apiResponse1->count;
+						$data['total_cost'] = number_format($apiResponse1->total_cost, 2, '.', '');
+						$this->session->set_userdata($data);
+					}
+					/** /.Get cart list */
+					
+					$response['cartListHtml'] = $cartListHtml;
+					$response['cartCount'] = $data['cartCount'];
+					$response['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].$data['total_cost'];
+					$response['success'] = 1;
+					$response['message'] = "Item successfully deleted from cart";
+				} else {
+					$response['success'] = 0;
+					$response['message'] = "Failed to delete Item";
+				}
+				echo json_encode($response);exit;
 			}
 		/** /. Product Details */
 
@@ -943,8 +1135,15 @@ class Home21 extends CI_Controller {
 
 		/** Logout */
 			public function logout() {
+				// Unset specific userdata items
 				$this->session->unset_userdata('login_data');
-				// $this->session->sess_destroy('login_data');
+				$this->session->unset_userdata('total_cost');
+				$this->session->unset_userdata('cartCount');
+			
+				// Destroy all session data
+				// $this->session->sess_destroy();
+			
+				// Respond with JSON indicating success
 				$response['success'] = 1;
 				$response['message'] = 'Logout Successfully';
 				echo json_encode($response);

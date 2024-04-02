@@ -5,19 +5,13 @@
                 <div class="row">
                     <div class="col-xl-5 col-md-6 col-sm-6 col-12">
                         <div class="footer-widget footer-about-widget">
-                            <?php /*if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
+                            <?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { ?>
                                 <div class="footer-logo mb-10">
                                     <div class="site-logo">
                                         <img src="<?php if(isset(TEMP_1['HEAD']['TEMP_LOGO']) && TEMP_1['HEAD']['TEMP_LOGO'] != NULL && TEMP_1['HEAD']['TEMP_LOGO'] != "") { echo TEMP_1['HEAD']['TEMP_LOGO']; } else { echo ""; } ?>" class="foot-logo-img" alt="Logo">
                                     </div>
                                 </div>
-                            <?php }*/ ?>
-                            <div class="footer-logo mb-10">
-                                <div class="site-logo">
-                                    <img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/logo_img.png" class="foot-logo-img" alt="Logo">
-                                </div>
-                            </div>
-                            
+                            <?php } ?>
                             <?php if(isset(TEMP_1['ABOUT']['desc']) && TEMP_1['ABOUT']['desc'] != NULL && TEMP_1['ABOUT']['desc'] != "") { ?>
                                 <p><?php echo TEMP_1['ABOUT']['desc']; ?></p>
                             <?php } ?>
@@ -532,11 +526,13 @@
                                             <div class="product-price">
                                                 <span id="prdPrice"></span>
                                                 <del id="prdDelMRP"></del>
+                                                <input type="hidden" value="" name="prdIdNew" id="prdIdNew">
                                                 <input type="hidden" value="" name="prdPrice">
                                                 <input type="hidden" value="" name="prdDelMRP">
                                                 <input type="hidden" value="" name="updatedPrdPrice">
                                                 <input type="hidden" value="" name="updatedPrdDelMRP">
                                                 <input type="hidden" value="" name="prdCurrency">
+                                                <input type="hidden" value="1" name="prdQty" id="prdQty">
                                             </div>
                                             <div class="modal-product-meta ltn__product-details-menu-1">
                                                 <ul>
@@ -561,33 +557,6 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <!-- <div class="ltn__product-details-menu-3">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#" class="" title="Wishlist" data-bs-toggle="modal" data-bs-target="#liton_wishlist_modal">
-                                                            <i class="far fa-heart"></i>
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="" title="Compare" data-bs-toggle="modal" data-bs-target="#quick_view_modal">
-                                                            <i class="fas fa-exchange-alt"></i>
-                                                            <span>Compare</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <hr> -->
-                                            <!-- <div class="ltn__social-media">
-                                                <ul>
-                                                    <li>Share:</li>
-                                                    <li><a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
-                                                    <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>
-                                                    <li><a href="#" title="Linkedin"><i class="fab fa-linkedin"></i></a></li>
-                                                    <li><a href="#" title="Instagram"><i class="fab fa-instagram"></i></a></li>
-                                                    
-                                                </ul>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -645,6 +614,7 @@
     <!-- MODAL AREA END -->
 </div>
 <!-- Body main wrapper end -->    
+
     <!-- preloader area start -->
     <div class="preloader d-none" id="preloader">
         <div class="preloader-inner">
@@ -655,6 +625,7 @@
         </div>
     </div>
     <!-- preloader area end -->
+
     <!-- All JS Plugins -->
     <script src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/js/plugins.js"></script>
     <!-- Main JS -->
@@ -666,17 +637,18 @@
     <script src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/js/intlTelInput.min.js"></script>  
     <!-- App Common Custom JS -->
     <script src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/js/app-custom.js"></script>
+
     <script>
         $(function() {
             // var custId = $("#custId").val();
             var custId = '<?php if(!empty($_SESSION['login_data']) && isset($this->session->userdata('login_data')['customer_id'])) { echo $this->session->userdata('login_data')['customer_id']; } ?>';
 
             if($.trim(custId) !== "" && custId !== null && typeof custId !== 'undefined') {
-                $("#signInBtn1").hide();
+                $("#signInBtn1").addClass('d-none');
                 $("#myAccBtn").removeClass('d-none');
             } else {
                 $("#myAccBtn").addClass('d-none');
-                $("#signInBtn1").show();
+                $("#signInBtn1").removeClass('d-none');
             }
         });
         var phone_number = window.intlTelInput(document.querySelector("#mobile"), {
@@ -720,4 +692,8 @@
             // Focus on the first input by default
             otpInputs[0].focus();
         });
+
+        $('#quick_view_modal').on('hidden.bs.modal', function () {
+            $(this).find('form').trigger('reset');
+        })
     </script>

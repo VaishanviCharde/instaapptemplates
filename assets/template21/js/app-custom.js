@@ -215,16 +215,19 @@ $(function() {
                 dataType: 'json',
                 data: formData,
                 success:function(response){
-                    console.log(response);
                     if(response.success == 1) {
+                        // alert(response.cartDataId);
                         $(form).trigger("reset");
+                        $("#cartId").val(response.cartDataId);
                         $('#custId').val(response.customer_id);
                         $("#loginUsername").html(response.customer_name);
                         $('#sign_in_modal').modal('hide');
                         $("#signInBtn").prop("disabled", false);
                         $("#signInBtn").html('<b>Sign In Now</b>');
-                        $("#signInBtn1").addClass('d-none');
                         $("#myAccBtn").removeClass('d-none');
+                        $("#signInBtn1").addClass('d-none');
+                        $('#cartCount').html(response.cartCount);
+                        $('.total_cost').html(response.total_cost);
                         Swal.fire({
                             toast: true,
                             text: response.message,
@@ -659,7 +662,6 @@ $(function() {
             },
             success:function(response){
                 $('#loader').hide();
-                console.log("hiii");
                 if(response.success == 1) {
                     // $("#productListDiv").html(response.pListHtml);
                     // $("#productListDiv1").html(response.pListHtml1);
@@ -676,7 +678,6 @@ $(function() {
                                 title= "Already In Cart";
                                 isAdded = 'isNotAddToCart';
                             }
-                            console.log(addedToCart);
                             let product_url = base_url+'assets'+TEMPNAME+'img/product/NoProductImg.png';
                             if(productList[i].product_url != '') {
                                 product_url = productList[i].product_url;
@@ -738,6 +739,8 @@ $(".logout-btn").on("click", function() {
                 $("#signInBtn1").removeClass('d-none');
                 $("#myAccBtn").addClass('d-none');
                 $('#custId').val('');
+                $('#cartCount').html('0');
+                $('.total_cost').html('0.00');
             } else {
                 Swal.fire({
                     toast: true,
@@ -825,19 +828,19 @@ $("#requestOTPAgain").on("click", function() {
 });
 
 // Capture scroll position before opening modal
-$('.tab-content').on('click', '.quick_view_button', function() {
-    var scrollPosition = $(window).scrollTop();
-    // Show the modal
-    $('#quick_view_modal').modal('show');
+// $('.tab-content').on('click', '.quick_view_button', function() {
+//     var scrollPosition = $(window).scrollTop();
+//     // Show the modal
+//     $('#quick_view_modal').modal('show');
     
-    // Set the scroll position to the current position to prevent scrolling
-    $(window).scrollTop(scrollPosition);
-});
+//     // Set the scroll position to the current position to prevent scrolling
+//     $(window).scrollTop(scrollPosition);
+// });
 
-$('#quick_view_modal').on('hidden.bs.modal', function () {
-    var scrollPosition = $(window).scrollTop();
-    $(window).scrollTop(scrollPosition);
-});
+// $('#quick_view_modal').on('hidden.bs.modal', function () {
+//     var scrollPosition = $(window).scrollTop();
+//     $(window).scrollTop(scrollPosition);
+// });
 
 /** Quick View Appended Html */
 $('.tab-content').on('click', '.quick_view_button', function() {
@@ -916,7 +919,11 @@ $(".quick_view_button").on("click", function(){
     $("#prdTitle").html('--');
     $("#prdPrice").html('0.00');
     $("#prdDelMRP").html('0.00');
-
+    $("input[name='prdCurrency']").val('');
+    $("input[name='prdPrice']").val('');
+    $("input[name='prdDelMRP']").val('');
+    $(".quickAddToCart").attr('data-key', '')
+    $("input[name='qtybutton']").val('');
     $.ajax({
         url: site_url+"get-single-product",  
         type: "post", 
@@ -943,8 +950,10 @@ $(".quick_view_button").on("click", function(){
                 $("input[name='prdCurrency']").val(prdCur);
                 $("input[name='prdPrice']").val(response.productDetails.price);
                 $("input[name='prdDelMRP']").val(response.productDetails.MRP);
-                $(".quickAddToCart").attr('data-key', btoa(prdId))
-                $("input[name='qtybutton']").val(1);
+                // $(".quickAddToCart").attr('data-key', btoa(prdId));
+                $("#prdIdNew").val(prdId);
+                $("input[name='qtybutton']").val('1');
+                $("#prdQty").val('1');
                 $("#quick_view_modal").modal('show');
             } else {
                 Swal.fire({
@@ -986,12 +995,14 @@ $(document).on("click", ".isAddToCart", function() {
     let custId = $("#custId").val();
     let cartId = $("#cartId").val();
     // $("input[name='qtybutton']").val(1);
+    // alert(custId);
+    // alert(cartId);
     if(custId != '' && cartId != '') {
         $.ajax({
             url: site_url+"add-to-cart",  
             type: "post", 
             dataType: 'json',
-            data: {prdId:prdId,price:price,custId:custId,cartId:cartId},
+            data: {prdId:prdId,prdQty:1,price:price,custId:custId,cartId:cartId},
             beforeSend:function () {
                 $('.loading').show();
             },
@@ -1000,10 +1011,9 @@ $(document).on("click", ".isAddToCart", function() {
                 if(response.success == 1) {
                     $clickedButton.removeClass('isAddToCart').addClass('isNotAddToCart');
                     $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
+                    $("#cartItemList").html(response.cartList);
                     $("#cartCount").html(response.cartCount);
-
-                    alert("hiii");
-
+                    $(".total_cost").html(response.total_cost);
                     Swal.fire({
                         toast: true,
                         text: response.message,
@@ -1059,7 +1069,9 @@ $(document).on("click", ".isAddToCart", function() {
 /** Add to Cart */
 $(document).on("click", ".quickAddToCart", function() {
     let $clickedButton = $(this);
-    let prdId = atob($(this).data('key'));
+    // let prdId = atob($(this).data('key'));
+    let prdId = $("#prdIdNew").val();
+
     let price = $("input[name='prdPrice']").val();
     let prdInstruction = $("#prdInstruction").val();
     let site_url = $("#site_url").val();
@@ -1067,13 +1079,15 @@ $(document).on("click", ".quickAddToCart", function() {
     let TempName = $("#TempName").val();
     let custId = $("#custId").val();
     let cartId = $("#cartId").val();
-
+    let prdQty = $("#prdQty").val();
+    // alert(custId);
+    // alert(cartId);
     if(custId != '' && cartId != '') {
         $.ajax({
             url: site_url+"add-to-cart",  
             type: "post", 
             dataType: 'json',
-            data: {prdId:prdId,price:price,custId:custId,cartId:cartId,prdInstruction:prdInstruction},
+            data: {prdId:prdId,prdQty:prdQty,price:price,custId:custId,cartId:cartId,prdInstruction:prdInstruction},
             beforeSend:function () {
                 $('.loading').show();
             },
@@ -1083,6 +1097,8 @@ $(document).on("click", ".quickAddToCart", function() {
                     $clickedButton.removeClass('isAddToCart').addClass('isNotAddToCart');
                     $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
                     $("#cartCount").html(response.cartCount);
+                    $(".total_cost").html(response.total_cost);
+                    $("#cartItemList").html(response.cartList);
                     $("#quick_view_modal").modal('hide');
                     Swal.fire({
                         toast: true,
@@ -1159,9 +1175,67 @@ $(".qtybutton").on("click", function() {
     var newPrdDelMRP = newVal * prdDelMRP;
 
     $button.siblings("input").val(newVal);
+    $("#prdQty").val(newVal);
     $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
     $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
 
     $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
     $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
+});
+
+$(document).on("click", ".mini-cart-item-delete", function() {
+    let pId = $(this).data("key");
+    let site_url = $("#site_url").val();
+    $.ajax({
+        url: site_url+"delete-cart-item",  
+        type: "post", 
+        dataType: 'json',
+        data: {pId:pId},
+        beforeSend:function () {
+            $('.loading').show();
+        },
+        success:function(response){
+            $(".loading").hide();
+            if(response.success == 1) {
+                $("#cartItemList").html(response.cartListHtml);
+                $("#cartCount").html(response.cartCount);
+                $(".total_cost").html(response.total_cost);
+                Swal.fire({
+                    toast: true,
+                    text: response.message,
+                    icon: 'success',
+                    showCloseButton: true,
+                    position: 'bottom',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    toast: true,
+                    text: response.message,
+                    icon: 'error',
+                    showCloseButton: true,
+                    position: 'bottom',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            $(".loading").hide();
+            Swal.fire({
+                toast: true,
+                text: 'Could not reach server, please try again later.  - '+error,
+                icon: 'error',
+                showCloseButton: true,
+                position: 'bottom',
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        }
+    });
+
 });

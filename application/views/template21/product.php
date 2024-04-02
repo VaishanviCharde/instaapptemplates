@@ -259,7 +259,6 @@
         </div>
     </div>
     <!-- PRODUCT DETAILS AREA END -->
-
 	<?php $this->load->view(TEMPNAME.'/layouts/footer.php'); ?>
 </body>
 </html>
