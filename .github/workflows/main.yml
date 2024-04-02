@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: test611
+      apk_name: businessapk111
       company_Name: Veggies
-      restaurant_id: 784
-      email: vaishnavi.charde@tissatech.com
+      restaurant_id: 787
+      email: vaishnavi.charde@tissatech.com,vaishnavicharde627@gmail.com
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/test611/'
+        server-dir: '/businessapk111/'
 
     - name: Call API
       run: |
