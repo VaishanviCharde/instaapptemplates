@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: erer
+      apk_name: qqw
       company_Name: Veggies
-      restaurant_id: 792
-      email: ree@ere
+      restaurant_id: 795
+      email: qqw@g.com
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/erer/'
+        server-dir: '/qqw/'
 
     - name: Call API
       run: |
