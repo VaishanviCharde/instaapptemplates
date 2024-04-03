@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: store11
+      apk_name: vvv
       company_Name: Veggies
-      restaurant_id: 861
-      email: vaishanvi.charde@tissatech.com,vaishnavicharde627@gmail.com
+      restaurant_id: 862
+      email: vv@g
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/store11/'
+        server-dir: '/vvv/'
 
     - name: Call API
       run: |
