@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: Roshan792
+      apk_name: store45
       company_Name: Veggies
-      restaurant_id: 225
-      email: niraj07.k@gmail.com,roshan.shendre@tissatech.com
+      restaurant_id: 891
+      email: vaishnavi.charde@tissatech.com
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/Roshan792/'
+        server-dir: '/store45/'
 
     - name: Call API
       run: |
