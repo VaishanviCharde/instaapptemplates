@@ -7,6 +7,7 @@ class Home21 extends CI_Controller {
 	{
 	  	parent::__construct();
 	  	$this->load->model('Home_model21');
+		// session_start();
 	}
 
 	/** Check login URL and Get the Token */
@@ -559,9 +560,11 @@ class Home21 extends CI_Controller {
 					$response['success'] = 1;
 					$response['message'] = 'Login successful';
 				} else {
+					$apiResData = $apiDecodedResponse->response;
 					if($apiDecodedResponse->status == 403) {
 						$response['success'] = 0;
-						$response['message'] = 'Your email is not Verified, Please verify your email address';
+						// $response['message'] = 'Your email is not Verified, Please verify your email address';
+						$response['message'] = $apiResData->message;
 					} else {
 						$response['success'] = 0;
 						$response['message'] = 'Your Username and Password does not match. Please try again or Reset Your Password.';
@@ -627,9 +630,43 @@ class Home21 extends CI_Controller {
 				$apiDecodedResponse = json_decode($details);
 				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
 					$apiResData = $apiDecodedResponse->response;
+
+					/** Get Cart Count & Other Details */
+					$cart_id = 0;
+					if(isset($_SESSION['cartId'])) {
+						$cart_id = $_SESSION['cartId'];
+					}
+					$token = $this->session->userdata('pre_login_data')['token'];
+					$restaurantId = $this->session->userdata('pre_login_data')['tempId'];
+					$method = 'GET';
+					$url = $api.'cart-items-x/?cart_id='.$cart_id.'&restaurant_id='.$restaurantId;
+					$header = array(
+						'action: cart-item',
+						'Content-Type: application/json',
+						'Authorization:  Token '.$token,
+						'cart_id: '.$cart_id,
+						'user_id: '.$apiResData->id
+					);
+					$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header);
+					$apiDecodedResponse3 = json_decode($cart_list_details);
+					$cartList = array();
+					$sess['cartCount'] = $_SESSION['pre_login_data']['appCurrencySymbol'].'0';
+					$sess['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].'0.00';
+					if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200){
+						$apiResponse3 = $apiDecodedResponse3->response;
+						$cartList = $apiResponse3->results;
+						$sess['cartCount'] = $apiResponse3->count;
+						$sess['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].number_format($apiResponse3->total_cost, 2, '.', '');
+						$this->session->set_userdata($sess);
+					}
+
 					$response['customer_name'] = $apiResData->username;
 					$response['customer_id'] = $apiResData->id;
 					$response['login_token'] = $apiResData->token;
+					$response['cartCount'] = $sess['cartCount'];
+					$response['total_cost'] = $sess['total_cost'];
+					$response['cartDataId'] = $cart_id;
+
 					$this->session->set_userdata('login_data',$response);
 					$response['success'] = 1;
 					$response['message'] = 'OTP verified. Login successful';

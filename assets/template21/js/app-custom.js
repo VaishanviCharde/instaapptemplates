@@ -415,8 +415,12 @@ $(function() {
                 success:function(response){
                     if(response.success == 1) {
                         $(form).trigger("reset");
+                        $("#cartId").val(response.cartDataId);
                         $('#custId').val(response.customer_id);
                         $("#loginUsername").html(response.customer_name);
+                        $('#cartCount').html(response.cartCount);
+                        $('.total_cost').html(response.total_cost);
+                        
                         $('#guest_sign_in_modal').modal('hide');
                         $("#otpBtn").prop("disabled", false);
                         $("#otpBtn").html('<b>Verify</b>');
@@ -644,9 +648,9 @@ $(function() {
         getProductList(catId1);
     });
 
-    // var activeLi = $('.categoryClass.active');
-    // var catId = activeLi.attr('my-cat');
-    // getProductList(catId);
+    var activeLi = $('.categoryClass.active');
+    var catId = activeLi.attr('my-cat');
+    getProductList(catId);
 
     function getProductList(catId) {
         var site_url = $("#site_url").val();
@@ -662,7 +666,6 @@ $(function() {
             },
             success:function(response){
                 $('#loader').hide();
-                // console.log(response.productList)
                 if(response.success == 1) {
                     // $("#productListDiv").html(response.pListHtml);
                     // $("#productListDiv1").html(response.pListHtml1);
@@ -671,14 +674,23 @@ $(function() {
                         var pListHtml = '';
                         var pListHtml1 = '';
                         for (var i = 0; i < productList.length; i++) {
+                            // var addedToCart = '';
+                            // var title= "Add to Cart";
+                            // var isAdded = 'isAddToCart';
+                            // if ($.inArray(productList.product_id, response.pIdList)) {
+                            //     addedToCart = 'prd_active';
+                            //     title= "Already In Cart";
+                            //     isAdded = 'isNotAddToCart';
+                            // }
                             var addedToCart = '';
-                            var title= "Add to Cart";
+                            var title = "Add to Cart";
                             var isAdded = 'isAddToCart';
-                            if ($.inArray(productList.product_id, response.pIdList)) {
-                                addedToCart = 'prd_active';
-                                title= "Already In Cart";
-                                isAdded = 'isNotAddToCart';
-                            }
+
+                            // if ($.inArray(productList.product_id, response.pIdList) !== -1) {
+                            //     addedToCart = 'prd_active';
+                            //     title = "Already In Cart";
+                            //     isAdded = 'isNotAddToCart';
+                            // }
                             let product_url = base_url+'assets'+TEMPNAME+'img/product/NoProductImg.png';
                             if(productList[i].product_url != '') {
                                 product_url = productList[i].product_url;
@@ -909,8 +921,8 @@ $('.tab-content').on('click', '.quick_view_button', function() {
 });
 
 /** Quick view Popup */
-$(".quick_view_button").on("click", function(){
-    
+$(document).on("click", ".quick_view_button", function() {
+    // alert("hiii")
     let prdId = atob($(this).data('key'));
     var site_url = $("#site_url").val();
     var base_url = $("#base_url").val();
@@ -918,13 +930,14 @@ $(".quick_view_button").on("click", function(){
 
     $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
     $("#prdTitle").html('--');
-    $("#prdPrice").html('0.00');
-    $("#prdDelMRP").html('0.00');
-    $("input[name='prdCurrency']").val('');
-    $("input[name='prdPrice']").val('');
-    $("input[name='prdDelMRP']").val('');
+    $("#prdPrice").html(0);
+    $("#prdDelMRP").html(0);
+    $("input[name='prdCurrency']").val('₹');
+    $("input[name='prdPrice']").val(0);
+    $("input[name='prdDelMRP']").val(0);
     $(".quickAddToCart").attr('data-key', '')
-    $("input[name='qtybutton']").val('');
+    $("input[name='qtybutton']").val(1);
+
     $.ajax({
         url: site_url+"get-single-product",  
         type: "post", 
@@ -935,6 +948,7 @@ $(".quick_view_button").on("click", function(){
         },
         success:function(response){
             $(".loading").hide();
+            // alert(response.productDetails.price)
             if(response.success == 1) {
                 var prdCur = '$';
                 if(response.currency == 'inr' || response.currency == 'INR') {
@@ -944,17 +958,17 @@ $(".quick_view_button").on("click", function(){
                 if(response.productDetails.product_url != "") {
                     product_url = response.productDetails.product_url;
                 }
+                $("input[name='prdPrice']").val(response.productDetails.price);
+                $("input[name='prdDelMRP']").val(response.productDetails.MRP);
                 $('#prdImg').attr('src', product_url);
                 $("#prdTitle").html(response.productDetails.product_name);
                 $("#prdPrice").html(prdCur+response.productDetails.price);
                 $("#prdDelMRP").html(prdCur+response.productDetails.MRP);
                 $("input[name='prdCurrency']").val(prdCur);
-                $("input[name='prdPrice']").val(response.productDetails.price);
-                $("input[name='prdDelMRP']").val(response.productDetails.MRP);
                 // $(".quickAddToCart").attr('data-key', btoa(prdId));
                 $("#prdIdNew").val(prdId);
-                $("input[name='qtybutton']").val('1');
-                $("#prdQty").val('1');
+                $("input[name='qtybutton']").val(1);
+                $("#prdQty").val(1);
                 $("#quick_view_modal").modal('show');
             } else {
                 Swal.fire({
@@ -984,17 +998,94 @@ $(".quick_view_button").on("click", function(){
         }
     });
 });
+// $(".quick_view_button").on("click", function(){
+//     alert("hiii")
+//     let prdId = atob($(this).data('key'));
+//     var site_url = $("#site_url").val();
+//     var base_url = $("#base_url").val();
+//     var TempName = $("#TempName").val();
+
+//     $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
+//     $("#prdTitle").html('--');
+//     $("#prdPrice").html(0);
+//     $("#prdDelMRP").html(0);
+//     $("input[name='prdCurrency']").val('');
+//     $("input[name='prdPrice']").val(0);
+//     $("input[name='prdDelMRP']").val(0);
+//     $(".quickAddToCart").attr('data-key', '')
+//     $("input[name='qtybutton']").val(1);
+
+//     $.ajax({
+//         url: site_url+"get-single-product",  
+//         type: "post", 
+//         dataType: 'json',
+//         data: {prdId:prdId},
+//         beforeSend:function () {
+//             $('.loading').show();
+//         },
+//         success:function(response){
+//             $(".loading").hide();
+//             alert(response.productDetails.price)
+//             if(response.success == 1) {
+//                 var prdCur = '$';
+//                 if(response.currency == 'inr' || response.currency == 'INR') {
+//                     prdCur = '₹';
+//                 }
+//                 var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
+//                 if(response.productDetails.product_url != "") {
+//                     product_url = response.productDetails.product_url;
+//                 }
+//                 $("input[name='prdPrice']").val(response.productDetails.price);
+//                 $("input[name='prdDelMRP']").val(response.productDetails.MRP);
+//                 $('#prdImg').attr('src', product_url);
+//                 $("#prdTitle").html(response.productDetails.product_name);
+//                 $("#prdPrice").html(prdCur+(response.productDetails.price).toFixed(2));
+//                 $("#prdDelMRP").html(prdCur+(response.productDetails.MRP).toFixed(2));
+//                 $("input[name='prdCurrency']").val(prdCur);
+//                 // $(".quickAddToCart").attr('data-key', btoa(prdId));
+//                 $("#prdIdNew").val(prdId);
+//                 $("input[name='qtybutton']").val(1);
+//                 $("#prdQty").val(1);
+//                 $("#quick_view_modal").modal('show');
+//             } else {
+//                 Swal.fire({
+//                     toast: true,
+//                     text: response.message,
+//                     icon: 'error',
+//                     showCloseButton: true,
+//                     position: 'bottom',
+//                     timer: 5000,
+//                     timerProgressBar: true,
+//                     showConfirmButton: false
+//                 });
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             $(".loading").hide();
+//             Swal.fire({
+//                 toast: true,
+//                 text: 'Could not reach server, please try again later.  - '+error,
+//                 icon: 'error',
+//                 showCloseButton: true,
+//                 position: 'bottom',
+//                 timer: 5000,
+//                 timerProgressBar: true,
+//                 showConfirmButton: false
+//             });
+//         }
+//     });
+// });
 
 /** Add to Cart */
 $(document).on("click", ".isAddToCart", function() {
-    let $clickedButton = $(this);
-    let prdId = atob($(this).data('key'));
-    let price = atob($(this).data('price'));
-    let site_url = $("#site_url").val();
-    let base_url = $("#base_url").val();
-    let TempName = $("#TempName").val();
-    let custId = $("#custId").val();
-    let cartId = $("#cartId").val();
+    var $clickedButton = $(this);
+    var prdId = atob($(this).data('key'));
+    var price = atob($(this).data('price'));
+    var site_url = $("#site_url").val();
+    var base_url = $("#base_url").val();
+    var TempName = $("#TempName").val();
+    var custId = $("#custId").val();
+    var cartId = $("#cartId").val();
     // $("input[name='qtybutton']").val(1);
     // alert(custId);
     // alert(cartId);
@@ -1159,9 +1250,10 @@ $(".cart-plus-minus").append('<div class="inc qtybutton">+</div>');
 $(".qtybutton").on("click", function() {
     var $button = $(this);
     var oldValue = parseFloat($button.siblings("input").val());
-    let prdPrice = parseFloat($("input[name='prdPrice']").val());
-    let prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
-    let prdCurrency = $("input[name='prdCurrency']").val();
+    // alert(oldValue)
+    var prdPrice = parseFloat($("input[name='prdPrice']").val());
+    var prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
+    var prdCurrency = $("input[name='prdCurrency']").val();
     if ($button.text() == "+") {
         var newVal = oldValue + 1;
     } else {
@@ -1171,10 +1263,10 @@ $(".qtybutton").on("click", function() {
             var newVal = 1;
         }
     }
-
+    // alert(newVal);
+    // alert(prdPrice);
     var newPrdPrice = newVal * prdPrice;
     var newPrdDelMRP = newVal * prdDelMRP;
-
     $button.siblings("input").val(newVal);
     $("#prdQty").val(newVal);
     $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
@@ -1183,6 +1275,7 @@ $(".qtybutton").on("click", function() {
     $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
     $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
 });
+
 
 $(document).on("click", ".mini-cart-item-delete", function() {
     let pId = $(this).data("key");
@@ -1201,6 +1294,11 @@ $(document).on("click", ".mini-cart-item-delete", function() {
                 $("#cartItemList").html(response.cartListHtml);
                 $("#cartCount").html(response.cartCount);
                 $(".total_cost").html(response.total_cost);
+
+                // var activeLi = $('.categoryClass.active');
+                // var catId = activeLi.attr('my-cat');
+                // getProductList(catId);
+                
                 Swal.fire({
                     toast: true,
                     text: response.message,
