@@ -644,9 +644,9 @@ $(function() {
         getProductList(catId1);
     });
 
-    // var $activeLi = $('.categoryClass.active');
-    // var catId = $activeLi.attr('my-cat');
-    // getProductList(catId);
+    var activeLi = $('.categoryClass.active');
+    var catId = activeLi.attr('my-cat');
+    getProductList(catId);
 
     function getProductList(catId) {
         var site_url = $("#site_url").val();
