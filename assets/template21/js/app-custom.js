@@ -644,9 +644,9 @@ $(function() {
         getProductList(catId1);
     });
 
-    var activeLi = $('.categoryClass.active');
-    var catId = activeLi.attr('my-cat');
-    getProductList(catId);
+    // var activeLi = $('.categoryClass.active');
+    // var catId = activeLi.attr('my-cat');
+    // getProductList(catId);
 
     function getProductList(catId) {
         var site_url = $("#site_url").val();
@@ -662,6 +662,7 @@ $(function() {
             },
             success:function(response){
                 $('#loader').hide();
+                // console.log(response.productList)
                 if(response.success == 1) {
                     // $("#productListDiv").html(response.pListHtml);
                     // $("#productListDiv1").html(response.pListHtml1);
