@@ -420,7 +420,7 @@ $(function() {
                         $("#loginUsername").html(response.customer_name);
                         $('#cartCount').html(response.cartCount);
                         $('.total_cost').html(response.total_cost);
-                        
+
                         $('#guest_sign_in_modal').modal('hide');
                         $("#otpBtn").prop("disabled", false);
                         $("#otpBtn").html('<b>Verify</b>');
@@ -1276,7 +1276,7 @@ $(".qtybutton").on("click", function() {
     $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
 });
 
-
+/** Delete Function */
 $(document).on("click", ".mini-cart-item-delete", function() {
     let pId = $(this).data("key");
     let site_url = $("#site_url").val();
@@ -1337,4 +1337,69 @@ $(document).on("click", ".mini-cart-item-delete", function() {
         }
     });
 
+});
+
+/** Search Function */
+$(document).on("click", "#searchBarBtn", function() {
+    var searchVal = $("input[name='search']").val();
+    alert("hii");
+    alert(searchVal);
+    let site_url = $("#site_url").val();
+    $.ajax({
+        url: site_url+"search-products",  
+        type: "post", 
+        dataType: 'json',
+        data: {searchVal:searchVal},
+        beforeSend:function () {
+            $('.loading').show();
+        },
+        success:function(response){
+            $(".loading").hide();
+            alert(response);
+            // if(response.success == 1) {
+            //     $("#cartItemList").html(response.cartListHtml);
+            //     $("#cartCount").html(response.cartCount);
+            //     $(".total_cost").html(response.total_cost);
+
+            //     // var activeLi = $('.categoryClass.active');
+            //     // var catId = activeLi.attr('my-cat');
+            //     // getProductList(catId);
+                
+            //     Swal.fire({
+            //         toast: true,
+            //         text: response.message,
+            //         icon: 'success',
+            //         showCloseButton: true,
+            //         position: 'bottom',
+            //         timer: 5000,
+            //         timerProgressBar: true,
+            //         showConfirmButton: false
+            //     });
+            // } else {
+            //     Swal.fire({
+            //         toast: true,
+            //         text: response.message,
+            //         icon: 'error',
+            //         showCloseButton: true,
+            //         position: 'bottom',
+            //         timer: 5000,
+            //         timerProgressBar: true,
+            //         showConfirmButton: false
+            //     });
+            // }
+        },
+        error: function(xhr, status, error) {
+            $(".loading").hide();
+            Swal.fire({
+                toast: true,
+                text: 'Could not reach server, please try again later.  - '+error,
+                icon: 'error',
+                showCloseButton: true,
+                position: 'bottom',
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        }
+    });
 });

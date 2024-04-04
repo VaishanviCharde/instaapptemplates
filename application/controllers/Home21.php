@@ -1121,6 +1121,11 @@ class Home21 extends CI_Controller {
 				}
 				echo json_encode($response);exit;
 			}
+
+			/** Search Product Function */
+			public function searchProducts() {
+				print_r("iff");
+			}
 		/** /. Product Details */
 
 		/** Order Place */
