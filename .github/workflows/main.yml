@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: Biryani12
+      apk_name: Biryani22
       company_Name: Veggies
-      restaurant_id: 931
-      email: pykeveki@citmo.net
+      restaurant_id: 933
+      email: pykeveki@citmo.net,pykeveki@citmo.net
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/Biryani12/'
+        server-dir: '/Biryani22/'
 
     - name: Call API
       run: |
