@@ -143,9 +143,9 @@
                             <?php } ?>
                             <!-- header-search-2 -->
                             <div class="header-search-2">
-                                <form id="searchform" method="post"  action="#">
-                                    <input type="text" name="search" id="searchBar" value="" placeholder="Search here..."/>
-                                    <button type="button" id="searchBarBtn">
+                                <form id="searchform" method="post" action="<?= site_url('product/all'); ?>" autocomplete="off">
+                                    <input type="text" name="search" id="searchBar" value="<?php if(isset($searchName) && $searchName != NULL && $searchName != '') { echo $searchName; } ?>" placeholder="Search here..."/>
+                                    <button type="submit" id="searchBarBtn">
                                         <span><i class="icon-search"></i></span>
                                     </button>
                                 </form>
@@ -313,8 +313,8 @@
                     <h5>Subtotal: <span class="total_cost"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></span></h5>
                 </div>
                 <div class="btn-wrapper">
-                    <a href="cart.html" class="theme-btn-1 btn btn-effect-1">View Cart</a>
-                    <a href="cart.html" class="theme-btn-2 btn btn-effect-2">Checkout</a>
+                    <a href="<?= site_url('cart'); ?>" class="theme-btn-1 btn btn-effect-1">View Cart</a>
+                    <a href="<?= site_url('checkout'); ?>" class="theme-btn-2 btn btn-effect-2">Checkout</a>
                 </div>
                 <!-- <p>Free Shipping on All Orders Over $100!</p> -->
             </div>

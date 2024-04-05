@@ -29,7 +29,7 @@
     <!-- BREADCRUMB AREA END -->
     
     <!-- PRODUCT DETAILS AREA START -->
-    <div class="ltn__product-area ltn__product-gutter mb-120">
+    <div class="ltn__product-area ltn__product-gutter mb-120" id="productPageContainer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
@@ -73,16 +73,28 @@
                                             $addedToCart = '';
                                             $title= "Add to Cart";
                                             $isAdded = 0;
-                                            if (in_array($prdData->product_id, $pIdList)) {
-                                                $addedToCart = 'prd_active';
-                                                $title= "Already In Cart";
-                                                $isAdded = 1;
-                                            }?>
+                                            if($segment2 == 'all') {
+                                                $product_id = $prdData->productId;
+                                                $in_stock = $prdData->inStock;
+                                                $product_name = $prdData->productName;
+                                                $product_url = $prdData->productUrl;
+                                            } else {
+                                                $product_id = $prdData->product_id;
+                                                $in_stock = $prdData->in_stock;
+                                                $product_name = $prdData->product_name;
+                                                $product_url = $prdData->product_url;
+                                            }
+                                            // if (in_array($product_id, $pIdList)) {
+                                            //     $addedToCart = 'prd_active';
+                                            //     $title= "Already In Cart";
+                                            //     $isAdded = 1;
+                                            // }
+                                            ?>
                                             <div class="col-xl-4 col-sm-6 col-6">
                                                 <div class="ltn__product-item ltn__product-item-3 text-center">
                                                     <div class="product-img">
-                                                        <a href="javascript:void(0);"><img src="<?php if(isset($prdData->product_url) && $prdData->product_url != NULL && $prdData->product_url != '') { echo $prdData->product_url; } else { echo base_url().'assets/'.TEMPNAME.'/img/product/NoProductImg.png'; } ?>" loading="lazy" alt="Product Image" class="pImg"></a>
-                                                        <?php if($prdData->in_stock != true) { ?>
+                                                        <a href="javascript:void(0);"><img src="<?php if(isset($product_url) && $product_url != '') { echo $product_url; } else { echo base_url().'assets/'.TEMPNAME.'/img/product/NoProductImg.png'; } ?>" loading="lazy" alt="Product Image" class="pImg"></a>
+                                                        <?php if($in_stock != true) { ?>
                                                             <div class="product-badge">
                                                                 <ul>
                                                                     <li class="sale-badge">Out Off Stock</li>
@@ -92,12 +104,12 @@
                                                         <div class="product-hover-action">
                                                                     <!-- title="Quick View" data-bs-toggle="modal" data-bs-target="#quick_view_modal"  -->
                                                             <ul>
-                                                                <li class="quick_view_button" data-key="<?= base64_encode($prdData->product_id); ?>">
+                                                                <li class="quick_view_button" data-key="<?= base64_encode($product_id); ?>">
                                                                     <a href="javascript:void(0);"> 
                                                                         <i class="far fa-eye"></i>
                                                                     </a>
                                                                 </li>
-                                                                <li class="add_to_cart <?php if($isAdded === 0){ echo 'isAddToCart'; } else { echo 'isNotAddToCart'; } ?>" data-key="<?= base64_encode($prdData->product_id); ?>" data-price="<?= base64_encode($prdData->price); ?>">
+                                                                <li class="add_to_cart <?php if($isAdded === 0){ echo 'isAddToCart'; } else { echo 'isNotAddToCart'; } ?>" data-key="<?= base64_encode($product_id); ?>" data-price="<?= base64_encode($prdData->price); ?>">
                                                                     <a href="javascript:void(0);" title="<?= $title; ?>" class="<?= $addedToCart; ?>">
                                                                         <i class="fas fa-shopping-cart"></i>
                                                                     </a>
@@ -106,7 +118,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="product-info">
-                                                        <h2 class="product-title pTitleHeight"><a href="javascript:void(0);"><?php if(isset($prdData->product_name) && $prdData->product_name != NULL && $prdData->product_name != '') { echo $prdData->product_name; } else { echo 'NA'; } ?></a></h2>
+                                                        <h2 class="product-title pTitleHeight"><a href="javascript:void(0);"><?php if(isset($product_name) && $product_name != NULL && $product_name != '') { echo $product_name; } else { echo 'NA'; } ?></a></h2>
                                                         <div class="product-price">
                                                             <span>₹<?php if(isset($prdData->price)) { echo $prdData->price; } else { echo '0.00'; } ?></span>
                                                             <del>₹<?php if(isset($prdData->MRP)) { echo $prdData->MRP; } else { echo '0.00'; } ?></del>
@@ -136,18 +148,29 @@
                                             $addedToCart = '';
                                             $title= "Add to Cart";
                                             $isAdded = 0;
-                                            if (in_array($prdData->product_id, $pIdList)) {
-                                                $addedToCart = 'prd_active';
-                                                $title= "Already In Cart";
-                                                $isAdded = 1;
+                                            if($segment2 == 'all') {
+                                                $product_id = $prdData->productId;
+                                                $in_stock = $prdData->inStock;
+                                                $product_name = $prdData->productName;
+                                                $product_url = $prdData->productUrl;
+                                            } else {
+                                                $product_id = $prdData->product_id;
+                                                $in_stock = $prdData->in_stock;
+                                                $product_name = $prdData->product_name;
+                                                $product_url = $prdData->product_url;
                                             }
+                                            // if (in_array($prdData->product_id, $pIdList)) {
+                                            //     $addedToCart = 'prd_active';
+                                            //     $title= "Already In Cart";
+                                            //     $isAdded = 1;
+                                            // }
                                         ?>
                                         <!-- ltn__product-item -->
                                         <div class="col-lg-12">
                                             <div class="ltn__product-item ltn__product-item-3">
                                                 <div class="product-img">
-                                                    <a href="javascript:void(0);"><img src="<?php if(isset($prdData->product_url) && $prdData->product_url != NULL && $prdData->product_url != '') { echo $prdData->product_url; } else { echo base_url().'assets/'.TEMPNAME.'/img/product/NoProductImg.png'; } ?>" loading="lazy" alt="Product Image"></a>
-                                                    <?php if($prdData->in_stock != true) { ?>
+                                                    <a href="javascript:void(0);"><img src="<?php if(isset($product_url) && $product_url != NULL && $product_url != '') { echo $product_url; } else { echo base_url().'assets/'.TEMPNAME.'/img/product/NoProductImg.png'; } ?>" loading="lazy" alt="Product Image"></a>
+                                                    <?php if($in_stock != true) { ?>
                                                         <div class="product-badge">
                                                             <ul>
                                                                 <li class="sale-badge">Out Off Stock</li>
@@ -156,7 +179,7 @@
                                                     <?php } ?>
                                                 </div>
                                                 <div class="product-info">
-                                                    <h2 class="product-title"><a href="javascript:void(0);"><?php if(isset($prdData->product_name) && $prdData->product_name != NULL && $prdData->product_name != '') { echo $prdData->product_name; } else { echo 'NA'; } ?></a></h2>
+                                                    <h2 class="product-title"><a href="javascript:void(0);"><?php if(isset($product_name) && $product_name != NULL && $product_name != '') { echo $product_name; } else { echo 'NA'; } ?></a></h2>
                                                     <!-- <div class="product-ratting">
                                                         <ul>
                                                             <li><a href="javascript:void(0);"><i class="fas fa-star"></i></a></li>
@@ -167,8 +190,8 @@
                                                         </ul>
                                                     </div> -->
                                                     <div class="product-price">
-                                                        <span>₹<?php if(isset($prdData->price)) { echo $prdData->price; } else { echo '0.00'; } ?></span>
-                                                        <del>₹<?php if(isset($prdData->MRP)) { echo $prdData->MRP; } else { echo '0.00'; } ?></del>
+                                                        <span>₹<?php if(isset($price)) { echo $price; } else { echo '0.00'; } ?></span>
+                                                        <del>₹<?php if(isset($MRP)) { echo $MRP; } else { echo '0.00'; } ?></del>
                                                     </div>
                                                     <?php if(isset($extra) && $extra != NULL && $extra != '') { ?>
                                                     <div class="product-brief">
@@ -177,14 +200,13 @@
                                                     <?php } ?>
                                                     <div class="product-hover-action">
                                                         <ul>
-                                                            <li class="quick_view_button" data-key="<?= base64_encode($prdData->product_id); ?>">
+                                                            <li class="quick_view_button" data-key="<?= base64_encode($product_id); ?>">
                                                                 <a href="javascript:void(0)" title="Quick View">
                                                                     <i class="far fa-eye"></i>
                                                                 </a>
                                                             </li>
-                                                            <li class="add_to_cart <?php if($isAdded === 0){ echo 'isAddToCart'; } else { echo 'isNotAddToCart'; } ?>" data-key="<?= base64_encode($prdData->product_id); ?>" data-price="<?= base64_encode($prdData->price); ?>">
+                                                            <li class="add_to_cart <?php if($isAdded === 0){ echo 'isAddToCart'; } else { echo 'isNotAddToCart'; } ?>" data-key="<?= base64_encode($product_id); ?>" data-price="<?php echo base64_encode($prdData->price); ?>">
                                                                 <a href="javascript:void(0)" title="<?= $title; ?>" class="<?= $addedToCart; ?>">
-                                                                <!-- data-bs-toggle="modal" data-bs-target="#add_to_cart_modal" -->
                                                                     <i class="fas fa-shopping-cart"></i>
                                                                 </a>
                                                             </li>

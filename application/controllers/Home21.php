@@ -43,7 +43,7 @@ class Home21 extends CI_Controller {
         );
         $apiResponse = $this->Home_model21->CallAPI($method, $url, $header);
 		$apiDecodedResponse = json_decode($apiResponse);
-
+		// print_r($apiDecodedResponse->response);exit;
 		if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200) {
 			$data = array(
 				"url" => $api,
@@ -750,12 +750,12 @@ class Home21 extends CI_Controller {
 				$appCommData = $this->checklogin();
 
 				$segment2 = $this->uri->segment(2);
+
 				$decodeCatId = base64_decode($segment2);
 				$parts = explode('_', $decodeCatId);
 				
 				// Get the last part (which is the last digit)
 				$catId = end($parts);
-
 				/* Get Category */
 				$categoryData = array();
 				$api = URL;
@@ -789,6 +789,54 @@ class Home21 extends CI_Controller {
 					$productData = $apiResData1->results;
 				}
 
+				/** get all search products */
+				$name = '';
+				if($segment2 == 'all') {
+					$name = $_POST['search'];
+					$query = <<<'QUERY'
+							query productSearch ($token: String, $productName: String,$restaurantId:Int, $first: Int, $skip: Int) {
+								productSearch (token: $token, productName : $productName, restaurantId :$restaurantId, first: $first, skip: $skip ) {
+								productId,
+								productName,
+								productUrl,
+								price,
+								MRP,
+								extra,
+								taxExempt,
+								availableTime,
+								inStock,
+								suspendedUntil,
+									category{ categoryId,category,availableTime,
+										masterCategory{ masterCategoryId,status,
+											MasterCategoryOpenHours{ day,startTime,endTime, status}
+										}
+									}
+								}
+							}
+							QUERY;
+						$variables = [
+							'productName' => $name,
+							'restaurantId'=>$tempId,
+							'first' => 20,
+							'skip' => 0,
+							'token' =>'0o6jcui8mfhmp56we69kcmu5rkejtock'
+						];
+						$json = json_encode(['query' => $query, 'variables' => $variables]);
+						$method = 'POST';
+						$url = $api.'graphql/';
+						$header = array(
+							'Content-Type: application/json',
+							'Authorization:  Token '.$token
+						);
+						$apiResponse = $this->Home_model21->CallAPI($method, $url, $header,$json);
+						$apiDecodedResponse = json_decode($apiResponse);
+						$productData = [];
+						if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200) {
+							$productData = $apiDecodedResponse->response->data->productSearch;
+						}
+						$data['segment2'] = 'all';
+				}
+				// print_r($productData);exit;
 				$cartId = 0;
 				if(isset($_SESSION['cartId'])) {
 					$cartId = $_SESSION['cartId'];
@@ -824,7 +872,8 @@ class Home21 extends CI_Controller {
 				$data['catId'] = $catId;
 				$data['cartId'] = $cartId;
 				$data['productData'] = $productData;
-				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+				$data1['searchName'] = $name;
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header', $data1);
 				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/product', $data);	
 			}
 
@@ -888,44 +937,7 @@ class Home21 extends CI_Controller {
 						array_push($pIdList, $cartData->product->product_id);
 					}
 				}
-				// $pListHtml = '';
-				// $pListHtml1 = '';
-				// foreach($productList as $prdData) {
-				// 	$addedToCart = '';
-				// 	$title= "Add to Cart";
-				// 	$isAdded = 'isAddToCart';
-				// 	if (in_array($prdData->product_id, $pIdList)) {
-				// 		$addedToCart = 'prd_active';
-				// 		$title= "Already In Cart";
-				// 		$isAdded = 'isNotAddToCart';
-				// 	}
-
-				// 	$product_url = base_url().'assets'.TEMPNAME.'img/product/NoProductImg.png';
-				// 	if($prdData->product_url != '') {
-				// 		$product_url = $prdData->product_url;
-				// 	}
-
-				// 	$product_name = 'NA';
-				// 	if($prdData->product_name != '') {
-				// 		$product_name = $prdData->product_name;
-				// 	}
-				// 	$isStock = '';
-				// 	if($prdData->in_stock != true) {
-				// 		$isStock = '<div class="product-badge"><ul><li class="sale-badge">Out Off Stock</li></ul></div>';
-				// 	}
-				// 	$price = '0.00';
-				// 	if($prdData->price != '') {
-				// 		$price = $prdData->price;
-				// 	}
-				// 	$MRP = '0.00';
-				// 	if($prdData->MRP != '') {
-				// 		$MRP = $prdData->MRP;
-				// 	}
-				// 	$product_id = base64_encode($prdData->product_id);
-
-				// 	$pListHtml .= "<div class='col-xl-4 col-sm-6 col-6'><div class='ltn__product-item ltn__product-item-3 text-center'><div class='product-img'><a href='javascript:void(0);'><img src=".$product_url." loading='lazy' alt='Product Image' class='pImg'></a>".$isStock."<div class='product-hover-action'><ul><li class='quick_view_button' data-key=".$product_id."><a href='#' title='Quick View'><i class='far fa-eye'></i></a></li><li  class='add_to_cart ".$isAdded." data-key=".base64_encode($prdData->product_id)." data-price=".base64_encode($prdData->price)."><a href='#'  title=".$title." class=".$addedToCart."><i class='fas fa-shopping-cart'></i></a></li></ul></div></div><div class='product-info'><h2 class='product-title pTitleHeight'><a href='javascript:void(0);'>".$product_name."</a></h2><div class='product-price'><span>₹".$price."</span><del>₹".$MRP."</del></div></div></div></div>";
-                //     $pListHtml1 .= "<div class='col-lg-12'><div class='ltn__product-item ltn__product-item-3'><div class='product-img'><a href='javascript:void(0);'><img src=".$product_url." loading='lazy' alt='Product Image'></a>".$isStock."</div><div class='product-info'><h2 class='product-title'><a href='javascript:void(0);'>".$product_name."</a></h2><div class='product-price'><span>₹".$price."</span><del>₹".$MRP."</del></div><div class='product-brief'><p>".$prdData->extra."</p></div><div class='product-hover-action'><ul><li class='quick_view_button' data-key=".$product_id."><a href='#' title='Quick View'><i class='far fa-eye'></i></a></li><li><a href='#' title='Add to Cart' data-bs-toggle='modal' data-bs-target='#add_to_cart_modal'><i class='fas fa-shopping-cart'></i></a></li></ul></div></div></div></div>";
-				// }
+				
 				$response['productList'] = $productList;
 				$response['pIdList'] = array_unique($pIdList);	
 				// $response['pListHtml'] = $pListHtml;	
@@ -968,6 +980,7 @@ class Home21 extends CI_Controller {
 				echo json_encode($response);exit;
 			}
 
+		/** Cart Pages */
 			/** Add to cart functionality */
 			public function addToCart() {
 				// $this->checklogin();
@@ -1122,11 +1135,48 @@ class Home21 extends CI_Controller {
 				echo json_encode($response);exit;
 			}
 
-			/** Search Product Function */
-			public function searchProducts() {
-				print_r("iff");
+			/** Cart View */
+			public function cartView() {
+				$appCommData = $this->checklogin();
+				$api = $this->session->userdata('pre_login_data')['url'];
+				$token = $this->session->userdata('pre_login_data')['token'];
+				$tempId = $this->session->userdata('pre_login_data')['tempId'];
+
+				$customerId = 0;
+				if(isset($_SESSION['login_data']['customer_id'])) {
+					$customerId = $_SESSION['login_data']['customer_id'];
+				}
+
+				$cart_id = 0;
+				if(isset($_SESSION['cartId'])) {
+					$cart_id = $_SESSION['cartId'];
+				}
+
+				$method = 'GET';
+				$url = $api.'cart-items-x/?cart_id='.$cart_id.'&restaurant_id='.$tempId;
+				$header = array(
+					'action: cart-item',
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token,
+					'cart_id: '.$cart_id,
+					'user_id: '.$customerId
+				);
+
+				$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse = json_decode($cart_list_details);
+				$cartList = array();
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != ""){
+					$apiResponse = $apiDecodedResponse->response;
+					$cartList = $apiResponse->results;
+					$data['cartCount'] = $apiResponse->count;
+					$data['total_cost'] = $apiResponse->total_cost;
+					$this->session->set_userdata($data);
+				}
+				$data['cartList'] = $cartList;
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/cart', $data);
 			}
-		/** /. Product Details */
+		/** /. Cart Pages */
 
 		/** Order Place */
 
@@ -1174,6 +1224,16 @@ class Home21 extends CI_Controller {
 			// 	echo json_encode($response);
 			// }
 		/** /. Order Place */
+
+		/** Checkout Function */
+		public function checkout() {
+			$appCommData = $this->checklogin();
+
+			$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+			$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/checkout');
+			
+		}
+		/** /. Checkout Function */
 
 		/** Logout */
 			public function logout() {

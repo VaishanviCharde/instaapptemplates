@@ -79,13 +79,17 @@ $route['about-us'] = $route['default_controller'].'/aboutUs';
 $route['contact-us'] = $route['default_controller'].'/contactUs';
 
 $route['product'] = $route['default_controller'].'/product';
+$route['product/(:any)/(:any)'] = $route['default_controller'].'/product/$1/$2';
 $route['product/(:any)'] = $route['default_controller'].'/product/$1';
 $route['product-details/(:any)'] = $route['default_controller'].'/product_details/$1';
 $route['get-products-by-category'] = $route['default_controller'].'/getProductsByCategory';
 $route['get-single-product'] = $route['default_controller'].'/getSingleProduct';
+$route['search-products'] = $route['default_controller'].'/searchProducts';
 
 $route['add-to-cart'] = $route['default_controller'].'/addToCart';
 $route['delete-cart-item'] = $route['default_controller'].'/deleteCartItem';
+$route['cart'] = $route['default_controller'].'/cartView';
 
+$route['checkout'] = $route['default_controller'].'/checkout';
 // $route['book-now-action'] = $route['default_controller'].'/placeOrder';
 /** /. MY Routes */

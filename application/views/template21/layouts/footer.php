@@ -271,7 +271,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label id="email-label">Password <span class="error">*</span></label>
+                                                <label id="email-label">Confirm Password <span class="error">*</span></label>
                                                 <input type="password" name="conf_password" id="conf_password" placeholder="Enter your confirm password" class="form-control" required>
                                             </div>
                                         </div>
@@ -591,8 +591,8 @@
                                             <h5><a href="product-details.html" id="cartTitle"></a></h5>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Cart</p>
                                             <div class="btn-wrapper">
-                                                <a href="cart.html" class="theme-btn-1 btn btn-effect-1 h-37">View Cart</a>
-                                                <a href="checkout.html" class="theme-btn-2 btn btn-effect-2">Checkout</a>
+                                                <a href="<?= site_url('cart'); ?>" class="theme-btn-1 btn btn-effect-1 h-37">View Cart</a>
+                                                <a href="<?= site_url('checkout'); ?>" class="theme-btn-2 btn btn-effect-2">Checkout</a>
                                             </div>
                                          </div>
                                          <!-- additional-info -->
@@ -695,5 +695,11 @@
 
         $('#quick_view_modal').on('hidden.bs.modal', function () {
             $(this).find('form').trigger('reset');
-        })
+        });
+
+        function isNumber(e) {
+            var t = (e = e || window.event).which ? e.which : e.keyCode;
+            return !(t > 31 && (t < 48 || t > 57));
+        }
+
     </script>
