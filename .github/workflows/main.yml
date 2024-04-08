@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: veges12
+      apk_name: ddq
       company_Name: Veggies
-      restaurant_id: 949
-      email: hylifiqu@closetab.email
+      restaurant_id: 950
+      email: ss@g.com
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/veges12/'
+        server-dir: '/ddq/'
 
     - name: Call API
       run: |
