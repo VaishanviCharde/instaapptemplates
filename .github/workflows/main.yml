@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: veges2
+      apk_name: veges3
       company_Name: Veggies
-      restaurant_id: 951
+      restaurant_id: 953
       email: ryjowu@closetab.email
       
     steps:
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/veges2/'
+        server-dir: '/veges3/'
 
     - name: Call API
       run: |
