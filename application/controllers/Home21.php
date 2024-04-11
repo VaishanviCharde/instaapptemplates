@@ -1238,9 +1238,10 @@ class Home21 extends CI_Controller {
 		/** Logout */
 			public function logout() {
 				// Unset specific userdata items
-				$this->session->unset_userdata('login_data');
 				$this->session->unset_userdata('total_cost');
 				$this->session->unset_userdata('cartCount');
+				$this->session->unset_userdata('cartId');
+				$this->session->unset_userdata('login_data');
 			
 				// Destroy all session data
 				// $this->session->sess_destroy();

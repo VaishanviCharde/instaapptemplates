@@ -142,13 +142,13 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Username <span class="error">*</span></label>
+                                                <label>Username <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="username" id="username" placeholder="Enter your username" class="form-control" value="<?php if($this->input->cookie('username', TRUE) && $this->input->cookie('rememberme', TRUE) ? print_r(base64_decode($this->input->cookie('username', TRUE))) : print_r("") )?>" required>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label id="email-label">Password <span class="error">*</span></label>
+                                                <label id="email-label">Password <span class="error">*&nbsp;</span></label>
                                                 <input type="password" name="password" id="password" placeholder="Enter your password" class="form-control" value="<?php if($this->input->cookie('password', TRUE) && $this->input->cookie('rememberme', TRUE) ? print_r(base64_decode($this->input->cookie('password', TRUE))) : print_r("") )?>" required>
                                             </div>
                                         </div>
@@ -223,7 +223,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Salutation <span class="error">*</span></label>
+                                                <label>Salutation <span class="error">*&nbsp;</span></label>
                                                 <select class="form-control nice-select list" name="salutation" id="salutation" required="">
                                                     <option value="">Select Salutation</option>
                                                     <option value="Mr.">Mr.</option>
@@ -235,43 +235,43 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label>First Name <span class="error">*</span></label>
+                                            <label>First Name <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="first_name" id="first_name" placeholder="Enter your first name" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label>Last Name <span class="error">*</span></label>
+                                            <label>Last Name <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="last_name" id="last_name" placeholder="Enter your last name" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label>Email <span class="error">*</span></label>
+                                            <label>Email <span class="error">*&nbsp;</span></label>
                                                 <input type="email" name="email" id="email" placeholder="Enter your email" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label>Mobile Number <span class="error">*</span></label>
+                                            <label>Mobile Number <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="mobile[main]" id="mobile" placeholder="Enter your mobile number" class="form-control" onkeypress="return isNumber(event)" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label>Username <span class="error">*</span></label>
+                                            <label>Username <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="signup_username" id="signup_username" placeholder="Enter your username" class="form-control" onkeydown="restrictSpaces(event)" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label id="email-label">Password <span class="error">*</span></label>
+                                                <label id="email-label">Password <span class="error">*&nbsp;</span></label>
                                                 <input type="password" name="sign_password" id="sign_password" placeholder="Enter your password" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label id="email-label">Confirm Password <span class="error">*</span></label>
+                                                <label id="email-label">Confirm Password <span class="error">*&nbsp;</span></label>
                                                 <input type="password" name="conf_password" id="conf_password" placeholder="Enter your confirm password" class="form-control" required>
                                             </div>
                                         </div>
@@ -324,7 +324,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Mobile Number <span class="error">*</span></label>
+                                                <label>Mobile Number <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="guest_mobile[main]" id="guest_mobile" class="form-control" placeholder="Enter your mobile number" onkeypress="return isNumber(event)">
                                             </div>
                                         </div>
@@ -409,7 +409,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Email <span class="error">*</span></label>
+                                                <label>Email <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="f_email" id="f_email" class="form-control" placeholder="Enter your email" required />
                                             </div>
                                         </div>
@@ -459,7 +459,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Username <span class="error">*</span></label>
+                                                <label>Username <span class="error">*&nbsp;</span></label>
                                                 <input type="text" name="f_username" id="f_username" class="form-control" placeholder="Enter your username" onkeydown="restrictSpaces(event)" required/>
                                             </div>
                                         </div>
