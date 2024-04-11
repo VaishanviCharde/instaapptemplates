@@ -43,7 +43,6 @@ class Home21 extends CI_Controller {
         );
         $apiResponse = $this->Home_model21->CallAPI($method, $url, $header);
 		$apiDecodedResponse = json_decode($apiResponse);
-		// print_r($apiDecodedResponse->response);exit;
 		if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200) {
 			$data = array(
 				"url" => $api,
@@ -135,10 +134,8 @@ class Home21 extends CI_Controller {
 				// 		'user_id: '.$customerId
 				// 	);
 				// 	$cart_data = array("customer_id"=>$customerId, "restaurant"=> $tempId);
-				// 	print_r($cart_data);echo "<pre>";
 				// 	$details3 = $this->Home_model21->CallAPI($method3, $url3, $header3,json_encode($cart_data));
 				// 	$apiDecodedResponse3 = json_decode($details3);
-				// 	print_r($apiDecodedResponse3);echo "<pre>";
 				// 	$cartDataId = '';
 				// 	if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200 && $apiDecodedResponse3->status != NULL && $apiDecodedResponse3->status != ""){
 				// 		$apiResData3 = $apiDecodedResponse3->response;
@@ -148,7 +145,6 @@ class Home21 extends CI_Controller {
 				// } else {
 				// 	$sessiondata['cartId'] = $cartData[0]->id;
 				// }
-				// print_r($sessiondata);exit;
 				// $this->session->set_userdata($sessiondata);
 			
 				// $cartId = 0;
@@ -346,7 +342,6 @@ class Home21 extends CI_Controller {
 		public function index()
 		{	
 			$appCommData = $this->checklogin();
-			// print_r($_SESSION['login_data']['customer_name']);exit;
 			// $appCommData = $this->getAppData();
 			$myToken = $this->generate_unique_token();
 
@@ -400,9 +395,7 @@ class Home21 extends CI_Controller {
 				$apiResData2 = $apiDecodedResponse2->response;
 				$cartData = $apiResData2->results;
 			}
-
 			if(empty($cartData)) {
-
 				/* Create cart api */
 				$method3 = 'POST';
 				$url3 = $api.'cart/';
@@ -415,16 +408,17 @@ class Home21 extends CI_Controller {
 				$cart_data = array("customer_id"=>$customerId, "restaurant"=> $tempId);
 				$details3 = $this->Home_model21->CallAPI($method3, $url3, $header3,json_encode($cart_data));
 				$apiDecodedResponse3 = json_decode($details3);
-				$cartDataId = '';
-				if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 200 && $apiDecodedResponse3->status != NULL && $apiDecodedResponse3->status != ""){
+				$mycartId = 0;
+				if(isset($apiDecodedResponse3->status) && $apiDecodedResponse3->status == 201 && $apiDecodedResponse3->status != NULL && $apiDecodedResponse3->status != ""){
 					$apiResData3 = $apiDecodedResponse3->response;
-					$cartDataId = $apiResData3->results->id;
+					$mycartId = $apiResData3->id;
 				}
-				$sessiondata['cartId'] = $cartDataId;
+				$sessiondata['cartId'] = $mycartId;
 			} else {
 				$sessiondata['cartId'] = $cartData[0]->id;
 			}
 			$this->session->set_userdata($sessiondata);
+			return $sessiondata['cartId'];
 		}
 		/** /. Get cart Data */
 
@@ -466,6 +460,9 @@ class Home21 extends CI_Controller {
 					$cust_details = $this->Home_model21->CallAPI($method, $url, $header,json_encode($cust_data));
 					$apiDecodedResponse1 = json_decode($cust_details);
 					if(isset($apiDecodedResponse1->status) && $apiDecodedResponse1->status == 200 && $apiDecodedResponse1->status != NULL && $apiDecodedResponse1->status != "") {
+						$appResponse = $apiDecodedResponse1->response;
+						$response['customer_id'] = $appResponse->customer_id;
+
 						$response['success'] = 1;
 						$response['message'] = 'Registration has been done successfully. We sent you an email for account verification';
 					} else {
@@ -523,10 +520,11 @@ class Home21 extends CI_Controller {
 					$data1['customer_id'] = $apiResData->id;
 					$data1['login_token'] = $apiResData->token;
 					$this->session->set_userdata('login_data',$data1);
-					$this->getCartDataByCustId($apiResData->id);
+					$myCartId = $this->getCartDataByCustId($apiResData->id);
+
 					/** Get Cart Count & Other Details */
-					$cart_id = 0;
-					if(isset($_SESSION['cartId'])) {
+					$cart_id = $myCartId;
+					if(isset($_SESSION['cartId']) && $_SESSION['cartId'] != NULL && $_SESSION['cartId'] != '') {
 						$cart_id = $_SESSION['cartId'];
 					}
 					$token = $this->session->userdata('pre_login_data')['token'];
@@ -632,8 +630,10 @@ class Home21 extends CI_Controller {
 					$apiResData = $apiDecodedResponse->response;
 
 					/** Get Cart Count & Other Details */
-					$cart_id = 0;
-					if(isset($_SESSION['cartId'])) {
+					$myCartId = $this->getCartDataByCustId($apiResData->id);
+					/** Get Cart Count & Other Details */
+					$cart_id = $myCartId;
+					if(isset($_SESSION['cartId']) && $_SESSION['cartId'] != NULL && $_SESSION['cartId'] != '') {
 						$cart_id = $_SESSION['cartId'];
 					}
 					$token = $this->session->userdata('pre_login_data')['token'];

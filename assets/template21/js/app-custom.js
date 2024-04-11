@@ -1,3 +1,88 @@
+
+// var activeLi = $('.categoryClass.active');
+// var catId = activeLi.attr('my-cat');
+// getProductList(catId);
+
+function getProductList(catId) {
+    var site_url = $("#site_url").val();
+    var base_url = $("#base_url").val();
+    var TEMPNAME = $("#TEMPNAME").val();
+    $.ajax({
+        url: site_url+"get-products-by-category",  
+        type: "post", 
+        dataType: 'json',
+        data: {catId: catId},
+        beforeSend:function () {
+            $('#loader').show();
+        },
+        success:function(response){
+            $('#loader').hide();
+            if(response.success == 1) {
+                // $("#productListDiv").html(response.pListHtml);
+                // $("#productListDiv1").html(response.pListHtml1);
+                var productList = response.productList;
+                if(productList.length > 0) {
+                    var pListHtml = '';
+                    var pListHtml1 = '';
+                    for (var i = 0; i < productList.length; i++) {
+                        // var addedToCart = '';
+                        // var title= "Add to Cart";
+                        // var isAdded = 'isAddToCart';
+                        // if ($.inArray(productList.product_id, response.pIdList)) {
+                        //     addedToCart = 'prd_active';
+                        //     title= "Already In Cart";
+                        //     isAdded = 'isNotAddToCart';
+                        // }
+                        var addedToCart = '';
+                        var title = "Add to Cart";
+                        var isAdded = 'isAddToCart';
+                        // var isAdded = 'isNotAddToCart';
+
+                        // if ($.inArray(productList.product_id, response.pIdList) !== -1) {
+                        //     addedToCart = 'prd_active';
+                        //     title = "Already In Cart";
+                        //     isAdded = 'isNotAddToCart';
+                        // }
+                        let product_url = base_url+'assets'+TEMPNAME+'img/product/NoProductImg.png';
+                        if(productList[i].product_url != '') {
+                            product_url = productList[i].product_url;
+                        }
+                        let product_name = 'NA';
+                        if(productList[i].product_name != '') {
+                            product_name = productList[i].product_name;
+                        }
+                        let isStock = '';
+                        if(productList[i].in_stock != true) {
+                            isStock = '<div class="product-badge"><ul><li class="sale-badge">Out Off Stock</li></ul></div>';
+                        }
+                        let price = '0.00';
+                        if(productList[i].price != '') {
+                            price = productList[i].price;
+                        }
+                        let MRP = '0.00';
+                        if(productList[i].MRP != '') {
+                            MRP = productList[i].MRP;
+                        }
+                        let product_id = btoa(productList[i].product_id);
+                        pListHtml += "<div class='col-xl-4 col-sm-6 col-6'><div class='ltn__product-item ltn__product-item-3 text-center'><div class='product-img'><a href='javascript:void(0)'><img src='"+product_url+"' loading='lazy' alt='Product Image' class='pImg'></a>"+isStock+"<div class='product-hover-action'><ul><li class='quick_view_button' data-key="+product_id+"><a href='javascript:void(0)' title='Quick View'><i class='far fa-eye'></i></a></li><li class='add_to_cart "+isAdded+"' data-key='"+btoa(productList[i].product_id)+"' data-price='"+btoa(productList[i].price)+"'><a href='javascript:void(0)' title='"+title+"' class="+addedToCart+"><i class='fas fa-shopping-cart'></i></a></li></ul></div></div><div class='product-info'><h2 class='product-title pTitleHeight'><a href='javascript:void(0)'>"+product_name+"</a></h2><div class='product-price'><span>₹"+price+"</span><del>₹"+MRP+"</del></div></div></div></div>";
+                        pListHtml1 += "<div class='col-lg-12'><div class='ltn__product-item ltn__product-item-3'><div class='product-img'><a href='javascript:void(0)'><img src='"+product_url+"' loading='lazy' alt='Product Image'></a>"+isStock+"</div><div class='product-info'><h2 class='product-title'><a href='javascript:void(0)'>"+product_name+"</a></h2><div class='product-price'><span>₹"+price+"</span><del>₹"+MRP+"</del></div><div class='product-brief'><p>"+productList[i].extra+"</p></div><div class='product-hover-action'><ul><li class='quick_view_button' data-key="+product_id+"><a href='javascript:void(0)' title='Quick View'><i class='far fa-eye'></i></a></li><li class='add_to_cart "+isAdded+"' data-key='"+btoa(productList[i].product_id)+"' data-price='"+btoa(productList[i].price)+"'><a href='javascript:void(0)' title='"+title+"' class="+addedToCart+"><i class='fas fa-shopping-cart'></i></a></li></ul></div></div></div></div>";
+                    }
+                    $("#productListDiv").html(pListHtml);
+                    $("#productListDiv1").html(pListHtml1);
+                } else {
+                    $("#productListDiv").html('<label class="txt-center">No Listings Available</label>');
+                }
+                // hideLoader();
+            } else {
+                $("#productListDiv").html('<label class="txt-center">No Listings Available</label>');
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#loader').hide();
+            $("#productListDiv").html('<label class="txt-center">No Listings Available</label>');
+        }
+    });
+}
 $(document).ready(function(){ 
 
     $('#sign_up_modal').on('show.bs.modal', function() {
@@ -77,27 +162,23 @@ $(document).ready(function(){
             }
         },
         errorPlacement: function (error, element) {
-            if (element.attr("name") === "password") {
-                error.insertAfter(element.parent());
-            }else if (element.attr("name") === "salutation") {
-                error.insertAfter(element.parent());
-            }else if (element.attr("name") === "mobile[main]") {
-                error.insertAfter(element.parent());
-            } else {
-                error.insertAfter(element);
-            }
+            error.insertAfter(element.parent());
             // if (error) {
-            //     $(".iti__selected-flag").css('height', '62%');
             //     element.addClass("error-form-field");
             // } else {
-            //     $(".iti__selected-flag").css('height', '100%');
             //     element.removeClass("error-form-field");
             // }
-
-            // if($("#salutation").val() != "") {
-            //     $("#salutation-error").css('display', 'none')
-            // }
+            // $(".form-control").css('margin-bottom', '0px');
         },
+        // success: function(label) {
+        //     // Check if the element is a select box
+        //     if (label.prev('.form-control').is('select')) {
+        //         // Remove any error message associated with the select box
+        //         label.prev('.form-control').removeClass('error').next('label.error').remove();
+        //     }
+        //     // Add margin-bottom if needed for other form controls
+        //     // $(".form-control.valid").css('margin-bottom', '5px');
+        // },
         submitHandler: function(form) {
             var site_url = $("#site_url").val();
             $("#signUpSubmitBtn").html('Sign Up &nbsp; <i class="fa fa-spinner fa-spin"></i>');
@@ -112,6 +193,7 @@ $(document).ready(function(){
                 success:function(response){
                     if(response.success == 1) {
                         $(form).trigger("reset");
+                        $("custId").val(response.customer_id);
                         $("#signUpSubmitBtn").html('Sign Up');
                         $("#signUpSubmitBtn").prop("disabled", false);
                         $('#sign_up_modal').modal('hide');
@@ -218,7 +300,6 @@ $(document).ready(function(){
                 data: formData,
                 success:function(response){
                     if(response.success == 1) {
-                        // alert(response.cartDataId);
                         $(form).trigger("reset");
                         $("#cartId").val(response.cartDataId);
                         $('#custId').val(response.customer_id);
@@ -299,14 +380,7 @@ $(document).ready(function(){
             }
         },
         errorPlacement: function (error, element) {
-            error.insertAfter(element);
-            if (error) {
-                $(".iti__selected-flag").css('height', '62%');
-                element.addClass("error-form-field");
-            } else {
-                $(".iti__selected-flag").css('height', '100%');
-                element.removeClass("error-form-field");
-            }
+            error.insertAfter(element.parent());
         },
         submitHandler: function(form) {
             $(".iti__selected-flag").css('height', '100%');
@@ -327,6 +401,10 @@ $(document).ready(function(){
                         $("#guestSignInBtn").html('<b>Request OTP</b>');
                         $("#guestSignInBtn").prop("disabled", false);
                         $('#guestModalForm').addClass('d-none');
+                        $("#otp1").val('');
+                        $("#otp2").val('');
+                        $("#otp3").val('');
+                        $("#otp4").val('');
                         $('#OTPModalForm').removeClass('d-none');
                         Swal.fire({
                             toast: true,
@@ -650,469 +728,159 @@ $(document).ready(function(){
         getProductList(catId1);
     });
 
-    // var activeLi = $('.categoryClass.active');
-    // var catId = activeLi.attr('my-cat');
-    // getProductList(catId);
+    /** Logout Action */
+    $(".logout-btn").on("click", function() {
+        var site_url = $("#site_url").val();
 
-    function getProductList(catId) {
+        $.ajax({
+            url: site_url+"logout",  
+            type: "post", 
+            dataType: 'json',
+            data: [],
+            success:function(response){
+                if(response.success == 1) {
+                    $("#signInBtn1").removeClass('d-none');
+                    $("#myAccBtn").addClass('d-none');
+                    $('#custId').val('');
+                    $('#cartCount').html('0');
+                    $('.total_cost').html('0.00');
+                } else {
+                    Swal.fire({
+                        toast: true,
+                        text: 'Service temporarily unavailable, try again later',
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    toast: true,
+                    text: 'Could not reach server, please try again later.  - '+error,
+                    icon: 'error',
+                    showCloseButton: true,
+                    position: 'bottom',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
+
+    /** Change Number for login */
+    $("#changeNumber").on("click", function() {
+        $('#guestModalForm').removeClass('d-none');
+        $('#OTPModalForm').addClass('d-none');
+    });
+
+    /** Request OTP Again */
+    $("#requestOTPAgain").on("click", function() {
+        var site_url = $("#site_url").val();
+        var number = $("#number").html();
+
+        $.ajax({
+            url: site_url+"guest-signin-action",  
+            type: "post", 
+            dataType: 'json',
+            data: {number:number},
+            success:function(response){
+                if(response.success == 1) {
+                    // $('#guestModalForm').removeClass('d-none');
+                    // $('#OTPModalForm').addClass('d-none');
+                    Swal.fire({
+                        toast: true,
+                        text: response.message,
+                        icon: 'success',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        toast: true,
+                        text: response.message,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    toast: true,
+                    text: 'Could not reach server, please try again later.  - '+error,
+                    icon: 'error',
+                    showCloseButton: true,
+                    position: 'bottom',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
+
+    // Capture scroll position before opening modal
+    // $('.tab-content').on('click', '.quick_view_button', function() {
+    //     var scrollPosition = $(window).scrollTop();
+    //     // Show the modal
+    //     $('#quick_view_modal').modal('show');
+        
+    //     // Set the scroll position to the current position to prevent scrolling
+    //     $(window).scrollTop(scrollPosition);
+    // });
+
+    // $('#quick_view_modal').on('hidden.bs.modal', function () {
+    //     var scrollPosition = $(window).scrollTop();
+    //     $(window).scrollTop(scrollPosition);
+    // });
+
+    /** Quick View Appended Html */
+    $('.tab-content').on('click', '.quick_view_button', function() {
+        let prdId = atob($(this).data('key'));
         var site_url = $("#site_url").val();
         var base_url = $("#base_url").val();
-        var TEMPNAME = $("#TEMPNAME").val();
+        var TempName = $("#TempName").val();
+
+        $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
+        $("#prdTitle").html('--');
+        $("#prdPrice").html('0.00');
+        $("#prdDelMRP").html('0.00');
+
         $.ajax({
-            url: site_url+"get-products-by-category",  
+            url: site_url+"get-single-product",  
             type: "post", 
             dataType: 'json',
-            data: {catId: catId},
+            data: {prdId:prdId},
             beforeSend:function () {
-                $('#loader').show();
+                $('.loading').show();
             },
             success:function(response){
-                $('#loader').hide();
+                $(".loading").hide();
                 if(response.success == 1) {
-                    // $("#productListDiv").html(response.pListHtml);
-                    // $("#productListDiv1").html(response.pListHtml1);
-                    var productList = response.productList;
-                    if(productList.length > 0) {
-                        var pListHtml = '';
-                        var pListHtml1 = '';
-                        for (var i = 0; i < productList.length; i++) {
-                            // var addedToCart = '';
-                            // var title= "Add to Cart";
-                            // var isAdded = 'isAddToCart';
-                            // if ($.inArray(productList.product_id, response.pIdList)) {
-                            //     addedToCart = 'prd_active';
-                            //     title= "Already In Cart";
-                            //     isAdded = 'isNotAddToCart';
-                            // }
-                            var addedToCart = '';
-                            var title = "Add to Cart";
-                            var isAdded = 'isAddToCart';
-                            // var isAdded = 'isNotAddToCart';
-
-                            // if ($.inArray(productList.product_id, response.pIdList) !== -1) {
-                            //     addedToCart = 'prd_active';
-                            //     title = "Already In Cart";
-                            //     isAdded = 'isNotAddToCart';
-                            // }
-                            let product_url = base_url+'assets'+TEMPNAME+'img/product/NoProductImg.png';
-                            if(productList[i].product_url != '') {
-                                product_url = productList[i].product_url;
-                            }
-                            let product_name = 'NA';
-                            if(productList[i].product_name != '') {
-                                product_name = productList[i].product_name;
-                            }
-                            let isStock = '';
-                            if(productList[i].in_stock != true) {
-                                isStock = '<div class="product-badge"><ul><li class="sale-badge">Out Off Stock</li></ul></div>';
-                            }
-                            let price = '0.00';
-                            if(productList[i].price != '') {
-                                price = productList[i].price;
-                            }
-                            let MRP = '0.00';
-                            if(productList[i].MRP != '') {
-                                MRP = productList[i].MRP;
-                            }
-                            let product_id = btoa(productList[i].product_id);
-                            pListHtml += "<div class='col-xl-4 col-sm-6 col-6'><div class='ltn__product-item ltn__product-item-3 text-center'><div class='product-img'><a href='javascript:void(0)'><img src='"+product_url+"' loading='lazy' alt='Product Image' class='pImg'></a>"+isStock+"<div class='product-hover-action'><ul><li class='quick_view_button' data-key="+product_id+"><a href='javascript:void(0)' title='Quick View'><i class='far fa-eye'></i></a></li><li class='add_to_cart "+isAdded+"' data-key='"+btoa(productList[i].product_id)+"' data-price='"+btoa(productList[i].price)+"'><a href='javascript:void(0)' title='"+title+"' class="+addedToCart+"><i class='fas fa-shopping-cart'></i></a></li></ul></div></div><div class='product-info'><h2 class='product-title pTitleHeight'><a href='javascript:void(0)'>"+product_name+"</a></h2><div class='product-price'><span>₹"+price+"</span><del>₹"+MRP+"</del></div></div></div></div>";
-                            pListHtml1 += "<div class='col-lg-12'><div class='ltn__product-item ltn__product-item-3'><div class='product-img'><a href='javascript:void(0)'><img src='"+product_url+"' loading='lazy' alt='Product Image'></a>"+isStock+"</div><div class='product-info'><h2 class='product-title'><a href='javascript:void(0)'>"+product_name+"</a></h2><div class='product-price'><span>₹"+price+"</span><del>₹"+MRP+"</del></div><div class='product-brief'><p>"+productList[i].extra+"</p></div><div class='product-hover-action'><ul><li class='quick_view_button' data-key="+product_id+"><a href='javascript:void(0)' title='Quick View'><i class='far fa-eye'></i></a></li><li class='add_to_cart "+isAdded+"' data-key='"+btoa(productList[i].product_id)+"' data-price='"+btoa(productList[i].price)+"'><a href='javascript:void(0)' title='"+title+"' class="+addedToCart+"><i class='fas fa-shopping-cart'></i></a></li></ul></div></div></div></div>";
-                        }
-                        $("#productListDiv").html(pListHtml);
-                        $("#productListDiv1").html(pListHtml1);
-                    } else {
-                        $("#productListDiv").html('<label class="txt-center">No Listings Available</label>');
+                    var prdCur = '$';
+                    if(response.currency == 'inr' || response.currency == 'INR') {
+                        prdCur = '₹';
                     }
-                    // hideLoader();
-                } else {
-                    $("#productListDiv").html('<label class="txt-center">No Listings Available</label>');
-                }
-            },
-            error: function(xhr, status, error) {
-                $('#loader').hide();
-                $("#productListDiv").html('<label class="txt-center">No Listings Available</label>');
-            }
-        });
-    }
-
-/** Logout Action */
-$(".logout-btn").on("click", function() {
-    var site_url = $("#site_url").val();
-
-    $.ajax({
-        url: site_url+"logout",  
-        type: "post", 
-        dataType: 'json',
-        data: [],
-        success:function(response){
-            if(response.success == 1) {
-                $("#signInBtn1").removeClass('d-none');
-                $("#myAccBtn").addClass('d-none');
-                $('#custId').val('');
-                $('#cartCount').html('0');
-                $('.total_cost').html('0.00');
-            } else {
-                Swal.fire({
-                    toast: true,
-                    text: 'Service temporarily unavailable, try again later',
-                    icon: 'error',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            Swal.fire({
-                toast: true,
-                text: 'Could not reach server, please try again later.  - '+error,
-                icon: 'error',
-                showCloseButton: true,
-                position: 'bottom',
-                timer: 5000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        }
-    });
-});
-
-/** Change Number for login */
-$("#changeNumber").on("click", function() {
-    $('#guestModalForm').removeClass('d-none');
-    $('#OTPModalForm').addClass('d-none');
-});
-
-/** Request OTP Again */
-$("#requestOTPAgain").on("click", function() {
-    var site_url = $("#site_url").val();
-    var number = $("#number").html();
-
-    $.ajax({
-        url: site_url+"guest-signin-action",  
-        type: "post", 
-        dataType: 'json',
-        data: {number:number},
-        success:function(response){
-            if(response.success == 1) {
-                // $('#guestModalForm').removeClass('d-none');
-                // $('#OTPModalForm').addClass('d-none');
-                Swal.fire({
-                    toast: true,
-                    text: response.message,
-                    icon: 'success',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            } else {
-                Swal.fire({
-                    toast: true,
-                    text: response.message,
-                    icon: 'error',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            Swal.fire({
-                toast: true,
-                text: 'Could not reach server, please try again later.  - '+error,
-                icon: 'error',
-                showCloseButton: true,
-                position: 'bottom',
-                timer: 5000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        }
-    });
-});
-
-// Capture scroll position before opening modal
-// $('.tab-content').on('click', '.quick_view_button', function() {
-//     var scrollPosition = $(window).scrollTop();
-//     // Show the modal
-//     $('#quick_view_modal').modal('show');
-    
-//     // Set the scroll position to the current position to prevent scrolling
-//     $(window).scrollTop(scrollPosition);
-// });
-
-// $('#quick_view_modal').on('hidden.bs.modal', function () {
-//     var scrollPosition = $(window).scrollTop();
-//     $(window).scrollTop(scrollPosition);
-// });
-
-/** Quick View Appended Html */
-$('.tab-content').on('click', '.quick_view_button', function() {
-    let prdId = atob($(this).data('key'));
-    var site_url = $("#site_url").val();
-    var base_url = $("#base_url").val();
-    var TempName = $("#TempName").val();
-
-    $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
-    $("#prdTitle").html('--');
-    $("#prdPrice").html('0.00');
-    $("#prdDelMRP").html('0.00');
-
-    $.ajax({
-        url: site_url+"get-single-product",  
-        type: "post", 
-        dataType: 'json',
-        data: {prdId:prdId},
-        beforeSend:function () {
-            $('.loading').show();
-        },
-        success:function(response){
-            $(".loading").hide();
-            if(response.success == 1) {
-                var prdCur = '$';
-                if(response.currency == 'inr' || response.currency == 'INR') {
-                    prdCur = '₹';
-                }
-                var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
-                if(response.productDetails.product_url != "") {
-                    product_url = response.productDetails.product_url;
-                }
-                $('#prdImg').attr('src', product_url);
-                $("#prdTitle").html(response.productDetails.product_name);
-                $("#prdPrice").html(prdCur+response.productDetails.price);
-                $("#prdDelMRP").html(prdCur+response.productDetails.MRP);
-                $("#quick_view_modal").modal('show');
-            } else {
-                Swal.fire({
-                    toast: true,
-                    text: response.message,
-                    icon: 'error',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            $(".loading").hide();
-            Swal.fire({
-                toast: true,
-                text: 'Could not reach server, please try again later.  - '+error,
-                icon: 'error',
-                showCloseButton: true,
-                position: 'bottom',
-                timer: 5000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        }
-    });
-});
-
-/** Quick view Popup */
-$(document).on("click", ".quick_view_button", function() {
-    // alert("hiii")
-    let prdId = atob($(this).data('key'));
-    var site_url = $("#site_url").val();
-    var base_url = $("#base_url").val();
-    var TempName = $("#TempName").val();
-
-    $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
-    $("#prdTitle").html('--');
-    $("#prdPrice").html(0);
-    $("#prdDelMRP").html(0);
-    $("input[name='prdCurrency']").val('₹');
-    $("input[name='prdPrice']").val(0);
-    $("input[name='prdDelMRP']").val(0);
-    $(".quickAddToCart").attr('data-key', '')
-    $("input[name='qtybutton']").val(1);
-
-    $.ajax({
-        url: site_url+"get-single-product",  
-        type: "post", 
-        dataType: 'json',
-        data: {prdId:prdId},
-        beforeSend:function () {
-            $('.loading').show();
-        },
-        success:function(response){
-            $(".loading").hide();
-            // alert(response.productDetails.price)
-            if(response.success == 1) {
-                var prdCur = '$';
-                if(response.currency == 'inr' || response.currency == 'INR') {
-                    prdCur = '₹';
-                }
-                var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
-                if(response.productDetails.product_url != "") {
-                    product_url = response.productDetails.product_url;
-                }
-                $("input[name='prdPrice']").val(response.productDetails.price);
-                $("input[name='prdDelMRP']").val(response.productDetails.MRP);
-                $('#prdImg').attr('src', product_url);
-                $("#prdTitle").html(response.productDetails.product_name);
-                $("#prdPrice").html(prdCur+response.productDetails.price);
-                $("#prdDelMRP").html(prdCur+response.productDetails.MRP);
-                $("input[name='prdCurrency']").val(prdCur);
-                // $(".quickAddToCart").attr('data-key', btoa(prdId));
-                $("#prdIdNew").val(prdId);
-                $("input[name='qtybutton']").val(1);
-                $("#prdQty").val(1);
-                $("#quick_view_modal").modal('show');
-            } else {
-                Swal.fire({
-                    toast: true,
-                    text: response.message,
-                    icon: 'error',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            $(".loading").hide();
-            Swal.fire({
-                toast: true,
-                text: 'Could not reach server, please try again later.  - '+error,
-                icon: 'error',
-                showCloseButton: true,
-                position: 'bottom',
-                timer: 5000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-        }
-    });
-});
-// $(".quick_view_button").on("click", function(){
-//     alert("hiii")
-//     let prdId = atob($(this).data('key'));
-//     var site_url = $("#site_url").val();
-//     var base_url = $("#base_url").val();
-//     var TempName = $("#TempName").val();
-
-//     $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
-//     $("#prdTitle").html('--');
-//     $("#prdPrice").html(0);
-//     $("#prdDelMRP").html(0);
-//     $("input[name='prdCurrency']").val('');
-//     $("input[name='prdPrice']").val(0);
-//     $("input[name='prdDelMRP']").val(0);
-//     $(".quickAddToCart").attr('data-key', '')
-//     $("input[name='qtybutton']").val(1);
-
-//     $.ajax({
-//         url: site_url+"get-single-product",  
-//         type: "post", 
-//         dataType: 'json',
-//         data: {prdId:prdId},
-//         beforeSend:function () {
-//             $('.loading').show();
-//         },
-//         success:function(response){
-//             $(".loading").hide();
-//             alert(response.productDetails.price)
-//             if(response.success == 1) {
-//                 var prdCur = '$';
-//                 if(response.currency == 'inr' || response.currency == 'INR') {
-//                     prdCur = '₹';
-//                 }
-//                 var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
-//                 if(response.productDetails.product_url != "") {
-//                     product_url = response.productDetails.product_url;
-//                 }
-//                 $("input[name='prdPrice']").val(response.productDetails.price);
-//                 $("input[name='prdDelMRP']").val(response.productDetails.MRP);
-//                 $('#prdImg').attr('src', product_url);
-//                 $("#prdTitle").html(response.productDetails.product_name);
-//                 $("#prdPrice").html(prdCur+(response.productDetails.price).toFixed(2));
-//                 $("#prdDelMRP").html(prdCur+(response.productDetails.MRP).toFixed(2));
-//                 $("input[name='prdCurrency']").val(prdCur);
-//                 // $(".quickAddToCart").attr('data-key', btoa(prdId));
-//                 $("#prdIdNew").val(prdId);
-//                 $("input[name='qtybutton']").val(1);
-//                 $("#prdQty").val(1);
-//                 $("#quick_view_modal").modal('show');
-//             } else {
-//                 Swal.fire({
-//                     toast: true,
-//                     text: response.message,
-//                     icon: 'error',
-//                     showCloseButton: true,
-//                     position: 'bottom',
-//                     timer: 5000,
-//                     timerProgressBar: true,
-//                     showConfirmButton: false
-//                 });
-//             }
-//         },
-//         error: function(xhr, status, error) {
-//             $(".loading").hide();
-//             Swal.fire({
-//                 toast: true,
-//                 text: 'Could not reach server, please try again later.  - '+error,
-//                 icon: 'error',
-//                 showCloseButton: true,
-//                 position: 'bottom',
-//                 timer: 5000,
-//                 timerProgressBar: true,
-//                 showConfirmButton: false
-//             });
-//         }
-//     });
-// });
-
-/** Add to Cart */
-$(document).on("click", ".isAddToCart", function() {
-    var $clickedButton = $(this);
-    var prdId = atob($(this).data('key'));
-    var price = atob($(this).data('price'));
-    var site_url = $("#site_url").val();
-    var base_url = $("#base_url").val();
-    var TempName = $("#TempName").val();
-    var custId = $("#custId").val();
-    var cartId = $("#cartId").val();
-    // $("input[name='qtybutton']").val(1);
-    // alert(custId);
-    // alert(cartId);
-    if(custId != '' && cartId != '') {
-        $.ajax({
-            url: site_url+"add-to-cart",  
-            type: "post", 
-            dataType: 'json',
-            data: {prdId:prdId,prdQty:1,price:price,custId:custId,cartId:cartId},
-            beforeSend:function () {
-                $('.loading').show();
-            },
-            success:function(response){
-                $(".loading").hide();
-                if(response.success == 1) {
-                    // $clickedButton.removeClass('isAddToCart').addClass('isNotAddToCart');
-                    // $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
-                    $("#cartItemList").html(response.cartList);
-                    $("#cartCount").html(response.cartCount);
-                    $(".total_cost").html(response.total_cost);
-                    Swal.fire({
-                        toast: true,
-                        text: response.message,
-                        icon: 'success',
-                        showCloseButton: true,
-                        position: 'bottom',
-                        timer: 5000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
-                    });
+                    var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
+                    if(response.productDetails.product_url != "") {
+                        product_url = response.productDetails.product_url;
+                    }
+                    $('#prdImg').attr('src', product_url);
+                    $("#prdTitle").html(response.productDetails.product_name);
+                    $("#prdPrice").html(prdCur+response.productDetails.price);
+                    $("#prdDelMRP").html(prdCur+response.productDetails.MRP);
+                    $("#quick_view_modal").modal('show');
                 } else {
                     Swal.fire({
                         toast: true,
@@ -1140,65 +908,58 @@ $(document).on("click", ".isAddToCart", function() {
                 });
             }
         });
+    });
 
-    } else {
-        Swal.fire({
-            toast: true,
-            text: 'Please Login First',
-            icon: 'error',
-            showCloseButton: true,
-            position: 'bottom',
-            timer: 5000,
-            timerProgressBar: true,
-            showConfirmButton: false
-        });
-    }
-});
+    /** Quick view Popup */
+    $(document).on("click", ".quick_view_button", function() {
+        // alert("hiii")
+        let prdId = atob($(this).data('key'));
+        var site_url = $("#site_url").val();
+        var base_url = $("#base_url").val();
+        var TempName = $("#TempName").val();
 
-/** Add to Cart */
-$(document).on("click", ".quickAddToCart", function() {
-    let $clickedButton = $(this);
-    // let prdId = atob($(this).data('key'));
-    let prdId = $("#prdIdNew").val();
+        $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
+        $("#prdTitle").html('--');
+        $("#prdPrice").html(0);
+        $("#prdDelMRP").html(0);
+        $("input[name='prdCurrency']").val('₹');
+        $("input[name='prdPrice']").val(0);
+        $("input[name='prdDelMRP']").val(0);
+        $(".quickAddToCart").attr('data-key', '')
+        $("input[name='qtybutton']").val(1);
 
-    let price = $("input[name='prdPrice']").val();
-    let prdInstruction = $("#prdInstruction").val();
-    let site_url = $("#site_url").val();
-    let base_url = $("#base_url").val();
-    let TempName = $("#TempName").val();
-    let custId = $("#custId").val();
-    let cartId = $("#cartId").val();
-    let prdQty = $("#prdQty").val();
-    // alert(custId);
-    // alert(cartId);
-    if(custId != '' && cartId != '') {
         $.ajax({
-            url: site_url+"add-to-cart",  
+            url: site_url+"get-single-product",  
             type: "post", 
             dataType: 'json',
-            data: {prdId:prdId,prdQty:prdQty,price:price,custId:custId,cartId:cartId,prdInstruction:prdInstruction},
+            data: {prdId:prdId},
             beforeSend:function () {
                 $('.loading').show();
             },
             success:function(response){
                 $(".loading").hide();
+                // alert(response.productDetails.price)
                 if(response.success == 1) {
-                    // $clickedButton.removeClass('isAddToCart').addClass('isNotAddToCart');
-                    // $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
-                    $("#cartCount").html(response.cartCount);
-                    $(".total_cost").html(response.total_cost);
-                    $("#cartItemList").html(response.cartList);
-                    $("#quick_view_modal").modal('hide');
-                    Swal.fire({
-                        toast: true,
-                        text: response.message,
-                        icon: 'success',
-                        showCloseButton: true,
-                        position: 'bottom',
-                        timer: 5000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
-                    });
+                    var prdCur = '$';
+                    if(response.currency == 'inr' || response.currency == 'INR') {
+                        prdCur = '₹';
+                    }
+                    var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
+                    if(response.productDetails.product_url != "") {
+                        product_url = response.productDetails.product_url;
+                    }
+                    $("input[name='prdPrice']").val(response.productDetails.price);
+                    $("input[name='prdDelMRP']").val(response.productDetails.MRP);
+                    $('#prdImg').attr('src', product_url);
+                    $("#prdTitle").html(response.productDetails.product_name);
+                    $("#prdPrice").html(prdCur+response.productDetails.price);
+                    $("#prdDelMRP").html(prdCur+response.productDetails.MRP);
+                    $("input[name='prdCurrency']").val(prdCur);
+                    // $(".quickAddToCart").attr('data-key', btoa(prdId));
+                    $("#prdIdNew").val(prdId);
+                    $("input[name='qtybutton']").val(1);
+                    $("#prdQty").val(1);
+                    $("#quick_view_modal").modal('show');
                 } else {
                     Swal.fire({
                         toast: true,
@@ -1226,104 +987,157 @@ $(document).on("click", ".quickAddToCart", function() {
                 });
             }
         });
+    });
+    // $(".quick_view_button").on("click", function(){
+    //     alert("hiii")
+    //     let prdId = atob($(this).data('key'));
+    //     var site_url = $("#site_url").val();
+    //     var base_url = $("#base_url").val();
+    //     var TempName = $("#TempName").val();
 
-    } else {
-        Swal.fire({
-            toast: true,
-            text: 'Please Login First',
-            icon: 'error',
-            showCloseButton: true,
-            position: 'bottom',
-            timer: 5000,
-            timerProgressBar: true,
-            showConfirmButton: false
-        });
-    }
-});
-/** Cart Plus Minus Values */
-$(".cart-plus-minus").prepend('<div class="dec qtybutton">-</div>');
-$(".cart-plus-minus").append('<div class="inc qtybutton">+</div>');
+    //     $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
+    //     $("#prdTitle").html('--');
+    //     $("#prdPrice").html(0);
+    //     $("#prdDelMRP").html(0);
+    //     $("input[name='prdCurrency']").val('');
+    //     $("input[name='prdPrice']").val(0);
+    //     $("input[name='prdDelMRP']").val(0);
+    //     $(".quickAddToCart").attr('data-key', '')
+    //     $("input[name='qtybutton']").val(1);
 
-$(".qtybutton").on("click", function() {
-    var $button = $(this);
-    var oldValue = parseFloat($button.siblings("input").val());
-    // alert(oldValue)
-    var prdPrice = parseFloat($("input[name='prdPrice']").val());
-    var prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
-    var prdCurrency = $("input[name='prdCurrency']").val();
-    if ($button.text() == "+") {
-        var newVal = oldValue + 1;
-    } else {
-        if (oldValue > 1) {
-            var newVal = oldValue - 1;
+    //     $.ajax({
+    //         url: site_url+"get-single-product",  
+    //         type: "post", 
+    //         dataType: 'json',
+    //         data: {prdId:prdId},
+    //         beforeSend:function () {
+    //             $('.loading').show();
+    //         },
+    //         success:function(response){
+    //             $(".loading").hide();
+    //             alert(response.productDetails.price)
+    //             if(response.success == 1) {
+    //                 var prdCur = '$';
+    //                 if(response.currency == 'inr' || response.currency == 'INR') {
+    //                     prdCur = '₹';
+    //                 }
+    //                 var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
+    //                 if(response.productDetails.product_url != "") {
+    //                     product_url = response.productDetails.product_url;
+    //                 }
+    //                 $("input[name='prdPrice']").val(response.productDetails.price);
+    //                 $("input[name='prdDelMRP']").val(response.productDetails.MRP);
+    //                 $('#prdImg').attr('src', product_url);
+    //                 $("#prdTitle").html(response.productDetails.product_name);
+    //                 $("#prdPrice").html(prdCur+(response.productDetails.price).toFixed(2));
+    //                 $("#prdDelMRP").html(prdCur+(response.productDetails.MRP).toFixed(2));
+    //                 $("input[name='prdCurrency']").val(prdCur);
+    //                 // $(".quickAddToCart").attr('data-key', btoa(prdId));
+    //                 $("#prdIdNew").val(prdId);
+    //                 $("input[name='qtybutton']").val(1);
+    //                 $("#prdQty").val(1);
+    //                 $("#quick_view_modal").modal('show');
+    //             } else {
+    //                 Swal.fire({
+    //                     toast: true,
+    //                     text: response.message,
+    //                     icon: 'error',
+    //                     showCloseButton: true,
+    //                     position: 'bottom',
+    //                     timer: 5000,
+    //                     timerProgressBar: true,
+    //                     showConfirmButton: false
+    //                 });
+    //             }
+    //         },
+    //         error: function(xhr, status, error) {
+    //             $(".loading").hide();
+    //             Swal.fire({
+    //                 toast: true,
+    //                 text: 'Could not reach server, please try again later.  - '+error,
+    //                 icon: 'error',
+    //                 showCloseButton: true,
+    //                 position: 'bottom',
+    //                 timer: 5000,
+    //                 timerProgressBar: true,
+    //                 showConfirmButton: false
+    //             });
+    //         }
+    //     });
+    // });
+
+    /** Add to Cart */
+    $(document).on("click", ".isAddToCart", function() {
+        var $clickedButton = $(this);
+        var prdId = atob($(this).data('key'));
+        var price = atob($(this).data('price'));
+        var site_url = $("#site_url").val();
+        var base_url = $("#base_url").val();
+        var TempName = $("#TempName").val();
+        var custId = $("#custId").val();
+        var cartId = $("#cartId").val();
+        // $("input[name='qtybutton']").val(1);
+        // alert(custId);
+        // alert(cartId);
+        if(custId != '' && cartId != '') {
+            $.ajax({
+                url: site_url+"add-to-cart",  
+                type: "post", 
+                dataType: 'json',
+                data: {prdId:prdId,prdQty:1,price:price,custId:custId,cartId:cartId},
+                beforeSend:function () {
+                    $('.loading').show();
+                },
+                success:function(response){
+                    $(".loading").hide();
+                    if(response.success == 1) {
+                        // $clickedButton.removeClass('isAddToCart').addClass('isNotAddToCart');
+                        // $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
+                        $("#cartItemList").html(response.cartList);
+                        $("#cartCount").html(response.cartCount);
+                        $(".total_cost").html(response.total_cost);
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'success',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $(".loading").hide();
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+
         } else {
-            var newVal = 1;
-        }
-    }
-    // alert(newVal);
-    // alert(prdPrice);
-    var newPrdPrice = newVal * prdPrice;
-    var newPrdDelMRP = newVal * prdDelMRP;
-    $button.siblings("input").val(newVal);
-    $("#prdQty").val(newVal);
-    $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
-    $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
-
-    $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
-    $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
-});
-
-/** Delete Function */
-$(document).on("click", ".mini-cart-item-delete", function() {
-    let pId = $(this).data("key");
-    let site_url = $("#site_url").val();
-    $.ajax({
-        url: site_url+"delete-cart-item",  
-        type: "post", 
-        dataType: 'json',
-        data: {pId:pId},
-        beforeSend:function () {
-            $('.loading').show();
-        },
-        success:function(response){
-            $(".loading").hide();
-            if(response.success == 1) {
-                $("#cartItemList").html(response.cartListHtml);
-                $("#cartCount").html(response.cartCount);
-                $(".total_cost").html(response.total_cost);
-
-                // var activeLi = $('.categoryClass.active');
-                // var catId = activeLi.attr('my-cat');
-                // getProductList(catId);
-                
-                Swal.fire({
-                    toast: true,
-                    text: response.message,
-                    icon: 'success',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            } else {
-                Swal.fire({
-                    toast: true,
-                    text: response.message,
-                    icon: 'error',
-                    showCloseButton: true,
-                    position: 'bottom',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            $(".loading").hide();
             Swal.fire({
                 toast: true,
-                text: 'Could not reach server, please try again later.  - '+error,
+                text: 'Please Login First',
                 icon: 'error',
                 showCloseButton: true,
                 position: 'bottom',
@@ -1334,6 +1148,185 @@ $(document).on("click", ".mini-cart-item-delete", function() {
         }
     });
 
-});
+    /** Add to Cart */
+    $(document).on("click", ".quickAddToCart", function() {
+        let $clickedButton = $(this);
+        // let prdId = atob($(this).data('key'));
+        let prdId = $("#prdIdNew").val();
+
+        let price = $("input[name='prdPrice']").val();
+        let prdInstruction = $("#prdInstruction").val();
+        let site_url = $("#site_url").val();
+        let base_url = $("#base_url").val();
+        let TempName = $("#TempName").val();
+        let custId = $("#custId").val();
+        let cartId = $("#cartId").val();
+        let prdQty = $("#prdQty").val();
+        // alert(custId);
+        // alert(cartId);
+        if(custId != '' && cartId != '') {
+            $.ajax({
+                url: site_url+"add-to-cart",  
+                type: "post", 
+                dataType: 'json',
+                data: {prdId:prdId,prdQty:prdQty,price:price,custId:custId,cartId:cartId,prdInstruction:prdInstruction},
+                beforeSend:function () {
+                    $('.loading').show();
+                },
+                success:function(response){
+                    $(".loading").hide();
+                    if(response.success == 1) {
+                        // $clickedButton.removeClass('isAddToCart').addClass('isNotAddToCart');
+                        // $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
+                        $("#cartCount").html(response.cartCount);
+                        $(".total_cost").html(response.total_cost);
+                        $("#cartItemList").html(response.cartList);
+                        $("#quick_view_modal").modal('hide');
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'success',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $(".loading").hide();
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+
+        } else {
+            Swal.fire({
+                toast: true,
+                text: 'Please Login First',
+                icon: 'error',
+                showCloseButton: true,
+                position: 'bottom',
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        }
+    });
+    /** Cart Plus Minus Values */
+    $(".cart-plus-minus").prepend('<div class="dec qtybutton">-</div>');
+    $(".cart-plus-minus").append('<div class="inc qtybutton">+</div>');
+
+    $(".qtybutton").on("click", function() {
+        var $button = $(this);
+        var oldValue = parseFloat($button.siblings("input").val());
+        // alert(oldValue)
+        var prdPrice = parseFloat($("input[name='prdPrice']").val());
+        var prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
+        var prdCurrency = $("input[name='prdCurrency']").val();
+        if ($button.text() == "+") {
+            var newVal = oldValue + 1;
+        } else {
+            if (oldValue > 1) {
+                var newVal = oldValue - 1;
+            } else {
+                var newVal = 1;
+            }
+        }
+        // alert(newVal);
+        // alert(prdPrice);
+        var newPrdPrice = newVal * prdPrice;
+        var newPrdDelMRP = newVal * prdDelMRP;
+        $button.siblings("input").val(newVal);
+        $("#prdQty").val(newVal);
+        $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
+        $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
+
+        $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
+        $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
+    });
+
+    /** Delete Function */
+    $(document).on("click", ".mini-cart-item-delete", function() {
+        let pId = $(this).data("key");
+        let site_url = $("#site_url").val();
+        $.ajax({
+            url: site_url+"delete-cart-item",  
+            type: "post", 
+            dataType: 'json',
+            data: {pId:pId},
+            beforeSend:function () {
+                $('.loading').show();
+            },
+            success:function(response){
+                $(".loading").hide();
+                if(response.success == 1) {
+                    $("#cartItemList").html(response.cartListHtml);
+                    $("#cartCount").html(response.cartCount);
+                    $(".total_cost").html(response.total_cost);
+
+                    // var activeLi = $('.categoryClass.active');
+                    // var catId = activeLi.attr('my-cat');
+                    // getProductList(catId);
+                    
+                    Swal.fire({
+                        toast: true,
+                        text: response.message,
+                        icon: 'success',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        toast: true,
+                        text: response.message,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                $(".loading").hide();
+                Swal.fire({
+                    toast: true,
+                    text: 'Could not reach server, please try again later.  - '+error,
+                    icon: 'error',
+                    showCloseButton: true,
+                    position: 'bottom',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
+        });
+
+    });
 
 });

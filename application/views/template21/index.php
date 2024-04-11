@@ -289,7 +289,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title-area ltn__section-title-2--- text-center">
-                        <h1 class="section-title white-color---">Top Catagories</h1>
+                        <h1 class="section-title white-color---">Top Categories</h1>
                         <!-- <p class="white-color---">A highly efficient slip-ring scanner for today's diagnostic requirements.</p> -->
                     </div>
                 </div>
