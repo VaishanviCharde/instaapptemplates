@@ -44,13 +44,31 @@
                             <h4 class="footer-title">Address</h4>
                             <div class="footer-address">
                                 <ul>
-                                    <?php if(isset(TEMP_1['DETAILS']['TEMP_ADD']) && TEMP_1['DETAILS']['TEMP_ADD'] != NULL && TEMP_1['DETAILS']['TEMP_ADD'] != "") { ?>
+                                    <?php if(isset(TEMP_1['DETAILS']['TEMP_ADD']) && TEMP_1['DETAILS']['TEMP_ADD'] != NULL && TEMP_1['DETAILS']['TEMP_ADD'] != "" && TEMP_1['DETAILS']['TEMP_ADD'] != "null") { ?>
                                         <li>
                                             <div class="footer-address-icon">
                                                 <i class="icon-placeholder"></i>
                                             </div>
                                             <div class="footer-address-info">
                                                 <p><?php echo TEMP_1['DETAILS']['TEMP_ADD']; ?></p>
+                                            </div>
+                                        </li>
+                                    <?php } else if(isset($_SESSION['address']) && $_SESSION['address'] != NULL && $_SESSION['address'] != "" && $_SESSION['address'] != "null") { ?>
+                                        <li>
+                                            <div class="footer-address-icon">
+                                                <i class="icon-placeholder"></i>
+                                            </div>
+                                            <div class="footer-address-info">
+                                                <p> <?php if(isset($_SESSION['address']) && $_SESSION['address'] != NULL && $_SESSION['address'] != "" && $_SESSION['address'] != "null") { echo $_SESSION['address']; } else { echo ""; } ?></p>
+                                            </div>
+                                        </li>
+                                    <?php } else {  ?>
+                                        <li>
+                                            <div class="footer-address-icon">
+                                                <i class="icon-placeholder"></i>
+                                            </div>
+                                            <div class="footer-address-info">
+                                                <p> <span class="userAddress"></span></p>
                                             </div>
                                         </li>
                                     <?php } ?>
@@ -702,4 +720,34 @@
             return !(t > 31 && (t < 48 || t > 57));
         }
 
+    </script>
+    <script>
+        // Function to get user's location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocation);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Function to send location to server
+        function sendLocation(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('save-location'); ?>",
+                data: {latitude: latitude, longitude: longitude},
+                success: function(response) {
+                    $(".userAddress").html(response);
+                    console.log("Location sent successfully!");
+                }
+            });
+        }
+
+        // Call the function to get location when the page loads
+        $(document).ready(function() {
+            getLocation();
+        });
     </script>

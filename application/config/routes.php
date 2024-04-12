@@ -91,5 +91,8 @@ $route['delete-cart-item'] = $route['default_controller'].'/deleteCartItem';
 $route['cart'] = $route['default_controller'].'/cartView';
 
 $route['checkout'] = $route['default_controller'].'/checkout';
+
+$route['save-location'] = $route['default_controller'].'/saveLocation';
+
 // $route['book-now-action'] = $route['default_controller'].'/placeOrder';
 /** /. MY Routes */

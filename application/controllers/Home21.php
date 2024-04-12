@@ -1095,6 +1095,7 @@ class Home21 extends CI_Controller {
 					$data['cartCount'] = '0';
 					$data['total_cost'] = number_format(0.00, 2, '.', '');
 					$cartListHtml = '';
+					$cartListPageHtml = '<tbody>';
 					if(isset($apiDecodedResponse1->status) && $apiDecodedResponse1->status == 200 && $apiDecodedResponse1->status != NULL && $apiDecodedResponse1->status != ""){
 						$apiResponse1 = $apiDecodedResponse1->response;
 						$cartList = $apiResponse1->results;
@@ -1114,7 +1115,27 @@ class Home21 extends CI_Controller {
 								<div class="float-right mr-20">'.$_SESSION['pre_login_data']['appCurrencySymbol'].$qytPrice.'</div>
 							</div>
 						</div>';
+
+						$cartListPageHtml .= '
+								<?php foreach($cartList as $cart_list) { ?>
+									<tr>
+										<td class="cart-product-remove delete-cart-item" data-key="'.base64_encode($cartPrdList->cart_item_id).'">x</td>
+										<td class="cart-product-image">
+											<a href="#"><img src="'.$cartPrdList->product->product_url.'" alt="Image"></a>
+										</td>
+										<td class="cart-product-info">
+											<h4><a href="#">'.$cartPrdList->product->product_name.'</a></h4>
+										</td>
+										<td class="cart-product-price">'.$_SESSION['pre_login_data']['appCurrencySymbol'].$cartPrdList->product->price.'</td>
+										<td class="cart-product-quantity">
+											<div class="cart-plus-minus">
+												<input type="text" value="'.$cartPrdList->quantity.'" name="qtybutton" class="cart-plus-minus-box">
+											</div>
+										</td>
+										<td class="cart-product-subtotal">'.$_SESSION['pre_login_data']['appCurrencySymbol'].$qytPrice.'</td>
+									</tr>';
 						}
+						$cartListPageHtml .= '</tbody>';
 						/** /.Append Cart List */
 
 						$data['cartCount'] = $apiResponse1->count;
@@ -1124,6 +1145,7 @@ class Home21 extends CI_Controller {
 					/** /.Get cart list */
 					
 					$response['cartListHtml'] = $cartListHtml;
+					$response['cartListPageHtml'] = $cartListPageHtml;
 					$response['cartCount'] = $data['cartCount'];
 					$response['total_cost'] = $_SESSION['pre_login_data']['appCurrencySymbol'].$data['total_cost'];
 					$response['success'] = 1;
@@ -1177,6 +1199,26 @@ class Home21 extends CI_Controller {
 				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/cart', $data);
 			}
 		/** /. Cart Pages */
+
+		/** Get the lot long */
+			public function saveLocation() {
+				$latitude = $this->input->post('latitude');
+				$longitude = $this->input->post('longitude');
+				// Google Maps Geocoding API endpoint
+				$apiEndpoint = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyCT4Ks8zytEomcp-Q-WhAY4swAg4dhGlSw";
+		
+				// Make a GET request to the API endpoint
+				$response = file_get_contents($apiEndpoint);
+		
+				// Decode the JSON response
+				$data = json_decode($response, true);
+		
+				// Extract the formatted address from the response
+				$formattedAddress = isset($data['results'][0]['formatted_address']) ? $data['results'][0]['formatted_address'] : 'Address not found';
+				$this->session->set_userdata("address", $formattedAddress);
+				// Send the formatted address as response
+				echo $formattedAddress;
+			}
 
 		/** Order Place */
 

@@ -29,7 +29,7 @@
                 <div class="col-lg-12">
                     <div class="shoping-cart-inner">
                         <div class="shoping-cart-table table-responsive">
-                            <table class="table">
+                            <table class="table" id="cartListPageHtml">
                                 <!-- <thead>
                                     <th class="cart-product-remove">Remove</th>
                                     <th class="cart-product-image">Image</th>
@@ -42,7 +42,7 @@
                                 <tbody>
                                     <?php foreach($cartList as $cart_list) { ?>
                                         <tr>
-                                            <td class="cart-product-remove">x</td>
+                                            <td class="cart-product-remove delete-cart-item" data-key="<?= base64_encode($cart_list->cart_item_id); ?>">x</td>
                                             <td class="cart-product-image">
                                                 <a href="#"><img src="<?php if(isset($cart_list->product->product_url) && $cart_list->product->product_url != NULL && $cart_list->product->product_url != '') { echo $cart_list->product->product_url; } else { echo base_url().'assets/'.TEMPNAME.'/img/product/NoProductImg.png'; } ?>" alt="Image"></a>
                                             </td>
@@ -52,10 +52,10 @@
                                             <td class="cart-product-price"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $cart_list->product->price;?></td>
                                             <td class="cart-product-quantity">
                                                 <div class="cart-plus-minus">
-                                                    <input type="text" value="<?= $cart_list->quantity;?>" name="qtybutton" class="cart-plus-minus-box">
+                                                    <input type="text" value="<?= $cart_list->quantity;?>" name="cartPageQtybutton" class="cart-plus-minus-box">
                                                 </div>
                                             </td>
-                                            <td class="cart-product-subtotal"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= number_format($cart_list->quantity * $cart_list->product->price, 2, '.', '');?></td>
+                                            <td class="cart-product-subtotal" id="prdPrice1"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= number_format($cart_list->quantity * $cart_list->product->price, 2, '.', '');?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>

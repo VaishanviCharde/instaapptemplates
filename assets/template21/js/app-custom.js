@@ -1266,7 +1266,36 @@ $(document).ready(function(){
         $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
     });
 
-    /** Delete Function */
+    // $(".cartPageQtybutton").on("click", function() {
+    //     var $button = $(this);
+    //     var oldValue = parseFloat($button.siblings("input").val());
+    //     alert(oldValue);return false;
+    //     var prdPrice = parseFloat($("input[name='prdPrice']").val());
+    //     var prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
+    //     var prdCurrency = $("input[name='prdCurrency']").val();
+    //     if ($button.text() == "+") {
+    //         var newVal = oldValue + 1;
+    //     } else {
+    //         if (oldValue > 1) {
+    //             var newVal = oldValue - 1;
+    //         } else {
+    //             var newVal = 1;
+    //         }
+    //     }
+    //     // alert(newVal);
+    //     // alert(prdPrice);
+    //     var newPrdPrice = newVal * prdPrice;
+    //     var newPrdDelMRP = newVal * prdDelMRP;
+    //     $button.siblings("input").val(newVal);
+    //     $("#prdQty").val(newVal);
+    //     $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
+    //     $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
+
+    //     $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
+    //     $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
+    // });
+
+    /** Delete mini cart item Function */
     $(document).on("click", ".mini-cart-item-delete", function() {
         let pId = $(this).data("key");
         let site_url = $("#site_url").val();
@@ -1282,6 +1311,71 @@ $(document).ready(function(){
                 $(".loading").hide();
                 if(response.success == 1) {
                     $("#cartItemList").html(response.cartListHtml);
+                    $("#cartListPageHtml").html(response.cartListPageHtml);
+                    $("#cartCount").html(response.cartCount);
+                    $(".total_cost").html(response.total_cost);
+
+                    // var activeLi = $('.categoryClass.active');
+                    // var catId = activeLi.attr('my-cat');
+                    // getProductList(catId);
+                    
+                    Swal.fire({
+                        toast: true,
+                        text: response.message,
+                        icon: 'success',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        toast: true,
+                        text: response.message,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                $(".loading").hide();
+                Swal.fire({
+                    toast: true,
+                    text: 'Could not reach server, please try again later.  - '+error,
+                    icon: 'error',
+                    showCloseButton: true,
+                    position: 'bottom',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
+        });
+
+    });
+
+    /** Delete cart list item Function */
+    $(document).on("click", ".delete-cart-item", function() {
+        let pId = $(this).data("key");
+        let site_url = $("#site_url").val();
+        $.ajax({
+            url: site_url+"delete-cart-item",  
+            type: "post", 
+            dataType: 'json',
+            data: {pId:pId},
+            beforeSend:function () {
+                $('.loading').show();
+            },
+            success:function(response){
+                $(".loading").hide();
+                if(response.success == 1) {
+                    $("#cartItemList").html(response.cartListHtml);
+                    $("#cartListPageHtml").html(response.cartListPageHtml);
                     $("#cartCount").html(response.cartCount);
                     $(".total_cost").html(response.total_cost);
 

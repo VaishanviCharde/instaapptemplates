@@ -190,8 +190,8 @@
                                                         </ul>
                                                     </div> -->
                                                     <div class="product-price">
-                                                        <span>₹<?php if(isset($price)) { echo $price; } else { echo '0.00'; } ?></span>
-                                                        <del>₹<?php if(isset($MRP)) { echo $MRP; } else { echo '0.00'; } ?></del>
+                                                        <span>₹<?php if(isset($prdData->price)) { echo $prdData->price; } else { echo '0.00'; } ?></span>
+                                                        <del>₹<?php if(isset($prdData->MRP)) { echo $prdData->MRP; } else { echo '0.00'; } ?></del>
                                                     </div>
                                                     <?php if(isset($extra) && $extra != NULL && $extra != '') { ?>
                                                     <div class="product-brief">
