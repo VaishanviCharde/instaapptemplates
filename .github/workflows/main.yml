@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: veges7
+      apk_name: veges8
       company_Name: Veggies
-      restaurant_id: 967
-      email: gifami@imagepoet.net
+      restaurant_id: 968
+      email: limawa@citmo.net
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/veges7/'
+        server-dir: '/veges8/'
 
     - name: Call API
       run: |
