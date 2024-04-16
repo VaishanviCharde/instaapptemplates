@@ -562,7 +562,7 @@
                                             <div class="ltn__product-details-menu-2">
                                                 <ul>
                                                     <li>
-                                                        <div class="cart-plus-minus">
+                                                        <div class="cart-plus-minus" id="cartPlusMinus">
                                                             <input type="text" value="1" name="qtybutton" class="cart-plus-minus-box">
                                                         </div>
                                                     </li>
@@ -657,6 +657,34 @@
     <script src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/js/app-custom.js"></script>
 
     <script>
+        var errorMsg = '<?php echo $this->session->flashdata('error'); ?>';
+        if (errorMsg != "") {
+            Swal.fire({
+                toast: true,
+                text: errorMsg,
+                icon: 'error',
+                showCloseButton: true,
+                position: 'bottom',
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        }
+
+        var successMsg = '<?php echo $this->session->flashdata('success'); ?>';
+        if (successMsg != "") {
+            Swal.fire({
+                toast: true,
+                text: successMsg,
+                icon: 'success',
+                showCloseButton: true,
+                position: 'bottom',
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        }
+        
         $(function() {
             // var custId = $("#custId").val();
             var custId = '<?php if(!empty($_SESSION['login_data']) && isset($this->session->userdata('login_data')['customer_id'])) { echo $this->session->userdata('login_data')['customer_id']; } ?>';

@@ -988,83 +988,6 @@ $(document).ready(function(){
             }
         });
     });
-    // $(".quick_view_button").on("click", function(){
-    //     alert("hiii")
-    //     let prdId = atob($(this).data('key'));
-    //     var site_url = $("#site_url").val();
-    //     var base_url = $("#base_url").val();
-    //     var TempName = $("#TempName").val();
-
-    //     $('#prdImg').attr('src', base_url+'assets/'+TempName+'/img/grey-bg.jpg');
-    //     $("#prdTitle").html('--');
-    //     $("#prdPrice").html(0);
-    //     $("#prdDelMRP").html(0);
-    //     $("input[name='prdCurrency']").val('');
-    //     $("input[name='prdPrice']").val(0);
-    //     $("input[name='prdDelMRP']").val(0);
-    //     $(".quickAddToCart").attr('data-key', '')
-    //     $("input[name='qtybutton']").val(1);
-
-    //     $.ajax({
-    //         url: site_url+"get-single-product",  
-    //         type: "post", 
-    //         dataType: 'json',
-    //         data: {prdId:prdId},
-    //         beforeSend:function () {
-    //             $('.loading').show();
-    //         },
-    //         success:function(response){
-    //             $(".loading").hide();
-    //             alert(response.productDetails.price)
-    //             if(response.success == 1) {
-    //                 var prdCur = '$';
-    //                 if(response.currency == 'inr' || response.currency == 'INR') {
-    //                     prdCur = '₹';
-    //                 }
-    //                 var product_url = base_url+'assets/'+TempName+'/img/product/NoProductImg.png';
-    //                 if(response.productDetails.product_url != "") {
-    //                     product_url = response.productDetails.product_url;
-    //                 }
-    //                 $("input[name='prdPrice']").val(response.productDetails.price);
-    //                 $("input[name='prdDelMRP']").val(response.productDetails.MRP);
-    //                 $('#prdImg').attr('src', product_url);
-    //                 $("#prdTitle").html(response.productDetails.product_name);
-    //                 $("#prdPrice").html(prdCur+(response.productDetails.price).toFixed(2));
-    //                 $("#prdDelMRP").html(prdCur+(response.productDetails.MRP).toFixed(2));
-    //                 $("input[name='prdCurrency']").val(prdCur);
-    //                 // $(".quickAddToCart").attr('data-key', btoa(prdId));
-    //                 $("#prdIdNew").val(prdId);
-    //                 $("input[name='qtybutton']").val(1);
-    //                 $("#prdQty").val(1);
-    //                 $("#quick_view_modal").modal('show');
-    //             } else {
-    //                 Swal.fire({
-    //                     toast: true,
-    //                     text: response.message,
-    //                     icon: 'error',
-    //                     showCloseButton: true,
-    //                     position: 'bottom',
-    //                     timer: 5000,
-    //                     timerProgressBar: true,
-    //                     showConfirmButton: false
-    //                 });
-    //             }
-    //         },
-    //         error: function(xhr, status, error) {
-    //             $(".loading").hide();
-    //             Swal.fire({
-    //                 toast: true,
-    //                 text: 'Could not reach server, please try again later.  - '+error,
-    //                 icon: 'error',
-    //                 showCloseButton: true,
-    //                 position: 'bottom',
-    //                 timer: 5000,
-    //                 timerProgressBar: true,
-    //                 showConfirmButton: false
-    //             });
-    //         }
-    //     });
-    // });
 
     /** Add to Cart */
     $(document).on("click", ".isAddToCart", function() {
@@ -1233,18 +1156,18 @@ $(document).ready(function(){
             });
         }
     });
+
     /** Cart Plus Minus Values */
-    $(".cart-plus-minus").prepend('<div class="dec qtybutton">-</div>');
-    $(".cart-plus-minus").append('<div class="inc qtybutton">+</div>');
+    $("#cartPlusMinus").prepend('<div class="dec qtybutton">-</div>');
+    $("#cartPlusMinus").append('<div class="inc qtybutton">+</div>');
 
     $(".qtybutton").on("click", function() {
-        var $button = $(this);
-        var oldValue = parseFloat($button.siblings("input").val());
-        // alert(oldValue)
+        var button = $(this);
+        var oldValue = parseFloat(button.siblings("input").val());
         var prdPrice = parseFloat($("input[name='prdPrice']").val());
         var prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
         var prdCurrency = $("input[name='prdCurrency']").val();
-        if ($button.text() == "+") {
+        if (button.text() == "+") {
             var newVal = oldValue + 1;
         } else {
             if (oldValue > 1) {
@@ -1253,11 +1176,9 @@ $(document).ready(function(){
                 var newVal = 1;
             }
         }
-        // alert(newVal);
-        // alert(prdPrice);
         var newPrdPrice = newVal * prdPrice;
         var newPrdDelMRP = newVal * prdDelMRP;
-        $button.siblings("input").val(newVal);
+        button.siblings("input").val(newVal);
         $("#prdQty").val(newVal);
         $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
         $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
@@ -1266,34 +1187,100 @@ $(document).ready(function(){
         $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
     });
 
-    // $(".cartPageQtybutton").on("click", function() {
-    //     var $button = $(this);
-    //     var oldValue = parseFloat($button.siblings("input").val());
-    //     alert(oldValue);return false;
-    //     var prdPrice = parseFloat($("input[name='prdPrice']").val());
-    //     var prdDelMRP = parseFloat($("input[name='prdDelMRP']").val());
-    //     var prdCurrency = $("input[name='prdCurrency']").val();
-    //     if ($button.text() == "+") {
-    //         var newVal = oldValue + 1;
-    //     } else {
-    //         if (oldValue > 1) {
-    //             var newVal = oldValue - 1;
-    //         } else {
-    //             var newVal = 1;
-    //         }
-    //     }
-    //     // alert(newVal);
-    //     // alert(prdPrice);
-    //     var newPrdPrice = newVal * prdPrice;
-    //     var newPrdDelMRP = newVal * prdDelMRP;
-    //     $button.siblings("input").val(newVal);
-    //     $("#prdQty").val(newVal);
-    //     $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
-    //     $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
+    $(".cartPageQtybutton").prepend('<div class="dec qtybutton qtybutton1">-</div>');
+    $(".cartPageQtybutton").append('<div class="inc qtybutton qtybutton1">+</div>');
 
-    //     $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
-    //     $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
-    // });
+    $(document).on("click", ".qtybutton1", function() {
+        var button = $(this);
+        var oldValue = parseFloat(button.siblings("input").val());
+        var cartIdPrice = button.closest('td').siblings('td').find('#cartIdPrice').val();
+        var cartIdProduct = button.closest('td').siblings('td').find('#cartIdProduct').val();
+        var cartItemId = button.closest('td').siblings('td').find('#cartItemId').val();
+
+        // alert(' oldValue --> '+oldValue);
+        // alert(' cartIdPrice --> '+cartIdPrice);
+        // alert(' cartIdProduct --> '+cartIdProduct);
+        // alert(' cartItemId --> '+cartItemId);return false;
+
+        if (button.text() == "+") {
+            var newVal = oldValue + 1;
+        } else {
+            if (oldValue > 1) {
+                var newVal = oldValue - 1;
+            } else {
+                var newVal = 1;
+            }
+        }
+        var newPrdPrice = newVal * cartIdPrice;
+        button.siblings("input").val(newVal);
+        var qty = newVal - oldValue;
+        var site_url = $("#site_url").val();
+        if(qty != 0) {
+            $.ajax({
+                url: site_url+"update-qty",  
+                type: "post", 
+                dataType: 'json',
+                data: {qty:qty,newVal:newVal,newPrdPrice:newPrdPrice,cartIdPrice:cartIdPrice,cartIdProduct:cartIdProduct,cartItemId:cartItemId},
+                beforeSend:function () {
+                    $('.loading').show();
+                },
+                success:function(response){
+                    $(".loading").hide();
+                    if(response.success == 1) {
+                        // console.log(response);return false;
+                        $("#cartItemList").html(response.cartListHtml);
+                        $("#cartListPageHtml").html(response.cartListPageHtml);
+                        $("#cartCount").html(response.cartCount);
+                        $(".total_cost").html(response.total_cost);
+                        // $("#prdPrice1").html(response.total_cost);
+                        // button.closest('tr').find('#prdPrice1').text('999')
+
+                        Swal.fire({
+                            toast: true,
+                            text: 'Cart item quantity updated successfully',
+                            icon: 'success',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            toast: true,
+                            text: 'Failed to update cart item quantity',
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $(".loading").hide();
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+
+        // $("#prdQty").val(newVal);
+        // $("#prdPrice").text(prdCurrency+newPrdPrice.toFixed(2));
+        // $("#prdDelMRP").text(prdCurrency+newPrdDelMRP.toFixed(2));
+
+        // $("input[name='updatedPrdPrice']").val(newPrdPrice.toFixed(2));
+        // $("input[name='updatedPrdDelMRP']").val(newPrdDelMRP.toFixed(2)); 
+    });
 
     /** Delete mini cart item Function */
     $(document).on("click", ".mini-cart-item-delete", function() {
@@ -1423,4 +1410,455 @@ $(document).ready(function(){
 
     });
 
+    $(document).on("click", ".place-order-btn1", function() 
+    {
+        var selectedValue = $('input[name="flexRadioDefault"]:checked').val();
+        if (!selectedValue) {
+            $("#selectcheckbox_error").show();
+            setTimeout(function() {
+                $("#selectcheckbox_error").hide();
+            }, 3000);
+        } else {
+            if(selectedValue == 'Pickup') {
+                $(".shippingAddressSection").addClass('d-none');
+                $(".billingAddressSection").removeClass('d-none');
+                // $(".shippingAddSection").removeClass('d-none');
+
+                // $(".place-order-btn1").addClass("pickupButton");
+                // $(".place-order-btn1").removeClass("deliveryButton");
+                $(".place-order-btn1").addClass("d-none");
+            } else if(selectedValue == 'Delivery') {
+                $(".billingAddressSection").addClass('d-none');
+                $(".shippingAddressSection").removeClass('d-none');
+                // $(".shippingAddSection").removeClass("d-none");
+
+                // $(".place-order-btn1").removeClass("pickupButton");
+                // $(".place-order-btn1").addClass("deliveryButton");
+                $(".place-order-btn1").addClass("d-none");
+            }
+        }
+        return false;
+    });
+
+    $('input[name="flexRadioDefault"]').change(function() {
+        var selectedValue = $('input[name="flexRadioDefault"]:checked').val();
+        if (!selectedValue) {
+            $("#selectcheckbox_error").show();
+            setTimeout(function() {
+                $("#selectcheckbox_error").hide();
+            }, 3000);
+        } else {
+            if(selectedValue == 'Pickup') {
+                $(".shippingAddressSection").addClass('d-none');
+                // $(".shippingAddSection").removeClass('d-none');
+                $(".billingAddressSection").removeClass('d-none');
+                $(".shipAddOptionForm").addClass("d-none");
+                // $(".place-order-btn1").addClass("pickupButton");
+                // $(".place-order-btn1").removeClass("deliveryButton");
+                $(".place-order-btn1").addClass("d-none");
+                // $(".paymentOption").addClass('d-none');
+                
+                $("#flexCheckChecked1").prop("checked", false);
+            } else if(selectedValue == 'Delivery') {
+                $(".billingAddressSection").addClass('d-none');
+                $(".shippingAddressSection").removeClass('d-none');
+                $(".shipAddOptionForm").removeClass("d-none");
+                $(".paymentOption").addClass('d-none');
+                // $(".shippingAddSection").removeClass("d-none");
+
+                // $(".place-order-btn1").removeClass("pickupButton");
+                // $(".place-order-btn1").addClass("deliveryButton");
+                $(".place-order-btn1").addClass("d-none");
+                $("#flexCheckChecked").prop("checked", false);
+            }
+        }
+    });
+
+    // Submit Pickup Form
+    $("form[name='pickupForm']").validate({
+        rules: {
+            pName: {
+                required: true
+            },
+            // pPhone: {
+            //     required: true,
+            //     number: true,
+            //     minlength: 10
+            // },
+            pAddress: {
+                required: true,
+            },
+            pApartment: {
+                required: true,
+                maxlength: 12,
+            },
+            pCity: {
+                required: true,
+            },
+            pState: {
+                required: true,
+            },
+            pCountry: {
+                required: true,
+            },
+            pZip: {
+                required: true,
+            }
+        },
+        messages: {
+            pName: {
+                required: "Please enter your full name"
+            },
+            // pPhone: {
+            //     required: "Please enter your mobile number",
+            //     number: "Please enter a valid number",
+            //     minlength: "Mobile number must be at least 10 digits long"
+            // },
+            pAddress: {
+                required: "Please enter your address",
+            },
+            pApartment: {
+                required: "Please enter your apartment no.",
+            },
+            pCity: {
+                required: "Please enter your city",
+            },
+            pState: {
+                required: "Please enter your state",
+            },
+            pCountry: {
+                required: "Please enter your country",
+            },
+            pZip: {
+                required: "Please enter your zip / postal code",
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+            if (error) {
+                element.addClass("error-form-field");
+            } else {
+                element.removeClass("error-form-field");
+            }
+        },
+        beforeSend:function () {
+            $('#loader').show();
+        },
+        submitHandler: function(form) {
+            $(".pickupButtton").prop("disabled", true);
+            $(".pickupButtton").html('Next &nbsp; <i class="fa fa-spinner fa-spin" style="margin-top: 5px;"></i>');
+
+            // $(".pickupButtton").addClass("d-none");
+            var site_url = $("#site_url").val();
+            var billingId = $("#billingId").val();
+            var formData = $(form).serialize();
+            formData += "&billingId=" + encodeURIComponent(billingId);
+            $.ajax({
+                url: site_url+"add-billing-address",  
+                type: "post", 
+                dataType: 'json',
+                data: formData,
+                success:function(response){
+                    $('#loader').hide();
+                    if(response.success == 1) {
+                        // $(form).trigger("reset");
+                        $(".pickupButtton").prop("disabled", false);
+                        $(".pickupButtton").html('<b>Next</b>');
+                        $(".pickupButtton").addClass('d-none');
+                        $(".paymentOption").removeClass("d-none");
+                        // Swal.fire({
+                        //     toast: true,
+                        //     text: response.message,
+                        //     icon: 'success',
+                        //     showCloseButton: true,
+                        //     position: 'bottom',
+                        //     timer: 5000,
+                        //     timerProgressBar: true,
+                        //     showConfirmButton: false
+                        // });
+                    } else {
+                        $(".pickupButtton").prop("disabled", false);
+                        $(".pickupButtton").html('<b>Next</b>');
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#loader').hide();
+                    $(".pickupButtton").prop("disabled", false);
+                    $(".pickupButtton").html('<b>Next</b>');
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+    });
+
+    // When click exist checkbox
+    $("#flexCheckChecked1").click(function(){
+        // Check if the checkbox is checked
+        if($(this).is(":checked")) {
+            let billName = $("#billName").val();
+            let billAddress = $("#billAddress").val();
+            let billHouseNo = $("#billHouseNo").val();
+            let billZip = $("#billZip").val();
+            let billCity = $("#billCity").val();
+            let billState = $("#billState").val();
+            let billCountry = $("#billCountry").val();
+            
+            $("#pName").val(billName);
+            $("#pAddress").val(billAddress);
+            $("#pApartment").val(billHouseNo);
+            $("#pCity").val(billCity);
+            $("#pState").val(billState);
+            $("#pCountry").val(billCountry);
+            $("#pZip").val(billZip);
+        } else {
+            $("#pName").val('');
+            $("#pAddress").val('');
+            $("#pApartment").val('');
+            $("#pCity").val('');
+            $("#pState").val('');
+            $("#pCountry").val('');
+            $("#pZip").val('');
+        }
+    });
+
+    // Coupon code validation
+    $(document).on("click", ".coupon-btn", function() {
+        // alert("hiii");
+        var bill_coupon = $("#bill_coupon").val();
+        var total_cost = $("#total_cost").val();
+        var bill_shipping_method_id = $("#bill_shipping_method").val();
+        var site_url = $("#site_url").val();
+        if(bill_coupon == "") {
+            $("#bill_coupon_err").html("Please enter coupon code");
+            setTimeout(function() {
+                $("#bill_coupon_err").html("");
+            },3000);
+        } else {
+            $.ajax({
+                url: site_url+"validate-coupon",
+                type:"post",
+                dataType:"json",
+                data:{bill_coupon:bill_coupon,total_cost:total_cost,bill_shipping_method_id:bill_shipping_method_id},
+                success:function(response){
+                    // alert(response);
+                    if(response.success) {
+                        $("#bill_coupon").prop('readonly', true);   
+                    } else {
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error:function(xhr, status, error) {
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+    });
+
+    // When click exist checkbox
+    $("#flexCheckChecked").click(function(){
+        // Check if the checkbox is checked
+        if($(this).is(":checked")) {
+            $(".shipAddOption").addClass("d-none");
+        } else {
+           $(".shipAddOption").removeClass("d-none");
+        }
+    });
+
+    // Submit Pickup Form
+    $("form[name='deliveryForm']").validate({
+        rules: {
+            ship_name: {
+                required: true
+            },
+            ship_building: {
+                required: true,
+            },
+            ship_address: {
+                required: true,
+            },
+            ship_apart: {
+                required: true,
+                maxlength: 12,
+            },
+            ship_city: {
+                required: true,
+            },
+            ship_state: {
+                required: true,
+            },
+            ship_country: {
+                required: true,
+            },
+            ship_zip: {
+                required: true,
+            }
+        },
+        messages: {
+            ship_name: {
+                required: "Please enter your full name"
+            },
+            ship_building: {
+                required: "Please enter your building/socity",
+            },
+            ship_address: {
+                required: "Please enter your address",
+            },
+            ship_apart: {
+                required: "Please enter your apartment no.",
+            },
+            ship_city: {
+                required: "Please enter your city",
+            },
+            ship_state: {
+                required: "Please enter your state",
+            },
+            ship_country: {
+                required: "Please enter your country",
+            },
+            ship_zip: {
+                required: "Please enter your zip / postal code",
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+            if (error) {
+                element.addClass("error-form-field");
+            } else {
+                element.removeClass("error-form-field");
+            }
+        },
+        beforeSend:function () {
+            $('#loader').show();
+        },
+        submitHandler: function(form) {
+            $(".deliveryButtton").prop("disabled", true);
+            $(".deliveryButtton").html('Next &nbsp; <i class="fa fa-spinner fa-spin" style="margin-top: 5px;"></i>');
+
+            var site_url = $("#site_url").val();
+            var shippingId = $("#shippingId").val();
+            var formData = $(form).serialize();
+            formData += "&shippingId=" + encodeURIComponent(shippingId);
+            $.ajax({
+                url: site_url+"add-shipping-address",  
+                type: "post", 
+                dataType: 'json',
+                data: formData,
+                success:function(response){
+                    $('#loader').hide();
+                    if(response.success == 1) {
+                        // $(form).trigger("reset");
+                        $(".deliveryButtton").prop("disabled", false);
+                        $(".deliveryButtton").html('<b>Next</b>');
+                        $(".deliveryButtton").addClass('d-none');
+                        $(".paymentOption").removeClass("d-none");
+                        // Swal.fire({
+                        //     toast: true,
+                        //     text: response.message,
+                        //     icon: 'success',
+                        //     showCloseButton: true,
+                        //     position: 'bottom',
+                        //     timer: 5000,
+                        //     timerProgressBar: true,
+                        //     showConfirmButton: false
+                        // });
+                    } else {
+                        $(".deliveryButtton").prop("disabled", false);
+                        $(".deliveryButtton").html('<b>Next</b>');
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#loader').hide();
+                    $(".deliveryButtton").prop("disabled", false);
+                    $(".deliveryButtton").html('<b>Next</b>');
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+    });
+
+    // When click exist checkbox
+    $("#flexCheckChecked").click(function(){
+        // Check if the checkbox is checked
+        if($(this).is(":checked")) {
+            let shipName = $("#shipName").val();
+            let shipAddress = $("#shipAddress").val();
+            let shipHouseNo = $("#shipHouseNo").val();
+            let shipZip = $("#shipZip").val();
+            let shipCity = $("#shipCity").val();
+            let shipState = $("#shipState").val();
+            let shipCountry = $("#shipCountry").val();
+            
+            $("#ship_name").val(shipName);
+            $("#ship_address").val(shipAddress);
+            $("#ship_apartment").val(shipHouseNo);
+            $("#ship_city").val(shipCity);
+            $("#ship_state").val(shipState);
+            $("#ship_country").val(shipCountry);
+            $("#ship_zip").val(shipZip);
+        } else {
+            $("#ship_name").val('');
+            $("#ship_address").val('');
+            $("#ship_apartment").val('');
+            $("#ship_city").val('');
+            $("#ship_state").val('');
+            $("#ship_country").val('');
+            $("#ship_zip").val('');
+        }
+    });
 });

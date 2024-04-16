@@ -42,22 +42,34 @@
                                 <tbody>
                                     <?php foreach($cartList as $cart_list) { ?>
                                         <tr>
-                                            <td class="cart-product-remove delete-cart-item" data-key="<?= base64_encode($cart_list->cart_item_id); ?>">x</td>
-                                            <td class="cart-product-image">
+                                            <td width="5%" class="cart-product-remove delete-cart-item" data-key="<?= base64_encode($cart_list->cart_item_id); ?>">x</td>
+                                            <td width="15%" class="cart-product-image">
                                                 <a href="#"><img src="<?php if(isset($cart_list->product->product_url) && $cart_list->product->product_url != NULL && $cart_list->product->product_url != '') { echo $cart_list->product->product_url; } else { echo base_url().'assets/'.TEMPNAME.'/img/product/NoProductImg.png'; } ?>" alt="Image"></a>
                                             </td>
-                                            <td class="cart-product-info">
+                                            <td width="30%" class="cart-product-info">
                                                 <h4><a href="#"><?php if(isset($cart_list->product->product_name)) { echo $cart_list->product->product_name; } else { echo 'NA'; } ?></a></h4>
                                             </td>
-                                            <td class="cart-product-price"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $cart_list->product->price;?></td>
-                                            <td class="cart-product-quantity">
-                                                <div class="cart-plus-minus">
-                                                    <input type="text" value="<?= $cart_list->quantity;?>" name="cartPageQtybutton" class="cart-plus-minus-box">
+                                            <td width="10%" class="cart-product-price"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $cart_list->product->price;?>
+                                                <input type="hidden" id="cartIdPrice" name="cartIdPrice" value="<?= $cart_list->product->price;?>" />
+                                                <input type="hidden" id="cartIdProduct" name="cartIdProduct" value="<?= $cart_list->product->product_id;?>" />
+                                                <input type="hidden" id="cartItemId" name="cartItemId" value="<?= $cart_list->cart_item_id;?>" />
+                                            </td>
+                                            <td width="20%" class="cart-product-quantity">
+                                                <div class="cart-plus-minus cartPageQtybutton" id="cartPageQtybutton">
+                                                    <input type="text" value="<?= $cart_list->quantity; ?>" name="cartPageQtybutton" class="cart-plus-minus-box">
                                                 </div>
                                             </td>
-                                            <td class="cart-product-subtotal" id="prdPrice1"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= number_format($cart_list->quantity * $cart_list->product->price, 2, '.', '');?></td>
+                                            <td width="20%" class="cart-product-subtotal" id="prdPrice1"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= number_format($cart_list->quantity * $cart_list->product->price, 2, '.', '');?></td>
                                         </tr>
                                     <?php } ?>
+                                        <tr>
+                                            <td width="5%"></td>
+                                            <td width="15%"></td>
+                                            <td width="30%"></td>
+                                            <td width="10%"></td>
+                                            <td width="20%" style="float:right;"><b>Total:</b></td>
+                                            <td width="20%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></td>
+                                        </tr>
                                 </tbody>
                                 <?php } ?>
                             </table>

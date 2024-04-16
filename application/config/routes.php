@@ -89,8 +89,14 @@ $route['search-products'] = $route['default_controller'].'/searchProducts';
 $route['add-to-cart'] = $route['default_controller'].'/addToCart';
 $route['delete-cart-item'] = $route['default_controller'].'/deleteCartItem';
 $route['cart'] = $route['default_controller'].'/cartView';
+$route['update-qty'] = $route['default_controller'].'/updateQuantity';
+
 
 $route['checkout'] = $route['default_controller'].'/checkout';
+$route['add-billing-address'] = $route['default_controller'].'/addBillingAddress';
+$route['add-shipping-address'] = $route['default_controller'].'/addShippingAddress';
+$route['submit-payment'] = $route['default_controller'].'/RazorPaySubmitPayment';
+$route['validate-coupon'] = $route['default_controller'].'/ValidateCouponCode';
 
 $route['save-location'] = $route['default_controller'].'/saveLocation';
 

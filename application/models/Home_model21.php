@@ -45,5 +45,38 @@ class Home_model21 extends CI_Model
 
         return json_encode($response);
     }
+
+    public function createRazorpayOrder($ordAmount)
+    {
+        $url = 'https://api.razorpay.com/v1/orders';
+        $apiKey = RAZOR_PAY_TEST_KEY;
+        $apiSecret = RAZOR_PAY_SECRET_KEY;
+
+        $data = array(
+            "amount" => $ordAmount,
+            "currency" => "INR",
+            "receipt" => "InstaApp-One-Time-Payment",
+            "partial_payment" => false
+            // "first_payment_min_amount" => $ordAmount
+        );
+
+        $headers = array(
+            'Content-Type: application/json'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_USERPWD, $apiKey . ':' . $apiSecret);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Process the response or return it to the caller
+        return $response;
+    }
 }
 ?>
