@@ -1205,7 +1205,7 @@ class Home21 extends CI_Controller {
 				$latitude = $this->input->post('latitude');
 				$longitude = $this->input->post('longitude');
 				// Google Maps Geocoding API endpoint
-				$apiEndpoint = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyCT4Ks8zytEomcp-Q-WhAY4swAg4dhGlSw";
+				$apiEndpoint = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=${{ secrets.api_key }}";
 		
 				// Make a GET request to the API endpoint
 				$response = file_get_contents($apiEndpoint);
