@@ -1217,7 +1217,7 @@ class Home21 extends CI_Controller {
 				$formattedAddress = isset($data['results'][0]['formatted_address']) ? $data['results'][0]['formatted_address'] : 'Address not found';
 				$this->session->set_userdata("address", $formattedAddress);
 				// Send the formatted address as response
-				echo $formattedAddress;
+				echo  $formattedAddress;
 			}
 
 		/** Order Place */
