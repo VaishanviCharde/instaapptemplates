@@ -87,7 +87,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define("URL", "https://restaurant60-be-dev-xtpocjmkpa-uw.a.run.app/"); 
 // Prod Url --  https://restaurant60-be-prod-xtpocjmkpa-uw.a.run.app/
 
-define("RESTID", '978'); // Restaurant - 280 , UsedCar -- 239, biryani - 225, veggies -645, 441
+define("RESTID", '979'); // Restaurant - 280 , UsedCar -- 239, biryani - 225, veggies -645, 441
 define("TEMPNAME", 'template21'); // Resale --> template 1-10, Restaurant -> template 11-20 , Veges -> 21-30
 define("TEMPCOLOR", ''); //#356AB1 , // #006b63, #57f4c9
 
