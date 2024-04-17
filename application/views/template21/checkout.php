@@ -57,8 +57,13 @@
                                     <h6><b>Note: If using a new address, uncheck the current one and fill in the fields
                                             below</b></h6>
                                 </div>
+                            <?php } else { ?>
+                                <div class="ltn__checkout-single-content ltn__coupon-code-wrap shippingAddressSection billingAddressSection d-none">
+                                    <h6><b>Note: If using a new address, uncheck the current one and fill in the fields
+                                            below</b></h6>
+                                </div>
                             <?php } ?>
-                            <?php if(isset($ship_address_list) && $ship_address_list != []){ ?>
+                            <?php if(isset($ship_address_list)){ ?>
                                 <div class="ltn__checkout-single-content ltn__coupon-code-wrap d-flex  shippingAddressSection d-none">
                                     <div class="form-check mt-2 ms-2 me-2">
                                         <input class="form-check-input fs-5 mt-2" type="checkbox" value="shipAddCheck" id="flexCheckChecked" >
@@ -243,8 +248,7 @@
                                                 </div>
                                             </div>
                                         <input type="hidden" name="ship_shipping_method" id="ship_shipping_method" value="<?php if(isset($ship_shipping_method)) { echo $ship_shipping_method; } ?>" />
-                                        <input type="hidden" name="latitude" id="latitude" value="" />
-                                        <input type="hidden" name="longitude" id="longitude" value="" />
+                                        
                                         </div>
                                         <button class="place-order-btn2 deliveryButtton btn btn-transparent text-color-primary font-weight-700 d-flex float-end" type="submit">Next</button>
 
@@ -297,12 +301,13 @@
                                             </table>
 
                                             <input type="hidden" class="app_name" name="app_name" id="app_name" value="<?= APP_NAME; ?>">
-                                            <input type="hidden" class="total_cost" name="total_cost" id="total_cost" value="<?php if(isset($_SESSION['total_cost'])) { echo round($_SESSION['total_cost'] * 100); } else { echo '0.00'; } ?>">
+                                            <input type="hidden" class="total_cost" name="total_cost" id="total_cost" value="<?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?>">
                                             <input type="hidden" name="testKey" id="testKey" value="<?= RAZOR_PAY_TEST_KEY ?>">
                                             <input type="hidden" name="ordId" id="ordId" value="<?= $ordId; ?>">
                                             <input type="hidden" name="cName" id="cName" value="<?= $this->session->userdata('pre_login_data')['appName']; ?>">
                                             <input type="hidden" name="cPhone" id="cPhone" value="<?= $this->session->userdata('pre_login_data')['appPhone']; ?>">
                                             <input type="hidden" name="cEmail" id="cEmail" value="<?= $this->session->userdata('pre_login_data')['appEmail']; ?>">
+
                                             <button
                                                 class="place-order-btn btn btn-transparent text-color-primary font-weight-700 d-flex float-end" type="button" id="ProceedPaymentButton" onclick=ProceedPaymentFunction()>Place order</button>
                                         </div>
@@ -318,6 +323,10 @@
                                 <input type="hidden" name="shipMethodId" id="shipMethodId" value="">
                                 <input type="hidden" name="special_note" id="special_note" value="">
                                 <input type="hidden" name="c_code" id="c_code" value="">
+                                <input type="hidden" class="total_cost1" name="total_cost1" id="total_cost1" value="<?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?>">
+                                <input type="hidden" name="latitude" id="latitude" value="" />
+                                <input type="hidden" name="longitude" id="longitude" value="" />
+                                <input type="hidden" name="stringCartItem" id="stringCartItem" value="<?= $stringCartItem; ?>" />
                             </form>
                             <!-- <button
                             class="place-order-btn1 btn btn-transparent text-color-primary font-weight-700 d-flex float-end"
@@ -358,7 +367,7 @@
         var app_name = $("#app_name").val();
         var options = {
             key: testKey, // Replace this with your test key
-            amount: oneTimeSetupFee, // Amount in paise (e.g., 100 rupees = 10000 paise)
+            amount: Math.round(oneTimeSetupFee * 100), // Amount in paise (e.g., 100 rupees = 10000 paise)
             currency: "INR",
             name: app_name,
             description: app_name+' Payment For Order - '+order_id,
@@ -423,8 +432,11 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 // Get current latitude and longitude
-                var currentLat = position.coords.latitude;
-                var currentLng = position.coords.longitude;
+                // var currentLat = position.coords.latitude;
+                // var currentLng = position.coords.longitude;
+                //  - pune lat long
+                var currentLat = 18.516726;
+                var currentLng = 73.856255;
 
                 // Set initial coordinates
                 initialLat = currentLat;
@@ -540,7 +552,7 @@
                     $("#ship_state").val(state);
                     $("#ship_city").val(city);
                     $("#ship_zip").val(pincode);
-                    $("#ship_country").val(countryShortName);
+                    $("#ship_country").val(countryLongName);
                 } else {
                     console.log('No results found');
                 }

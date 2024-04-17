@@ -195,8 +195,8 @@
                                                 <?php if($customerName != '') { echo $customerName; }?>
                                                 </span>&nbsp;<i class="fa fa-caret-down"></i></b></a>
                                                 <ul>
-                                                    <li><a href="account.html">My Account</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    <!-- <li><a href="account.html">My Account</a></li> -->
+                                                    <li><a href="<?= site_url('orders'); ?>">Order List</a></li>
                                                     <li class="logout-btn"><a href="javascript:void(0);">Logout</a></li>
                                                 </ul>
                                             </li>

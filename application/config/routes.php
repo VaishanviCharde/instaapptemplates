@@ -97,6 +97,8 @@ $route['add-billing-address'] = $route['default_controller'].'/addBillingAddress
 $route['add-shipping-address'] = $route['default_controller'].'/addShippingAddress';
 $route['submit-payment'] = $route['default_controller'].'/RazorPaySubmitPayment';
 $route['validate-coupon'] = $route['default_controller'].'/ValidateCouponCode';
+$route['orders'] = $route['default_controller'].'/OrderList';
+$route['orderdetail/(:any)/(:any)/(:any)/(:any)'] = $route['default_controller'].'orderDetail/$1/$2/$3/$4';
 
 $route['save-location'] = $route['default_controller'].'/saveLocation';
 

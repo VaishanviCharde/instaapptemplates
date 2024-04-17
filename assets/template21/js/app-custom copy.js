@@ -1440,27 +1440,34 @@ $(document).ready(function(){
         return false;
     });
 
-    $(document).on("change", 'input[name="flexRadioDefault"]', function() {
+    $('input[name="flexRadioDefault"]').change(function() {
         var selectedValue = $('input[name="flexRadioDefault"]:checked').val();
-        // alert("hiii");
-        // alert(selectedValue);
         if (!selectedValue) {
             $("#selectcheckbox_error").show();
             setTimeout(function() {
                 $("#selectcheckbox_error").hide();
             }, 3000);
         } else {
-            if (selectedValue == 'Pickup') {
+            if(selectedValue == 'Pickup') {
                 $(".shippingAddressSection").addClass('d-none');
+                // $(".shippingAddSection").removeClass('d-none');
                 $(".billingAddressSection").removeClass('d-none');
                 $(".shipAddOptionForm").addClass("d-none");
+                // $(".place-order-btn1").addClass("pickupButton");
+                // $(".place-order-btn1").removeClass("deliveryButton");
                 $(".place-order-btn1").addClass("d-none");
+                // $(".paymentOption").addClass('d-none');
+                
                 $("#flexCheckChecked1").prop("checked", false);
-            } else if (selectedValue == 'Delivery') {
+            } else if(selectedValue == 'Delivery') {
                 $(".billingAddressSection").addClass('d-none');
                 $(".shippingAddressSection").removeClass('d-none');
                 $(".shipAddOptionForm").removeClass("d-none");
                 $(".paymentOption").addClass('d-none');
+                // $(".shippingAddSection").removeClass("d-none");
+
+                // $(".place-order-btn1").removeClass("pickupButton");
+                // $(".place-order-btn1").addClass("deliveryButton");
                 $(".place-order-btn1").addClass("d-none");
                 $("#flexCheckChecked").prop("checked", false);
             }
@@ -1604,10 +1611,9 @@ $(document).ready(function(){
     });
 
     // When click exist checkbox
-    $(document).on("click", "#flexCheckChecked1", function() {
-        // alert("byeee")
+    $("#flexCheckChecked1").click(function(){
         // Check if the checkbox is checked
-        if ($(this).is(":checked")) {
+        if($(this).is(":checked")) {
             let billName = $("#billName").val();
             let billAddress = $("#billAddress").val();
             let billHouseNo = $("#billHouseNo").val();
@@ -1615,7 +1621,7 @@ $(document).ready(function(){
             let billCity = $("#billCity").val();
             let billState = $("#billState").val();
             let billCountry = $("#billCountry").val();
-    
+            
             $("#pName").val(billName);
             $("#pAddress").val(billAddress);
             $("#pApartment").val(billHouseNo);
@@ -1633,7 +1639,6 @@ $(document).ready(function(){
             $("#pZip").val('');
         }
     });
-    
 
     // Coupon code validation
     $(document).on("click", ".coupon-btn", function() {
@@ -1828,7 +1833,7 @@ $(document).ready(function(){
     });
 
     // When click exist checkbox
-    $(document).on("click", "#flexCheckChecked", function(){
+    $("#flexCheckChecked").click(function(){
         // Check if the checkbox is checked
         if($(this).is(":checked")) {
             let shipName = $("#shipName").val();

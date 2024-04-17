@@ -1347,13 +1347,39 @@ class Home21 extends CI_Controller {
 				$data['ship_shipping_method'] = $apiResponse3->results[1]->id;
 			}
 
+			/** Get cart details */
+			$method = 'GET';
+			$url = $api.'cart-items-x/?cart_id='.$cart_id.'&restaurant_id='.$tempId;
+			$header = array(
+				'action: cart-item',
+				'Content-Type: application/json',
+				'Authorization:  Token '.$token,
+				'cart_id: '.$cart_id,
+				'user_id: '.$customerId
+			);
+
+			$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header);
+			$apiDecodedResponse = json_decode($cart_list_details);
+			$cartList = array();
+			$cartItems = array();
+			if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != ""){
+				$apiResponse = $apiDecodedResponse->response;
+				$cartList = $apiResponse->results;
+
+				foreach($cartList as $crtList) {
+					$cartNames = $crtList->product->product_name;
+					array_push($cartItems, $cartNames);
+				}
+			}
+			$stringCartItem = implode(", ", $cartItems);
 			/**
 			 * Generate a unique orderId
 			 */
 			$ordAmount = 0;
 			if(isset($_SESSION['total_cost'])) {
-				$ordAmt = (int)round($_SESSION['total_cost']);
-				$ordAmount = $ordAmt * 100;
+				$ordAmt = $_SESSION['total_cost'];
+				if($ordAmt != 0)
+					$ordAmount = $ordAmt * 100;
 			}
 			$createOrder = $this->Home_model21->createRazorpayOrder($ordAmount);
 			$ordData = json_decode($createOrder);
@@ -1362,7 +1388,8 @@ class Home21 extends CI_Controller {
 				$ordId = $ordData->id;
 			} 
 			$data['ordId'] = $ordId;
-			$data['ordAmount'] = $ordAmount;
+			// $data['ordAmount'] = $ordAmount;
+			$data['stringCartItem'] = $stringCartItem;
 			// print_r($data['ship_address_list']);exit;
 			$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
 			$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/checkout', $data);
@@ -1542,8 +1569,6 @@ class Home21 extends CI_Controller {
 			$api = $this->session->userdata('pre_login_data')['url'];
 			$token = $this->session->userdata('pre_login_data')['token'];
 			$tempId = $this->session->userdata('pre_login_data')['tempId'];
-			// $appEmail = $this->session->userdata('pre_login_data')['appEmail'];
-			$total_cost = $this->session->userdata('total_cost');
 
 			$cart_id = 0;
 			if(isset($_SESSION['cartId'])) {
@@ -1562,6 +1587,11 @@ class Home21 extends CI_Controller {
 			$special_note = $this->input->post("special_note");
 			$c_code = $this->input->post("c_code");
 			$paymentType = $this->input->post("paymentType");
+			$total_cost = $this->input->post("total_cost1");
+			$latitude = $this->input->post("latitude");
+			$longitude = $this->input->post("longitude");
+			$stringCartItem = $this->input->post("stringCartItem");
+			$totalCost = $total_cost;
 
 			/** Get billing address */
 			$method = 'GET';
@@ -1583,6 +1613,7 @@ class Home21 extends CI_Controller {
 			$zip = '';
 			$city = '';
 			$state = '';
+			$country = '';
 			if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
 				$apiResponse = $apiDecodedResponse->response;
 				$bill_address_list = $apiResponse->results;
@@ -1593,6 +1624,7 @@ class Home21 extends CI_Controller {
 					$zip = $bill_address_list[0]->zip;
 					$city = $bill_address_list[0]->city;
 					$state = $bill_address_list[0]->state;
+					$country = $bill_address_list[0]->country;
 				}
 			}
 			/** get shiping address */
@@ -1609,18 +1641,30 @@ class Home21 extends CI_Controller {
 			$apiDecodedResponse = json_decode($ship_details);
 			$ship_address_list = [];
 			$ship_address_text = '';
-
+			$address1 = "";
+			$house_number1 = "";
+			$zip1 = "";
+			$city1 = "";
+			$state1 = "";
+			$country1 = "";
 			if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
 				$apiResponse = $apiDecodedResponse->response;
 				$ship_address_list = $apiResponse->results;
 				if(isset($ship_address_list) && is_array($ship_address_list) && !empty($ship_address_list)) {
 					$ship_address_text = $ship_address_list[0]->name.', '.$ship_address_list[0]->address.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->zip.', '.$ship_address_list[0]->city.', '.$ship_address_list[0]->state.', '.$ship_address_list[0]->country;
-					$address = $ship_address_list[0]->address;
-					$house_number = $ship_address_list[0]->house_number;
-					$zip = $ship_address_list[0]->zip;
-					$city = $ship_address_list[0]->city;
-					$state = $ship_address_list[0]->state;
+					$address1 = $ship_address_list[0]->address;
+					$house_number1 = $ship_address_list[0]->house_number;
+					$zip1 = $ship_address_list[0]->zip;
+					$city1 = $ship_address_list[0]->city;
+					$state1 = $ship_address_list[0]->state;
+					$country1 = $ship_address_list[0]->country;
 				}
+			}
+
+			if($paymentType == 'Pickup') {
+				$borzo_address = $address;
+			} else {
+				$borzo_address =  $address1;
 			}
 
 			/* Fee Api */
@@ -1633,10 +1677,42 @@ class Home21 extends CI_Controller {
 				'cart_id: '.$cart_id,
 				'user_id: '.$customerId
 			);
-
-			$fee_data = array("no_tax_total"=>0,"shipping_id"=>(int)$shipMethodId,"restaurant_id"=>(int)$tempId,"customer_id"=>$customerId,"sub_total"=>$total_cost,"tip"=>0,"custom_tip"=>0,"coupon"=>$c_code,"type"=>$o_type);
+			if($paymentType == 'Pickup') {
+				$fee_data = array("no_tax_total"=>0,"shipping_id"=>(int)$shipMethodId,"restaurant_id"=>(int)$tempId,"customer_id"=>$customerId,"sub_total"=>$totalCost,"tip"=>0,"custom_tip"=>0,"coupon"=>$c_code,"type"=>$o_type);
+			} else {
+				$fee_data = array(
+					"no_tax_total"=> 0,
+					"shipping_id" =>(int)$shipMethodId,
+					"restaurant_id" =>(int)$tempId,
+					"customer_id" =>$customerId,
+					"sub_total" =>$totalCost,
+					"tip" =>0,
+					"custom_tip" =>0,
+					"coupon" =>$c_code,
+					"cart_id"=>$cart_id,
+					"type"=>$o_type, // ecommerce
+					// "destination_pincode"=>"400053"
+					"borzo_obj"=>array(
+						"matter"=>$stringCartItem,
+						"total_weight_kg"=>"1",
+						"address"=>$borzo_address,
+						"phone"=>"",
+						"username"=>"",
+						"latitude"=>$latitude,
+						"longitude"=>$longitude,
+						"note"=>"",
+						"building_number"=>"",
+						"entrance_number"=>"",
+						"intercom_code"=>"",
+						"floor_number"=>"",
+						"apartment_number"=>""
+					)        
+				);
+			}
+			// print_r(json_encode($fee_data));echo "<pre>";
 			$fee_details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($fee_data));
 			$apiDecodedResponse = json_decode($fee_details);
+			// print_r($apiDecodedResponse);exit;
 			if(isset($apiDecodedResponse->status) && ($apiDecodedResponse->status == 201 || $apiDecodedResponse->status == 200) && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
 				$fees = $apiDecodedResponse->response;
 
@@ -1651,7 +1727,6 @@ class Home21 extends CI_Controller {
 					'user_id: '.$customerId
 				);
 				$order_data = array("subtotal"=>$fees->sub_total,"total"=>$fees->total,"shipping_fee"=>$fees->shipping_fee,"currency"=>"INR","tip"=>$fees->tip,"discount"=>$fees->discount,"extra"=>$special_note,"tax"=>$fees->tax,"cart_id"=>$cart_id,"service_fee"=>$fees->service_fee,"customer"=>$customerId,"status"=>"active","shipping_address_text"=>$ship_address_text,"billing_address_text"=>$bill_address_text);
-				// print_r($order_data);echo "<pre>";
 				
 				$order_details = $this->Home_model21->CallAPI($method1, $url1, $header1, json_encode($order_data));
 				$apiDecodedResponse1 = json_decode($order_details);
@@ -1661,6 +1736,7 @@ class Home21 extends CI_Controller {
 					$orderDetails = $apiDecodedResponse1->response;
 					$order_id = $orderDetails->order_id;
 				}
+				// print_r($order_id);exit;
 				if($orderDetails) {
 
 					/** Get customer data */
@@ -1692,11 +1768,10 @@ class Home21 extends CI_Controller {
 							'Content-Type: application/json',
 							'Authorization:  Token '.$token,
 						);
-						// print_r($header);echo "<pre>";
 
 						$pay_data = array(
 							"type"=>"Online",
-							"amount"=>$total_cost,
+							"amount"=>$totalCost,
 							"currency"=>"inr",
 							"receipt_email"=>$cust_email,
 							"source"=>"web",
@@ -1726,28 +1801,50 @@ class Home21 extends CI_Controller {
 									"postal_code"=>$zip
 								),
 							),
-							"borzo_order"=>array(),
+							"borzo_order"=>array(
+								"matter"=>$stringCartItem,
+								"address"=>$borzo_address,
+								"apartment_number"=>"",
+								"username"=>$cust_name,
+								"total_weight_kg"=>"1",
+								"phone"=>$cust_phone,
+								"latitude"=>$latitude,
+								"longitude"=>$longitude,
+								"note"=>"",
+								"building_number"=>"",
+								"entrance_number"=>"",
+								"intercom_code"=>"",
+								"floor_number"=>""
+							),
 							"o_type"=>$o_type,
 							"transaction_id"=>$payId,
 							"payment_method"=>$payMethod,
 							"cart_id"=>$cart_id,
 							"coupon"=>$c_code
 						);
+						// print_r(json_encode($pay_data));echo "<pre>";
 
-						$pay_details = $this->Home_model21->CallAPI($method2, $url2, $header2, json_encode($pay_data));
+						$pay_details = $this->Home_model21->CallAPINew($method2, $url2, $header2, json_encode($pay_data));
+						// print_r($pay_details);echo "<pre>";
+						
 						$apiDecodedResponse2 = json_decode($pay_details);
 						// print_r($apiDecodedResponse2);echo "<pre>";exit;
 
-						$payDetails = [];
-						$apiResponse2 = '';
-						if(isset($apiDecodedResponse2->status) && ($apiDecodedResponse2->status == 201 || $apiDecodedResponse2->status == 200) && $apiDecodedResponse2->status != NULL && $apiDecodedResponse2->status != "") {
+						$apiResponse2 = [];
+						if(isset($apiDecodedResponse2->status) && $apiDecodedResponse2->status == 200 && $apiDecodedResponse2->status != NULL && $apiDecodedResponse2->status != "") {
+							// print_r("ifff");echo "<pre>";
 							$apiResponse2 = $apiDecodedResponse2->response;
-							$myCartId = $this->getCartDataByCustId($apiResData->id);
-
+							$myCartId = $this->getCartDataByCustId($customerId);
+							// print_r($myCartId);exit;
 							$this->session->set_flashdata('success', 'Order placed successfully');
 							redirect('product');
 						} else {
-							$this->session->set_flashdata('error', 'Failed to placed the order');
+							if($apiDecodedResponse2->status == 400) {
+								$apiResponse2 = $apiDecodedResponse2->response;
+								$this->session->set_flashdata('error', $apiResponse2->message);
+							} else {
+								$this->session->set_flashdata('error', 'Failed to placed the order');
+							}
 							redirect('checkout');
 						}
 
@@ -1758,70 +1855,119 @@ class Home21 extends CI_Controller {
 						$msg = $res->msg;
 					}
 					$this->session->set_flashdata('error', $msg);
+					// print_r("else 1");exit;
 					redirect('checkout');
 				} else {
 					$this->session->set_flashdata('error', 'Service temporarily unavailable, try again later');
+					// print_r("else 2");exit;
 					redirect('checkout');
 				}
 					
 			} else {
 				$this->session->set_flashdata('error', 'Service temporarily unavailable, try again later');
+				// print_r("else 3");exit;
 				redirect('checkout');
 			}
 		}
 		/** /. Submit payment */
 
 		/** Validate Coupon Code */
-		public function ValidateCouponCode() {
-			$api = $this->session->userdata('pre_login_data')['url'];
-			$token = $this->session->userdata('pre_login_data')['token'];
-			$total_cost = $this->session->userdata('total_cost');
-			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+			public function ValidateCouponCode() {
+				$api = $this->session->userdata('pre_login_data')['url'];
+				$token = $this->session->userdata('pre_login_data')['token'];
+				$total_cost = $this->session->userdata('total_cost');
+				$tempId = $this->session->userdata('pre_login_data')['tempId'];
 
-			$cart_id = 0;
-			if(isset($_SESSION['cartId'])) {
-				$cart_id = $_SESSION['cartId'];
+				$cart_id = 0;
+				if(isset($_SESSION['cartId'])) {
+					$cart_id = $_SESSION['cartId'];
+				}
+
+				$customerId = 0;
+				if(isset($_SESSION['login_data']['customer_id'])) {
+					$customerId = $_SESSION['login_data']['customer_id'];
+				}
+
+				$bill_coupon = $this->input->post("bill_coupon");
+				$bill_shipping_method_id = $this->input->post("bill_shipping_method_id");
+				/* Fee Api */
+				$method = 'POST';
+				$url = $api.'v2/fee-x/';
+				$header = array(
+					'action: fee',
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token,
+					'cart_id: '.$cart_id,
+					'user_id: '.$customerId
+				);
+
+				$fee_data = array("no_tax_total"=>0,"shipping_id"=>(int)$bill_shipping_method_id,"restaurant_id"=>(int)$tempId,"customer_id"=>$customerId,"sub_total"=>$total_cost,"tip"=>0,"custom_tip"=>0,"coupon"=>$bill_coupon,"cart_id"=>$cart_id, "type"=>"ecommerce");
+				
+				$fee_details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($fee_data));
+				$response['fee'] = "";
+				$apiDecodedResponse = json_decode($fee_details);
+
+				if(isset($apiDecodedResponse->response->error)) {
+					$response['success'] = 0;
+					$response['message'] = $apiDecodedResponse->response->error;
+				} else {
+					$tax = "0.00";
+					if($apiDecodedResponse->response->tax != 0) 
+						$tax = $apiDecodedResponse->response->tax;
+
+						$response['success'] = 1;
+						$response['message'] = 'Valid Coupon';
+				}
+				echo json_encode($response);
+
 			}
-
-			$customerId = 0;
-			if(isset($_SESSION['login_data']['customer_id'])) {
-				$customerId = $_SESSION['login_data']['customer_id'];
-			}
-
-			$bill_coupon = $this->input->post("bill_coupon");
-			$bill_shipping_method_id = $this->input->post("bill_shipping_method_id");
-			/* Fee Api */
-			$method = 'POST';
-			$url = $api.'v2/fee-x/';
-			$header = array(
-				'action: fee',
-				'Content-Type: application/json',
-				'Authorization:  Token '.$token,
-				'cart_id: '.$cart_id,
-				'user_id: '.$customerId
-			);
-
-			$fee_data = array("no_tax_total"=>0,"shipping_id"=>(int)$bill_shipping_method_id,"restaurant_id"=>(int)$tempId,"customer_id"=>$customerId,"sub_total"=>$total_cost,"tip"=>0,"custom_tip"=>0,"coupon"=>$bill_coupon,"cart_id"=>$cart_id, "type"=>"ecommerce");
-			
-			$fee_details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($fee_data));
-			$response['fee'] = "";
-			$apiDecodedResponse = json_decode($fee_details);
-
-			if(isset($apiDecodedResponse->response->error)) {
-				$response['success'] = 0;
-				$response['message'] = $apiDecodedResponse->response->error;
-			} else {
-				$tax = "0.00";
-				if($apiDecodedResponse->response->tax != 0) 
-					$tax = $apiDecodedResponse->response->tax;
-
-					$response['success'] = 1;
-					$response['message'] = 'Valid Coupon';
-			}
-			echo json_encode($response);
-
-		}
 		/** /. Validate Coupon Code */
+
+		/** Order List */
+			public function OrderList() {
+				$appCommData = $this->checklogin();
+
+				$api = $this->session->userdata('pre_login_data')['url'];
+				$token = $this->session->userdata('pre_login_data')['token'];
+				$tempId = $this->session->userdata('pre_login_data')['tempId'];
+
+				$cart_id = 0;
+				if(isset($_SESSION['cartId'])) {
+					$cart_id = $_SESSION['cartId'];
+				}
+
+				$customerId = 0;
+				if(isset($_SESSION['login_data']['customer_id'])) {
+					$customerId = $_SESSION['login_data']['customer_id'];
+				}
+
+				/* Get Orders */
+				$method = 'GET';
+				$url = $api.'customer-payment/?customer_id='.$customerId.'&restaurant_id='.$tempId;
+				$header = array(
+					'action: customer-payment',
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token,
+					'user_id: '.$customerId
+				);
+
+				$order_details = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse = json_decode($order_details);
+
+				$data['orders'] = [];
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
+					$data['orders'] = $apiDecodedResponse->response;
+				}
+				// print_r($data);exit;
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/orderlist', $data);
+			}
+		/** /. Order List */
+
+		/** Order Details */
+		public function orderDetail() {
+			print_r("hiii");exit;
+		}
 
 		/** Logout */
 			public function logout() {
