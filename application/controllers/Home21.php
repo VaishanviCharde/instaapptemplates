@@ -1077,7 +1077,7 @@ class Home21 extends CI_Controller {
 							<td width="30%"></td>
 							<td width="10%"></td>
 							<td width="20%" style="float:right;"><b>Total:</b></td>
-							<td width="20%" class="cart-product-subtotal text-center" id="totalPrdPrice">'.$_SESSION['pre_login_data']['appCurrencySymbol'].number_format($apiResponse->total_cost, 2, '.', '').'</td>
+							<td width="20%" class="cart-product-subtotal text-center" id="totalPrdPrice">'.$_SESSION['pre_login_data']['appCurrencySymbol'].number_format($apiResponse1->total_cost, 2, '.', '').'</td>
 						</tr>';
 						}
 						$cartListPageHtml .= '</tbody>';
@@ -1824,7 +1824,7 @@ class Home21 extends CI_Controller {
 						);
 						// print_r(json_encode($pay_data));echo "<pre>";
 
-						$pay_details = $this->Home_model21->CallAPINew($method2, $url2, $header2, json_encode($pay_data));
+						$pay_details = $this->Home_model21->CallAPI($method2, $url2, $header2, json_encode($pay_data));
 						// print_r($pay_details);echo "<pre>";
 						
 						$apiDecodedResponse2 = json_decode($pay_details);
@@ -1837,7 +1837,7 @@ class Home21 extends CI_Controller {
 							$myCartId = $this->getCartDataByCustId($customerId);
 							// print_r($myCartId);exit;
 							$this->session->set_flashdata('success', 'Order placed successfully');
-							redirect('product');
+							redirect('orders');
 						} else {
 							if($apiDecodedResponse2->status == 400) {
 								$apiResponse2 = $apiDecodedResponse2->response;

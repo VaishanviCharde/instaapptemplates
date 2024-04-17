@@ -28,7 +28,7 @@
                     <div class="col-lg-12">
                         <div class="ltn__checkout-inner">
                             <div class="ltn__checkout-single-content ltn__returning-customer-wrap d-flex">
-                                <h5 class="me-5">Pick your preference?</h5>
+                                <h5 class="me-5">Pick your preference</h5>
                                 <div class="d-flex ms-5 mt-3">
                                     <div class="form-check me-5">
                                         <input class="form-check-input fs-5" type="radio" name="flexRadioDefault"

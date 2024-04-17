@@ -57,7 +57,7 @@
                                         <td><?= $i; ?></td>
                                         <td><?= date("d M Y", strtotime($ord->created_at)); ?></td>
                                         <td><?= $ord->order->order_id; ?></td>
-                                        <td>&#163;<?= $ord->amount; ?></td>
+                                        <td><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $ord->amount; ?></td>
                                         <td><?= str_replace("_"," ",strtoupper($ord->status)); ?></td>
                                         <td><?php if($ord->payment_method == 'CASH') { echo 'Cash on Delivery'; } else { echo 'Card Payment'; } ?></td>
                                         <td>

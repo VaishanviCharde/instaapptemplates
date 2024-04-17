@@ -82,13 +82,13 @@
                                 <?php if(isset(TEMP_1['DETAILS']['TEMP_EMAIL']) && TEMP_1['DETAILS']['TEMP_EMAIL'] != NULL && TEMP_1['DETAILS']['TEMP_EMAIL'] != "" && TEMP_1['DETAILS']['TEMP_EMAIL'] != 'null') { ?>
                                     <li><a href="mailto:<?php if(isset(TEMP_1['DETAILS']['TEMP_EMAIL']) && TEMP_1['DETAILS']['TEMP_EMAIL'] != NULL && TEMP_1['DETAILS']['TEMP_EMAIL'] != "") { echo TEMP_1['DETAILS']['TEMP_EMAIL']; } else { echo ""; } ?>"><i class="icon-mail"></i> <?php if(isset(TEMP_1['DETAILS']['TEMP_EMAIL']) && TEMP_1['DETAILS']['TEMP_EMAIL'] != NULL && TEMP_1['DETAILS']['TEMP_EMAIL'] != "") { echo TEMP_1['DETAILS']['TEMP_EMAIL']; } else { echo ""; } ?></a></li>
                                 <?php } ?>
-                                <?php if(isset(TEMP_1['DETAILS']['TEMP_ADD']) && TEMP_1['DETAILS']['TEMP_ADD'] != NULL && TEMP_1['DETAILS']['TEMP_ADD'] != "" && TEMP_1['DETAILS']['TEMP_ADD'] != 'null') { ?>
+                                <?php /*if(isset(TEMP_1['DETAILS']['TEMP_ADD']) && TEMP_1['DETAILS']['TEMP_ADD'] != NULL && TEMP_1['DETAILS']['TEMP_ADD'] != "" && TEMP_1['DETAILS']['TEMP_ADD'] != 'null') { ?>
                                     <li><a href="javascript:void(0);"><i class="icon-placeholder"></i> <?php if(isset(TEMP_1['DETAILS']['TEMP_ADD']) && TEMP_1['DETAILS']['TEMP_ADD'] != NULL && TEMP_1['DETAILS']['TEMP_ADD'] != "" && TEMP_1['DETAILS']['TEMP_ADD'] != 'null') { echo TEMP_1['DETAILS']['TEMP_ADD']; } else { echo ""; } ?></a></li>
                                 <?php } else if(isset($_SESSION['address']) && $_SESSION['address'] != NULL && $_SESSION['address'] != "" && $_SESSION['address'] != 'null') { ?>
                                     <li><a href="javascript:void(0);"><i class="icon-placeholder"></i> <?php if(isset($_SESSION['address']) && $_SESSION['address'] != NULL && $_SESSION['address'] != "") { echo $_SESSION['address']; } else { echo ""; } ?></a></li>
                                 <?php } else { ?>
                                     <li><a href="javascript:void(0);"><i class="icon-placeholder"></i><span class="userAddress"></span></a></li>
-                                <?php }  ?>
+                                <?php }*/  ?>
                             </ul>
                         </div>
                     </div>
