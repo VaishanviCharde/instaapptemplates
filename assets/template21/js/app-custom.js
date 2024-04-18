@@ -1,7 +1,7 @@
 
-// var activeLi = $('.categoryClass.active');
-// var catId = activeLi.attr('my-cat');
-// getProductList(catId);
+var activeLi = $('.categoryClass.active');
+var catId = activeLi.attr('my-cat');
+getProductList(catId);
 
 function getProductList(catId) {
     var site_url = $("#site_url").val();
@@ -1456,6 +1456,7 @@ $(document).ready(function(){
                 $(".shipAddOptionForm").addClass("d-none");
                 $(".place-order-btn1").addClass("d-none");
                 $("#flexCheckChecked1").prop("checked", false);
+                $(".mapOption").addClass("d-none");
             } else if (selectedValue == 'Delivery') {
                 $(".billingAddressSection").addClass('d-none');
                 $(".shippingAddressSection").removeClass('d-none');
@@ -1463,6 +1464,7 @@ $(document).ready(function(){
                 $(".paymentOption").addClass('d-none');
                 $(".place-order-btn1").addClass("d-none");
                 $("#flexCheckChecked").prop("checked", false);
+                $(".mapOption").removeClass("d-none");
             }
         }
     });
@@ -1634,7 +1636,6 @@ $(document).ready(function(){
         }
     });
     
-
     // Coupon code validation
     $(document).on("click", ".coupon-btn", function() {
         // alert("hiii");
@@ -1768,8 +1769,17 @@ $(document).ready(function(){
 
             var site_url = $("#site_url").val();
             var shippingId = $("#shippingId").val();
+            var total_cost = $("#total_cost").val();
+            var o_type = $("#o_type").val();
+            var stringCartItem = $("#stringCartItem").val();
+            var latitude = $("#latitude").val();
+            var longitude = $("#longitude").val();
+            var flexCheckChecked2 = $("#flexCheckChecked2").is(":checked");
+            var billingId = $("#billingId").val();
+
             var formData = $(form).serialize();
-            formData += "&shippingId=" + encodeURIComponent(shippingId);
+            formData += "&shippingId=" + encodeURIComponent(shippingId)+"&total_cost="+total_cost+"&o_type="+o_type+"&stringCartItem="+stringCartItem+"&latitude="+latitude+"&longitude="+longitude+"&billingId="+billingId+"&flexCheckChecked2="+flexCheckChecked2;
+            
             $.ajax({
                 url: site_url+"add-shipping-address",  
                 type: "post", 
@@ -1778,21 +1788,20 @@ $(document).ready(function(){
                 success:function(response){
                     $('#loader').hide();
                     if(response.success == 1) {
-                        // $(form).trigger("reset");
+                        $("#subTotal").html(response.subTotal);
+                        $("#Tax").html('0.00');
+                        $("#DeliveryFee").html(response.shipping_fee);
+                        $("#Discount").html(response.discount);
+                        $("#totalAmt").html(response.total);
+                        $("#total_cost").val(response.total);
+                        $("#ordId").val(response.ordId);
+
+
                         $(".deliveryButtton").prop("disabled", false);
                         $(".deliveryButtton").html('<b>Next</b>');
                         $(".deliveryButtton").addClass('d-none');
                         $(".paymentOption").removeClass("d-none");
-                        // Swal.fire({
-                        //     toast: true,
-                        //     text: response.message,
-                        //     icon: 'success',
-                        //     showCloseButton: true,
-                        //     position: 'bottom',
-                        //     timer: 5000,
-                        //     timerProgressBar: true,
-                        //     showConfirmButton: false
-                        // });
+                        
                     } else {
                         $(".deliveryButtton").prop("disabled", false);
                         $(".deliveryButtton").html('<b>Next</b>');
@@ -1831,6 +1840,7 @@ $(document).ready(function(){
     $(document).on("click", "#flexCheckChecked", function(){
         // Check if the checkbox is checked
         if($(this).is(":checked")) {
+            $(".mapOption").addClass("d-none");
             let shipName = $("#shipName").val();
             let shipAddress = $("#shipAddress").val();
             let shipHouseNo = $("#shipHouseNo").val();
@@ -1838,6 +1848,8 @@ $(document).ready(function(){
             let shipCity = $("#shipCity").val();
             let shipState = $("#shipState").val();
             let shipCountry = $("#shipCountry").val();
+            let shipLat = $("#shipLat").val();
+            let shipLong = $("#shipLong").val();
             
             $("#ship_name").val(shipName);
             $("#ship_address").val(shipAddress);
@@ -1846,7 +1858,11 @@ $(document).ready(function(){
             $("#ship_state").val(shipState);
             $("#ship_country").val(shipCountry);
             $("#ship_zip").val(shipZip);
+            $("#latitude").val(shipLat);
+            $("#longitude").val(shipLong);
+
         } else {
+            $(".mapOption").removeClass("d-none");
             $("#ship_name").val('');
             $("#ship_address").val('');
             $("#ship_apartment").val('');
@@ -1854,6 +1870,129 @@ $(document).ready(function(){
             $("#ship_state").val('');
             $("#ship_country").val('');
             $("#ship_zip").val('');
+            $("#latitude").val('');
+            $("#longitude").val('');
+
         }
+    });
+
+    $(document).on("click", "#flexCheckChecked2", function(){
+        // Check if the checkbox is checked
+        if($(this).is(":checked")) {
+            $("#useShipAddreeBill").val(true);
+        } else {
+            $("#useShipAddreeBill").val(false);
+        }
+    });
+
+    // Update Profile
+    $("form[name='profile-form']").validate({
+        ignore: "#salutation [value='']",
+        rules: {
+            pro_salutation: {
+                required: true
+            },
+            pro_username: {
+                required: true
+            },
+            pro_first_name: {
+                required: true
+            },
+            pro_last_name: {
+                required: true
+            },
+            pro_email: {
+                required: true,
+                email: true
+            },
+            "pro_mobile[main]": {
+                required: true,
+                number: true,
+                minlength: 10
+            }
+        },
+        messages: {
+            pro_salutation: {
+                required: "Please select your salutation"
+            },
+            pro_username: {
+                required: "Please enter your username"
+            },
+            pro_first_name: {
+                required: "Please enter your first name"
+            },
+            pro_last_name: {
+                required: "Please enter your last name"
+            },
+            pro_email: {
+                required: "Please enter your email",
+                email: "Please enter a valid email"
+            },
+            "pro_mobile[main]": {
+                required: "Please enter your mobile number",
+                number: "Please enter a valid number",
+                minlength: "Mobile number must be at least 10 digits long"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        },
+        submitHandler: function(form) {
+            var site_url = $("#site_url").val();
+            $("#profileSubmitButton").html('Update Profile &nbsp; <i class="fa fa-spinner fa-spin"></i>');
+            $("#profileSubmitButton").prop('disabled', true);
+
+            var formData = $(form).serialize();
+            $.ajax({
+                url: site_url+"profile-action",  
+                type: "post", 
+                dataType: 'json',
+                data: formData,
+                success:function(response){
+                    if(response.success == 1) {
+                        $("#profileSubmitButton").html('Update Profile');
+                        $("#profileSubmitButton").prop("disabled", false);
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'success',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        $("#profileSubmitButton").html('Update Profile');
+                        $("#profileSubmitButton").prop("disabled", false);
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $("#profileSubmitButton").html('Update Profile');
+                    $("#profileSubmitButton").prop("disabled", false);
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        },
+        focusInvalid: true,
     });
 });

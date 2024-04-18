@@ -724,7 +724,9 @@ class Home21 extends CI_Controller {
 				/** get all search products */
 				$name = '';
 				if($segment2 == 'all') {
-					$name = $_POST['search'];
+					if(isset($_POST['search'])) { 
+						$name = $_POST['search'];
+					}
 					$query = <<<'QUERY'
 							query productSearch ($token: String, $productName: String,$restaurantId:Int, $first: Int, $skip: Int) {
 								productSearch (token: $token, productName : $productName, restaurantId :$restaurantId, first: $first, skip: $skip ) {
@@ -1328,6 +1330,8 @@ class Home21 extends CI_Controller {
 				$data['ship_address_list'] = $apiResponse->results;
 			}
 
+			// print_r($data['ship_address_list']);exit;
+
 			$method3 = 'GET';
 			$url3 = $api.'shipping-method/?status=ACTIVE&restaurant_id='.$tempId;
 			$header3 = array(
@@ -1388,7 +1392,6 @@ class Home21 extends CI_Controller {
 				$ordId = $ordData->id;
 			} 
 			$data['ordId'] = $ordId;
-			// $data['ordAmount'] = $ordAmount;
 			$data['stringCartItem'] = $stringCartItem;
 			// print_r($data['ship_address_list']);exit;
 			$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
@@ -1449,7 +1452,6 @@ class Home21 extends CI_Controller {
 				"customer_id"=>$customerId,
 				"country"=>$pCountry
 			);
-
 			$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($bill_data));
 			
 			$apiDecodedResponse = json_decode($cart_list_details);
@@ -1457,20 +1459,6 @@ class Home21 extends CI_Controller {
 			if(isset($apiDecodedResponse->status) && ($apiDecodedResponse->status == 201 || $apiDecodedResponse->status == 200) && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
 				$apiResponse = $apiDecodedResponse->response;
 
-				/** Get fee details  */
-					// $method2 = 'POST';
-					// $url2 = $api.'fee-x/';
-					// $header2 = array(
-					// 	'action: fee',
-					// 	'Content-Type: application/json',
-					// 	'Authorization:  Token '.$token,
-					// 	'cart_id: '.$cart_id,
-					// 	'user_id: '.$customerId
-					// );
-					// $fee_data = array("no_tax_total"=>0,"shipping_id"=>(int)$ship_shipping_method,"restaurant_id"=>(int)$tempId,"customer_id"=>$customerId,"sub_total"=>$total_cost,"tip"=>0,"custom_tip"=>0,"cart_id"=>$cart_id);
-					// $fee_details = $this->Home_model21->CallAPI($method2, $url2, $header2, json_encode($fee_data));
-					// $fees = json_decode($fee_details);
-					// $response['fee'] = "";
 				/** /. Get fee details  */
 				$response['success'] = 1;
 				$response['message'] = "Billing address added successfully";
@@ -1486,7 +1474,7 @@ class Home21 extends CI_Controller {
 		public function addShippingAddress() {
 			$api = $this->session->userdata('pre_login_data')['url'];
 			$token = $this->session->userdata('pre_login_data')['token'];
-			$total_cost = $this->session->userdata('total_cost');
+			// $total_cost = $this->session->userdata('total_cost');
 			$tempId = $this->session->userdata('pre_login_data')['tempId'];
 			// print_r('total_cost --> '.$total_cost);echo "<pre>";exit;
 			$cart_id = 0;
@@ -1508,6 +1496,13 @@ class Home21 extends CI_Controller {
 			$ship_zip = $this->input->post("ship_zip");
 			$shippingId = $this->input->post("shippingId");
 			$ship_shipping_method = $this->input->post("ship_shipping_method");
+			$total_cost = $this->input->post("total_cost");
+			$o_type = $this->input->post("o_type");
+			$stringCartItem = $this->input->post("stringCartItem");
+			$latitude = $this->input->post("latitude");
+			$longitude = $this->input->post("longitude");
+			$flexCheckChecked2 = $this->input->post("flexCheckChecked2");
+			$billingId = $this->input->post("billingId");
 
 			$method = 'POST';
 			$url = $api.'shipping/';
@@ -1530,7 +1525,9 @@ class Home21 extends CI_Controller {
 				"priority"=>"1",
 				"state"=>$ship_state,
 				"customer_id"=>$customerId,
-				"country"=>$ship_country
+				"country"=>$ship_country,
+				"latitude"=>$latitude,
+				"longitude"=>$longitude
 			);
 
 			$cart_list_details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($ship_data));
@@ -1539,20 +1536,118 @@ class Home21 extends CI_Controller {
 			if(isset($apiDecodedResponse->status) && ($apiDecodedResponse->status == 201 || $apiDecodedResponse->status == 200) && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
 				$apiResponse = $apiDecodedResponse->response;
 
+				/** add/update billing address */
+				// if($flexCheckChecked2 == true) {
+				// 	$method = 'POST';
+				// 	$url = $api.'billing/';
+				// 	if($billingId) {
+				// 		$method = 'PUT';
+				// 		$url = $api.'billing/'.$billingId.'/';
+				// 	}
+				// 	$header = array(
+				// 		'action: cart-item',
+				// 		'Content-Type: application/json',
+				// 		'Authorization:  Token '.$token,
+				// 	);
+				// 	$bill_data = array(
+				// 		"name"=>$ship_name,
+				// 		"zip"=>$ship_zip,
+				// 		"address"=>$ship_address,
+				// 		"house_number"=>$ship_apart,
+				// 		"city"=>$ship_city,
+				// 		"company_name"=>"",
+				// 		"priority"=>"1",
+				// 		"state"=>$ship_state,
+				// 		"customer_id"=>$customerId,
+				// 		"country"=>$ship_country
+				// 	);
+				// 	$bill_details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($bill_data));
+				// }
+
 				/** Get fee details  */
-					// $method2 = 'POST';
-					// $url2 = $api.'fee-x/';
-					// $header2 = array(
-					// 	'action: fee',
-					// 	'Content-Type: application/json',
-					// 	'Authorization:  Token '.$token,
-					// 	'cart_id: '.$cart_id,
-					// 	'user_id: '.$customerId
-					// );
-					// $fee_data = array("no_tax_total"=>0,"shipping_id"=>(int)$ship_shipping_method,"restaurant_id"=>(int)$tempId,"customer_id"=>$customerId,"sub_total"=>$total_cost,"tip"=>0,"custom_tip"=>0,"cart_id"=>$cart_id);
-					// $fee_details = $this->Home_model21->CallAPI($method2, $url2, $header2, json_encode($fee_data));
-					// $fees = json_decode($fee_details);
-					// $response['fee'] = "";
+					$method2 = 'POST';
+					$url2 = $api.'v2/fee-x/';
+					$header2 = array(
+						'action: fee',
+						'Content-Type: application/json',
+						'Authorization:  Token '.$token,
+						'cart_id: '.$cart_id,
+						'user_id: '.$customerId
+					);
+					
+					$fee_data = array(
+						"no_tax_total"=> 0,
+						"shipping_id" =>(int)$ship_shipping_method,
+						"restaurant_id" =>(int)$tempId,
+						"customer_id" =>$customerId,
+						"sub_total" =>$total_cost,
+						"tip" =>0,
+						"custom_tip" =>0,
+						"coupon" =>"",
+						"cart_id"=>$cart_id,
+						"type"=>$o_type, // ecommerce
+						// "destination_pincode"=>"400053"
+						"borzo_obj"=>array(
+							"matter"=>$stringCartItem,
+							"total_weight_kg"=>"1",
+							"address"=>$ship_address,
+							"phone"=>"",
+							"username"=>"",
+							"latitude"=>$latitude,
+							"longitude"=>$longitude,
+							"note"=>"",
+							"building_number"=>"",
+							"entrance_number"=>"",
+							"intercom_code"=>"",
+							"floor_number"=>"",
+							"apartment_number"=>""
+						)        
+					);
+					
+					$fee_details = $this->Home_model21->CallAPI($method2, $url2, $header2, json_encode($fee_data));
+					$apiDecodedResponse = json_decode($fee_details);
+					$subTotal = "";
+					$tax = "";
+					$tip = "";
+					$service_fee = "";
+					$shipping_fee = "";
+					$discount = "";
+					$total = "";
+					if(isset($apiDecodedResponse->status) && ($apiDecodedResponse->status == 201 || $apiDecodedResponse->status == 200) && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
+						$apiResponse = $apiDecodedResponse->response;
+						$subTotal = $apiResponse->sub_total;
+						$tax = $apiResponse->tax;
+						$tip = $apiResponse->tip;
+						$service_fee = $apiResponse->service_fee;
+						$shipping_fee = $apiResponse->shipping_fee;
+						$discount = $apiResponse->discount;
+						$total = $apiResponse->total;
+					}
+
+					$response['subTotal'] = $_SESSION['pre_login_data']['appCurrencySymbol'].$subTotal;
+					$response['tax'] = $_SESSION['pre_login_data']['appCurrencySymbol'].$tax;
+					$response['tip'] = $tip;
+					$response['service_fee'] = $service_fee;
+					$response['shipping_fee'] = $_SESSION['pre_login_data']['appCurrencySymbol'].$shipping_fee;
+					$response['discount'] = '-'.$_SESSION['pre_login_data']['appCurrencySymbol'].$discount;
+					$response['total'] = $_SESSION['pre_login_data']['appCurrencySymbol'].$total;
+
+					/**
+					 * Generate a unique orderId
+					 */
+					$ordAmount = 0;
+					if($total) {
+						$ordAmt = $total;
+						if($ordAmt != 0)
+							$ordAmount = $ordAmt * 100;
+					}
+					$createOrder = $this->Home_model21->createRazorpayOrder($ordAmount);
+					$ordData = json_decode($createOrder);
+					$ordId = '';
+					if(isset($ordData->id)) {
+						$ordId = $ordData->id;
+					} 
+					$response['ordId'] = $ordId;
 				/** /. Get fee details  */
 				$response['success'] = 1;
 				$response['message'] = "Shipping address added successfully";
@@ -1591,6 +1686,7 @@ class Home21 extends CI_Controller {
 			$latitude = $this->input->post("latitude");
 			$longitude = $this->input->post("longitude");
 			$stringCartItem = $this->input->post("stringCartItem");
+			$useShipAddreeBill = $this->input->post("useShipAddreeBill");
 			$totalCost = $total_cost;
 
 			/** Get billing address */
@@ -1618,7 +1714,11 @@ class Home21 extends CI_Controller {
 				$apiResponse = $apiDecodedResponse->response;
 				$bill_address_list = $apiResponse->results;
 				if(isset($bill_address_list) && is_array($bill_address_list) && !empty($bill_address_list)) {
-					$bill_address_text = $bill_address_list[0]->name.', '.$bill_address_list[0]->address.', '.$bill_address_list[0]->house_number.', '.$bill_address_list[0]->zip.', '.$bill_address_list[0]->city.', '.$bill_address_list[0]->state.', '.$bill_address_list[0]->country;
+					if($useShipAddreeBill == true) {
+						$bill_address_text = $bill_address_list[0]->name.', '.$bill_address_list[0]->house_number.', '.$bill_address_list[0]->address;
+					} else {
+						$bill_address_text = $bill_address_list[0]->name.', '.$bill_address_list[0]->address.', '.$bill_address_list[0]->house_number.', '.$bill_address_list[0]->zip.', '.$bill_address_list[0]->city.', '.$bill_address_list[0]->state.', '.$bill_address_list[0]->country;
+					}
 					$address = $bill_address_list[0]->address;
 					$house_number = $bill_address_list[0]->house_number;
 					$zip = $bill_address_list[0]->zip;
@@ -1651,7 +1751,12 @@ class Home21 extends CI_Controller {
 				$apiResponse = $apiDecodedResponse->response;
 				$ship_address_list = $apiResponse->results;
 				if(isset($ship_address_list) && is_array($ship_address_list) && !empty($ship_address_list)) {
-					$ship_address_text = $ship_address_list[0]->name.', '.$ship_address_list[0]->address.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->zip.', '.$ship_address_list[0]->city.', '.$ship_address_list[0]->state.', '.$ship_address_list[0]->country;
+					// $ship_address_text = $ship_address_list[0]->name.', '.$ship_address_list[0]->address.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->zip.', '.$ship_address_list[0]->city.', '.$ship_address_list[0]->state.', '.$ship_address_list[0]->country;
+					$ship_address_text = $ship_address_list[0]->name.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->address;
+					if($useShipAddreeBill == true) {
+						$bill_address_text = $ship_address_list[0]->name.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->address;
+					}
+					
 					$address1 = $ship_address_list[0]->address;
 					$house_number1 = $ship_address_list[0]->house_number;
 					$zip1 = $ship_address_list[0]->zip;
@@ -1965,9 +2070,164 @@ class Home21 extends CI_Controller {
 		/** /. Order List */
 
 		/** Order Details */
-		public function orderDetail() {
-			print_r("hiii");exit;
+		public function orderDetail($ord_id,$created_at,$status,$payment_method) {
+			$appCommData = $this->checklogin();
+
+			$api = $this->session->userdata('pre_login_data')['url'];
+			$token = $this->session->userdata('pre_login_data')['token'];
+			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+
+			$cart_id = 0;
+			if(isset($_SESSION['cartId'])) {
+				$cart_id = $_SESSION['cartId'];
+			}
+
+			$customerId = 0;
+			if(isset($_SESSION['login_data']['customer_id'])) {
+				$customerId = $_SESSION['login_data']['customer_id'];
+			}
+			
+			if($customerId != 0) {
+
+				$order_id = base64_decode($ord_id);
+		
+				$method = 'GET';
+				$url = $api.'order/'.$order_id.'/';
+				$header = array(
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token
+				);
+				$orddetails = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse = json_decode($orddetails);
+
+				$data['order_id'] = $order_id;
+				$data['date'] = base64_decode($created_at);
+				$data['status'] = base64_decode($status);
+				$data['payment_method'] = base64_decode($payment_method);
+				$data['sub_total'] = "0.00";
+				$data['tax'] = "0.00";
+				$data['shipping_fee'] = "0.00";
+				$data['discount'] = "0.00";
+				$data['total'] = "0.00";
+				$data['shipping_address_text'] = "";
+				$data['billing_address_text'] = "";
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
+					$orderdata = $apiDecodedResponse->response;
+
+					$data['sub_total'] = $orderdata->subtotal;
+					$data['tax'] = $orderdata->tax;
+					$data['shipping_fee'] = $orderdata->shipping_fee;
+					$data['discount'] = $orderdata->discount;
+					$data['total'] = $orderdata->total;
+					$data['shipping_address_text'] = $orderdata->shipping_address_text;
+					$data['billing_address_text'] = $orderdata->billing_address_text;
+				}
+
+				$method = 'GET';
+				$url = $api.'order-items-x/?order_id='.$order_id;
+				$header = array(
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token
+				);
+				$order_details = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse1 = json_decode($order_details);
+				$orderdata = [];
+				if(isset($apiDecodedResponse1->status) && $apiDecodedResponse1->status == 200 && $apiDecodedResponse1->status != NULL && $apiDecodedResponse1->status != "") {
+					$apiResponse1 = $apiDecodedResponse1->response;
+					$orderdata = $apiResponse1->results;
+				}
+
+				$data['orderitem'] = $orderdata;
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/orderdetails', $data);
+			} else {
+				redirect("");
+			}
 		}
+		/** Order Details */
+
+		/** Profile Update */
+		public function profile() {
+			$appCommData = $this->checklogin();
+
+			$api = $this->session->userdata('pre_login_data')['url'];
+			$token = $this->session->userdata('pre_login_data')['token'];
+			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+
+			$customerId = 0;
+			if(isset($_SESSION['login_data']['customer_id'])) {
+				$customerId = $_SESSION['login_data']['customer_id'];
+			}
+			
+			if($customerId != 0) {
+
+				/* Get Customer Api */
+				$method = 'GET';
+				$url = $api.'customer/?customer_id='.$customerId;
+				$header = array(
+				'Content-Type: application/json',
+					'Authorization:  Token '.$token
+				);
+				$cust_details = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse = json_decode($cust_details);
+				$customerData = [];
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
+					$apiResponse = $apiDecodedResponse->response;
+					$customerData = $apiResponse->results;
+				}
+				// print_r($customerData);exit;
+				$data['customers'] = $customerData;
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/profile', $data);
+			} else {
+				redirect("");
+			}
+		}
+
+		public function profileUpdate() {
+			$appCommData = $this->checklogin();
+
+			$api = $this->session->userdata('pre_login_data')['url'];
+			$token = $this->session->userdata('pre_login_data')['token'];
+			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+			$customerId = 0;
+			if(isset($_SESSION['login_data']['customer_id'])) {
+				$customerId = $_SESSION['login_data']['customer_id'];
+			}
+			$pro_salutation = $this->input->post('pro_salutation');
+			$pro_username = $this->input->post('pro_username');
+			$pro_first_name = $this->input->post('pro_first_name');
+			$pro_last_name = $this->input->post('pro_last_name');
+			$pro_email = $this->input->post('pro_email');
+			$pro_mobile = $this->input->post('pro_mobile')['full'];
+
+			/* Update Profile Api */
+			$method = 'PUT';
+			$url = $api.'user/'.$customerId.'/';
+			$header = array(
+				'Content-Type: application/json',
+				'Authorization:  Token '.$token
+			);
+			$data = array("salutation"=>$pro_salutation,"username"=> $pro_username,"first_name"=>$pro_first_name,"last_name"=>$pro_last_name,"email"=>$pro_email,"phone_number"=>$pro_mobile);
+			$details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($data));
+			$apiDecodedResponse = json_decode($details);
+			$customerData = [];
+			if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200 && $apiDecodedResponse->status != NULL && $apiDecodedResponse->status != "") {
+				$response['success'] = 1;
+				$response['message'] = 'Profile Updated Successfully.';
+			} else {
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 500) {
+					$response['success'] = 2;
+					$response['message'] = 'Email/Username already exists';
+				} else {
+					$response['success'] = 0;
+					$response['message'] = 'The system is temporarily unavailable. Please try again later';
+				}
+			}
+			echo json_encode($response);
+		}
+
+		/** /. Profile Update */
 
 		/** Logout */
 			public function logout() {

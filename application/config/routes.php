@@ -98,9 +98,11 @@ $route['add-shipping-address'] = $route['default_controller'].'/addShippingAddre
 $route['submit-payment'] = $route['default_controller'].'/RazorPaySubmitPayment';
 $route['validate-coupon'] = $route['default_controller'].'/ValidateCouponCode';
 $route['orders'] = $route['default_controller'].'/OrderList';
-$route['orderdetail/(:any)/(:any)/(:any)/(:any)'] = $route['default_controller'].'orderDetail/$1/$2/$3/$4';
+$route['order-detail/(:any)/(:any)/(:any)/(:any)'] = $route['default_controller'].'/orderDetail/$1/$2/$3/$4';
 
 $route['save-location'] = $route['default_controller'].'/saveLocation';
+$route['profile'] = $route['default_controller'].'/profile';
+$route['profile-action'] = $route['default_controller'].'/profileUpdate';
 
 // $route['book-now-action'] = $route['default_controller'].'/placeOrder';
 /** /. MY Routes */

@@ -78,13 +78,31 @@
                                     <input type="hidden" name="shipCity" id="shipCity" value="<?php if($ship_address_list) { echo  $ship_address_list[0]->city; } ?>" /> 
                                     <input type="hidden" name="shipState" id="shipState" value="<?php if($ship_address_list) { echo  $ship_address_list[0]->state; } ?>" /> 
                                     <input type="hidden" name="shipCountry" id="shipCountry" value="<?php if($ship_address_list) { echo  $ship_address_list[0]->country; } ?>" />
-                                    <div class="ltn__checkout-single-content-info w-100" onclick="initMap()"><?php  if($ship_address_list) { echo $ship_address_list[0]->name.', '.$ship_address_list[0]->address.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->zip.', '.$ship_address_list[0]->city.', '.$ship_address_list[0]->state.', '.$ship_address_list[0]->country; } ?></div>
+                                    <input type="hidden" name="shipLat" id="shipLat" value="<?php if($ship_address_list) { echo  $ship_address_list[0]->latitude; } ?>" />
+                                    <input type="hidden" name="shipLong" id="shipLong" value="<?php if($ship_address_list) { echo  $ship_address_list[0]->longitude; } ?>" />
+                                    <!-- <div class="ltn__checkout-single-content-info w-100" onclick="initMap()"><?php  //if($ship_address_list) { echo $ship_address_list[0]->name.', '.$ship_address_list[0]->address.', '.$ship_address_list[0]->house_number.', '.$ship_address_list[0]->zip.', '.$ship_address_list[0]->city.', '.$ship_address_list[0]->state.', '.$ship_address_list[0]->country; } ?></div> -->
+                                    <div class="ltn__checkout-single-content-info w-100" onclick="initMap()">
+                                        <?php  
+                                            if($ship_address_list) { // Check if $ship_address_list exists and is not empty
+                                                echo $ship_address_list[0]->name.', '; // Output the name from the first address in the list
+                                                
+                                                // Check if building number is set and echo it if it exists
+                                                if(isset($ship_address_list[0]->building_number)) { 
+                                                    echo $ship_address_list[0]->building_number.', '; 
+                                                }
+                                                
+                                                echo $ship_address_list[0]->house_number.', '; // Output the house number
+                                                echo $ship_address_list[0]->address; // Output the address
+                                            } 
+                                        ?>
+                                    </div>
                                 </div>
                             <!-- <button class="place-order-btn3 btn btn-transparent shippingAddressSection d-none text-color-primary font-weight-700 d-flex fl-left" type="submit">Add New Address</button> -->
-                            <div class="ltn__checkout-single-content ltn__coupon-code-wrap shippingAddressSection shipAddOption d-none">
+                            <div class="ltn__checkout-single-content ltn__coupon-code-wrap shippingAddressSection shipAddOption mapOption d-none">
                                 <h6><b>Select existing address or pick address from map</b></h6>
                             </div>
-                            <div id="map" class="shippingAddressSection shipAddOption d-none" style="height: 400px;"></div>
+                            <input type="text" class="form-control shippingAddressSection shipAddOption mapOption d-none" id="map_autocomplete" placeholder="Enter location" autocomplete="on">
+                            <div id="map" class="shippingAddressSection shipAddOption mapOption d-none" style="height: 400px;"></div>
                             <?php } ?>
                             
                             <?php if(isset($bill_address_list)){ ?>
@@ -108,7 +126,7 @@
                                            
 
                             <div class="ltn__checkout-single-content mt-50 billingAddressSection d-none">
-                                <h4 class="title-2">Billing Details</h4>
+                                <h4 class="title-2">Billing Address</h4>
                                 <div class="ltn__checkout-single-content-info">
                                     <form action="#" method="post" id="pickupForm" name="pickupForm">
                                         <h6>Personal Information</h6>
@@ -184,9 +202,9 @@
                             </div>
 
                             <div class="ltn__checkout-single-content mt-50 shipAddOptionForm d-none">
-                                <h4 class="title-2">Shipping Details</h4>
+                                <h4 class="title-2">Shipping Address</h4>
                                 <div class="ltn__checkout-single-content-info">
-                                    <div class="ltn__checkout-single-content ltn__coupon-code-wrap shippingAddressSection billingAddressSection d-none">
+                                    <div class="ltn__checkout-single-content ltn__coupon-code-wrap shippingAddressSection billingAddressSection mapOption d-none">
                                         <h6><b>Note: Please select address from map</b></h6>
                                     </div>
                                     <form action="#" method="post" name="deliveryForm" id="deliveryForm" autocomplete="off">
@@ -250,7 +268,17 @@
                                         <input type="hidden" name="ship_shipping_method" id="ship_shipping_method" value="<?php if(isset($ship_shipping_method)) { echo $ship_shipping_method; } ?>" />
                                         
                                         </div>
-                                        <button class="place-order-btn2 deliveryButtton btn btn-transparent text-color-primary font-weight-700 d-flex float-end" type="submit">Next</button>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-check ms-2 me-2">
+                                                    <input class="form-check-input fs-5" type="checkbox" value="useAsBilling" id="flexCheckChecked2">
+                                                    <b style="width: 25%;color:#699403;" class="mt-1">Use shipping address for billing</b>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="place-order-btn2 deliveryButtton btn btn-transparent text-color-primary font-weight-700 d-flex float-end" type="submit">Next</button>
+                                            </div>
+                                        </div>
 
                                     </form>
                                 </div>
@@ -279,23 +307,23 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>Subtotal</td>
-                                                        <td class="total_cost"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></td>
+                                                        <td class="total_cost" id="subTotal"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Tax</td>
-                                                        <td><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>0.00</td>
+                                                        <td id="Tax"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>0.00</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Discount</td>
-                                                        <td>- <?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>0.00</td>
+                                                        <td id="Discount">- <?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>0.00</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Delivery Fee</td>
-                                                        <td><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>0.00</td>
+                                                        <td id="DeliveryFee"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>0.00</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="py-3"><strong>Order Total</strong></td>
-                                                        <td class="py-3"><strong><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></strong></td>
+                                                        <td class="py-3" id="totalAmt"><strong><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></strong></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -326,6 +354,7 @@
                                 <input type="hidden" class="total_cost1" name="total_cost1" id="total_cost1" value="<?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?>">
                                 <input type="hidden" name="latitude" id="latitude" value="" />
                                 <input type="hidden" name="longitude" id="longitude" value="" />
+                                <input type="hidden" name="useShipAddreeBill" id="useShipAddreeBill" value="" />
                                 <input type="hidden" name="stringCartItem" id="stringCartItem" value="<?= $stringCartItem; ?>" />
                             </form>
                             <!-- <button
@@ -432,11 +461,11 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 // Get current latitude and longitude
-                // var currentLat = position.coords.latitude;
-                // var currentLng = position.coords.longitude;
+                var currentLat = position.coords.latitude;
+                var currentLng = position.coords.longitude;
                 //  - pune lat long
-                var currentLat = 18.516726;
-                var currentLng = 73.856255;
+                // var currentLat = 18.516726;
+                // var currentLng = 73.856255;
 
                 // Set initial coordinates
                 initialLat = currentLat;

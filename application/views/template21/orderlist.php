@@ -27,7 +27,7 @@
         <div class="container">
             <div class="row">
                 <div class="ltn__myaccount-tab-content-inner">
-                    <div class="table-responsive">
+                    <div class="table-responsive text-center">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -42,12 +42,6 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <!-- <td>1</td>
-                                    <td>Jun 22, 2019</td>
-                                    <td>Pending</td>
-                                    <td>$3000</td>
-                                    <td><a href="cart.html">View</a></td> -->
-
                                     <?php
                                     if($orders) {
                                         $i = 1;
@@ -57,11 +51,11 @@
                                         <td><?= $i; ?></td>
                                         <td><?= date("d M Y", strtotime($ord->created_at)); ?></td>
                                         <td><?= $ord->order->order_id; ?></td>
-                                        <td><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $ord->amount; ?></td>
+                                        <td><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $ord->order->total; ?></td>
                                         <td><?= str_replace("_"," ",strtoupper($ord->status)); ?></td>
                                         <td><?php if($ord->payment_method == 'CASH') { echo 'Cash on Delivery'; } else { echo 'Card Payment'; } ?></td>
                                         <td>
-                                            <a href="javascript:void(0)"><i class="fas fa-file-alt"></i></a>
+                                            <a href="<?= site_url('order-detail/'.base64_encode($ord->order->order_id).'/'.base64_encode($ord->created_at).'/'.base64_encode($ord->status).'/'.base64_encode($ord->payment_method)); ?>"><i class="fas fa-file-alt"></i></a>
                                             <?php /*site_url('orderdetail/'.base64_encode($ord->order->order_id).'/'.base64_encode($ord->created_at).'/'.base64_encode($ord->status).'/'.base64_encode($ord->payment_method));*/ ?>
                                         </td>
                                     </tr>

@@ -711,6 +711,13 @@
             utilsScript: "<?= base_url(); ?>assets/<?= TEMPNAME; ?>/js/utils.js"
         });
 
+        var phone_number2 = window.intlTelInput(document.querySelector("#pro_mobile"), {
+            separateDialCode: true,
+            preferredCountries:['IN', 'US', 'UK'],
+            hiddenInput: "full",
+            utilsScript: "<?= base_url(); ?>assets/<?= TEMPNAME; ?>/js/utils.js"
+        });
+
         function restrictSpaces(event) {
             if (event.keyCode === 32) {
                 event.preventDefault();
