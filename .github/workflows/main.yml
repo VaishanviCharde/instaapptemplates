@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: Vegestest1
+      apk_name: VUserApp
       company_Name: Veggies
-      restaurant_id: 983
-      email: dnyaneshwari.mitkar@tissatech.com
+      restaurant_id: 984
+      email: vaishnavi.charde@tissatech.com
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/Vegestest1/'
+        server-dir: '/VUserApp/'
 
     - name: Call API
       run: |
