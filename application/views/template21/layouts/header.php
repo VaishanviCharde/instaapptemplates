@@ -396,3 +396,4 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="uri2" id="uri2" value="<?php echo $this->uri->segment(2); ?>" />

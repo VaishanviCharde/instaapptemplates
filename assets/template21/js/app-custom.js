@@ -1,7 +1,10 @@
 
-var activeLi = $('.categoryClass.active');
-var catId = activeLi.attr('my-cat');
-getProductList(catId);
+var uri2 = $('#uri2').val();
+if(uri2 != 'all') {
+    var activeLi = $('.categoryClass.active');
+    var catId = activeLi.attr('my-cat');
+    getProductList(catId);
+}
 
 function getProductList(catId) {
     var site_url = $("#site_url").val();
