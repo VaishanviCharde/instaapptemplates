@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: VUserApp
+      apk_name: shipstore
       company_Name: Veggies
-      restaurant_id: 984
+      restaurant_id: 986
       email: vaishnavi.charde@tissatech.com
       
     steps:
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/VUserApp/'
+        server-dir: '/shipstore/'
 
     - name: Call API
       run: |
