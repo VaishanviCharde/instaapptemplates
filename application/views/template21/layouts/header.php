@@ -160,8 +160,7 @@
                         <!-- header-options -->
                         <div class="ltn__header-options">
                             <ul>
-                                <li class="d-lg-none">
-                                    <!-- header-search-1 -->
+                                <!-- <li class="d-lg-none">
                                     <div class="header-search-wrap">
                                         <div class="header-search-1">
                                             <div class="search-icon">
@@ -170,15 +169,15 @@
                                             </div>
                                         </div>
                                         <div class="header-search-1-form">
-                                            <form id="#" method="get"  action="#">
-                                                <input type="text" name="search" value="" placeholder="Search here..."/>
-                                                <button type="submit">
+                                            <form id="searchform1" method="post" action="<?= site_url('product/all'); ?>" autocomplete="off">
+                                                <input type="text" name="search" value="<?php if(isset($searchName) && $searchName != NULL && $searchName != '') { echo $searchName; } ?>" placeholder="Search here..."/>
+                                                <button type="submit" id="searchBarBtn1">
                                                     <span><i class="icon-search"></i></span>
                                                 </button>
                                             </form>
                                         </div>
                                     </div>
-                                </li>
+                                </li> -->
                                 <li class="d-none" id="myAccBtn"> 
                                     <!-- user-menu -->
                                     <div class="ltn__drop-menu user-menu">
@@ -243,7 +242,7 @@
                                                         <i class="icon-shopping-cart"></i>
                                                         <sup id="cartCount"><?php if(isset($_SESSION['cartCount'])){ echo $_SESSION['cartCount']; } else { echo 0; } ?></sup>
                                                     </span>
-                                                    <h6><span>Your Cart</span> <span class="ltn__secondary-color total_cost"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></span></h6>
+                                                    <h6><span>Your Cart</span> <span class="ltn__secondary-color total_cost"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo number_format($_SESSION['total_cost'], 2, '.', ''); } else { echo '0.00'; } ?></span></h6>
                                                 </a>
                                             </div>
                                         </li>
@@ -285,11 +284,11 @@
             <?php } ?>
             <div class="mini-cart-footer">
                 <div class="mini-cart-sub-total">
-                    <h5>Subtotal: <span class="total_cost"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></span></h5>
+                    <h5>Subtotal: <span class="total_cost"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo number_format($_SESSION['total_cost'], 2, '.', ''); } else { echo '0.00'; } ?></span></h5>
                 </div>
                 <div class="btn-wrapper">
                     <a href="<?= site_url('cart'); ?>" class="theme-btn-1 btn btn-effect-1">View Cart</a>
-                    <a href="<?= site_url('checkout'); ?>" class="theme-btn-2 btn btn-effect-2">Checkout</a>
+                    <a href="javascript:void(0);" class="theme-btn-2 btn btn-effect-2" id="checkoutButton">Checkout</a>
                 </div>
                 <!-- <p>Free Shipping on All Orders Over $100!</p> -->
             </div>
@@ -311,9 +310,9 @@
                 <button class="ltn__utilize-close">×</button>
             </div>
             <div class="ltn__utilize-menu-search-form">
-                <form action="#">
-                    <input type="text" name="search" placeholder="Search...">
-                    <button><i class="fas fa-search"></i></button>
+            <form id="searchform1" method="post" action="<?= site_url('product/all'); ?>" autocomplete="off">
+                    <input type="text" name="search" id="searchBar1" value="<?php if(isset($searchName) && $searchName != NULL && $searchName != '') { echo $searchName; } ?>" placeholder="Search...">
+                    <button id="searchBarBtn1"><i class="fas fa-search"></i></button>
                 </form>
             </div>
             <div class="ltn__utilize-menu">
@@ -382,7 +381,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <!-- Mobile Menu Button -->
-                    <div class="mobile-menu-toggle d-lg-none">
+                    <div class="mobile-menu-toggle d-lg-none mb-10">
                         <span>MENU</span>
                         <a href="#ltn__utilize-mobile-menu" class="ltn__utilize-toggle">
                             <svg viewBox="0 0 800 600">

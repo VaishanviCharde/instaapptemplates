@@ -38,7 +38,7 @@
                                     <th class="cart-product-quantity">Quantity</th>
                                     <th class="cart-product-subtotal">Subtotal</th>
                                 </thead> -->
-                                <?php if(isset($cartList) && $cartList != '') { ?>
+                                <?php if(isset($cartList) && $cartList != '' && !empty($cartList)) { ?>
                                 <tbody>
                                     <?php foreach($cartList as $cart_list) { ?>
                                         <tr>
@@ -68,7 +68,7 @@
                                             <td width="30%"></td>
                                             <td width="10%"></td>
                                             <td width="20%" style="float:right;"><b>Total:</b></td>
-                                            <td width="20%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?></td>
+                                            <td width="20%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo number_format($_SESSION['total_cost'], 2, '.', ''); } else { echo '0.00'; } ?></td>
                                         </tr>
                                 </tbody>
                                 <?php } ?>

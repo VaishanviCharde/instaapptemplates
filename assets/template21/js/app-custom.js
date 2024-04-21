@@ -1,5 +1,5 @@
 
-var uri2 = $('#uri2').val();
+let uri2 = $("#uri2").val();
 if(uri2 != 'all') {
     var activeLi = $('.categoryClass.active');
     var catId = activeLi.attr('my-cat');
@@ -309,6 +309,8 @@ $(document).ready(function(){
                         $("#loginUsername").html(response.customer_name);
                         $('#cartCount').html(response.cartCount);
                         $('.total_cost').html(response.total_cost);
+                        $("#totalAmount").val(response.total_cost);
+
                         $('#sign_in_modal').modal('hide');
                         $("#signInBtn").prop("disabled", false);
                         $("#signInBtn").html('<b>Sign In Now</b>');
@@ -503,6 +505,7 @@ $(document).ready(function(){
                         $("#loginUsername").html(response.customer_name);
                         $('#cartCount').html(response.cartCount);
                         $('.total_cost').html(response.total_cost);
+                        $("#totalAmount").val(response.total_cost);
 
                         $('#guest_sign_in_modal').modal('hide');
                         $("#otpBtn").prop("disabled", false);
@@ -747,6 +750,8 @@ $(document).ready(function(){
                     $('#custId').val('');
                     $('#cartCount').html('0');
                     $('.total_cost').html('0.00');
+                    $("#totalAmount").val('0.00');
+
                 } else {
                     Swal.fire({
                         toast: true,
@@ -925,6 +930,7 @@ $(document).ready(function(){
         $("#prdTitle").html('--');
         $("#prdPrice").html(0);
         $("#prdDelMRP").html(0);
+        $("#prd_des").html('');
         $("input[name='prdCurrency']").val('₹');
         $("input[name='prdPrice']").val(0);
         $("input[name='prdDelMRP']").val(0);
@@ -941,7 +947,6 @@ $(document).ready(function(){
             },
             success:function(response){
                 $(".loading").hide();
-                // alert(response.productDetails.price)
                 if(response.success == 1) {
                     var prdCur = '$';
                     if(response.currency == 'inr' || response.currency == 'INR') {
@@ -955,6 +960,7 @@ $(document).ready(function(){
                     $("input[name='prdDelMRP']").val(response.productDetails.MRP);
                     $('#prdImg').attr('src', product_url);
                     $("#prdTitle").html(response.productDetails.product_name);
+                    $("#prdDesc").html(response.productDetails.extra);
                     $("#prdPrice").html(prdCur+response.productDetails.price);
                     $("#prdDelMRP").html(prdCur+response.productDetails.MRP);
                     $("input[name='prdCurrency']").val(prdCur);
@@ -1022,6 +1028,8 @@ $(document).ready(function(){
                         $("#cartItemList").html(response.cartList);
                         $("#cartCount").html(response.cartCount);
                         $(".total_cost").html(response.total_cost);
+                        $("#totalAmount").val(response.total_cost);
+
                         Swal.fire({
                             toast: true,
                             text: response.message,
@@ -1106,6 +1114,8 @@ $(document).ready(function(){
                         // $clickedButton.find('a').addClass('prd_active').attr('title', 'Already In Cart');
                         $("#cartCount").html(response.cartCount);
                         $(".total_cost").html(response.total_cost);
+                        $("#totalAmount").val(response.total_cost);
+
                         $("#cartItemList").html(response.cartList);
                         $("#quick_view_modal").modal('hide');
                         Swal.fire({
@@ -1235,6 +1245,8 @@ $(document).ready(function(){
                         $("#cartListPageHtml").html(response.cartListPageHtml);
                         $("#cartCount").html(response.cartCount);
                         $(".total_cost").html(response.total_cost);
+                        $("#totalAmount").val(response.total_cost);
+
                         // $("#prdPrice1").html(response.total_cost);
                         // button.closest('tr').find('#prdPrice1').text('999')
 
@@ -1304,6 +1316,7 @@ $(document).ready(function(){
                     $("#cartListPageHtml").html(response.cartListPageHtml);
                     $("#cartCount").html(response.cartCount);
                     $(".total_cost").html(response.total_cost);
+                    $("#totalAmount").val(response.total_cost);
 
                     // var activeLi = $('.categoryClass.active');
                     // var catId = activeLi.attr('my-cat');
@@ -1368,6 +1381,7 @@ $(document).ready(function(){
                     $("#cartListPageHtml").html(response.cartListPageHtml);
                     $("#cartCount").html(response.cartCount);
                     $(".total_cost").html(response.total_cost);
+                    $("#totalAmount").val(response.total_cost);
 
                     // var activeLi = $('.categoryClass.active');
                     // var catId = activeLi.attr('my-cat');
@@ -1643,9 +1657,17 @@ $(document).ready(function(){
     $(document).on("click", ".coupon-btn", function() {
         // alert("hiii");
         var bill_coupon = $("#bill_coupon").val();
-        var total_cost = $("#total_cost").val();
         var bill_shipping_method_id = $("#bill_shipping_method").val();
+        var ship_shipping_method_id = $("#ship_shipping_method").val();
         var site_url = $("#site_url").val();
+        var total_cost = $("#total_cost").val();
+        var o_type = $("#o_type").val();
+        var stringCartItem = $("#stringCartItem").val();
+        var latitude = $("#latitude").val();
+        var longitude = $("#longitude").val();
+        var flexCheckChecked2 = $("#flexCheckChecked2").is(":checked");
+        var paymentType = $("input[name='flexRadioDefault']:checked").val();
+        var ship_address = $("#ship_address").val();
         if(bill_coupon == "") {
             $("#bill_coupon_err").html("Please enter coupon code");
             setTimeout(function() {
@@ -1656,11 +1678,32 @@ $(document).ready(function(){
                 url: site_url+"validate-coupon",
                 type:"post",
                 dataType:"json",
-                data:{bill_coupon:bill_coupon,total_cost:total_cost,bill_shipping_method_id:bill_shipping_method_id},
+                data:{bill_coupon:bill_coupon,total_cost:total_cost,bill_shipping_method_id:bill_shipping_method_id,o_type:o_type
+                ,ship_shipping_method_id:ship_shipping_method_id,stringCartItem:stringCartItem,latitude:latitude,longitude:longitude,flexCheckChecked2:flexCheckChecked2,paymentType:paymentType,ship_address:ship_address},
                 success:function(response){
                     // alert(response);
                     if(response.success) {
-                        $("#bill_coupon").prop('readonly', true);   
+                        // $("#bill_coupon").prop('readonly', true); 
+                        $("#subTotal").html(response.subTotal);
+                        $("#Tax").html('0.00');
+                        $("#DeliveryFee").html(response.shipping_fee);
+                        $("#Discount").html(response.discount);
+                        $("#totalAmt").html(response.totalAmt);
+                        $("#total_cost").val(response.total); 
+                        $("#totalAmount").val(response.total);
+
+                        $("#ordId").val(response.ordId);
+
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'success',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
                     } else {
                         Swal.fire({
                             toast: true,
@@ -1690,16 +1733,6 @@ $(document).ready(function(){
         }
     });
 
-    // When click exist checkbox
-    // $("#flexCheckChecked").click(function(){
-    //     // Check if the checkbox is checked
-    //     if($(this).is(":checked")) {
-    //         $(".shipAddOption").addClass("d-none");
-    //     } else {
-    //        $(".shipAddOption").removeClass("d-none");
-    //     }
-    // });
-
     // Submit Pickup Form
     $("form[name='deliveryForm']").validate({
         rules: {
@@ -1727,6 +1760,28 @@ $(document).ready(function(){
             },
             ship_zip: {
                 required: true,
+            },
+            bill_Name: {
+                required: true,
+            },
+            bill_Address: {
+                required: true,
+            },
+            bill_Apartment: {
+                required: true,
+                maxlength: 12
+            },
+            bill_City: {
+                required: true,
+            },
+            bill_State: {
+                required: true,
+            },
+            bill_Country: {
+                required: true,
+            },
+            bill_Zip: {
+                required: true,
             }
         },
         messages: {
@@ -1741,6 +1796,7 @@ $(document).ready(function(){
             },
             ship_apart: {
                 required: "Please enter your apartment no.",
+                maxlength: "Maximum length is 12 Character"
             },
             ship_city: {
                 required: "Please enter your city",
@@ -1753,6 +1809,28 @@ $(document).ready(function(){
             },
             ship_zip: {
                 required: "Please enter your zip / postal code",
+            },
+            bill_Name: {
+                required: "Please enter your full name",
+            },
+            bill_Address: {
+                required: "Please enter your address",
+            },
+            bill_Apartment: {
+                required: "Please enter your apartment no.",
+                maxlength: "Maximum length is 12 Character"
+            },
+            bill_City: {
+                required: "Please enter your city",
+            },
+            bill_State: {
+                required: "Please enter your state",
+            },
+            bill_Country: {
+                required: "Please enter your country",
+            },
+            bill_Zip: {
+                required: "Please enter your zip",
             }
         },
         errorPlacement: function (error, element) {
@@ -1795,16 +1873,16 @@ $(document).ready(function(){
                         $("#Tax").html('0.00');
                         $("#DeliveryFee").html(response.shipping_fee);
                         $("#Discount").html(response.discount);
-                        $("#totalAmt").html(response.total);
+                        $("#totalAmt").html(response.totalAmt);
                         $("#total_cost").val(response.total);
-                        $("#ordId").val(response.ordId);
+                        $("#totalAmount").val(response.total);
 
+                        $("#ordId").val(response.ordId);
 
                         $(".deliveryButtton").prop("disabled", false);
                         $(".deliveryButtton").html('<b>Next</b>');
                         $(".deliveryButtton").addClass('d-none');
                         $(".paymentOption").removeClass("d-none");
-                        
                     } else {
                         $(".deliveryButtton").prop("disabled", false);
                         $(".deliveryButtton").html('<b>Next</b>');
@@ -1856,7 +1934,7 @@ $(document).ready(function(){
             
             $("#ship_name").val(shipName);
             $("#ship_address").val(shipAddress);
-            $("#ship_apartment").val(shipHouseNo);
+            $("#ship_apart").val(shipHouseNo);
             $("#ship_city").val(shipCity);
             $("#ship_state").val(shipState);
             $("#ship_country").val(shipCountry);
@@ -1868,7 +1946,7 @@ $(document).ready(function(){
             $(".mapOption").removeClass("d-none");
             $("#ship_name").val('');
             $("#ship_address").val('');
-            $("#ship_apartment").val('');
+            $("#ship_apart").val('');
             $("#ship_city").val('');
             $("#ship_state").val('');
             $("#ship_country").val('');
@@ -1883,8 +1961,10 @@ $(document).ready(function(){
         // Check if the checkbox is checked
         if($(this).is(":checked")) {
             $("#useShipAddreeBill").val(true);
+            $(".billingAddForm").addClass('d-none');
         } else {
             $("#useShipAddreeBill").val(false);
+            $(".billingAddForm").removeClass('d-none');
         }
     });
 
@@ -1997,5 +2077,25 @@ $(document).ready(function(){
             });
         },
         focusInvalid: true,
+    });
+
+    // Checkout button click event
+    $(document).on("click", "#checkoutButton", function() {
+        let total_cost = $("#totalAmount").val();
+        let site_url = $("#site_url").val();
+        if(total_cost == '₹0.00' || total_cost == '0.00' || total_cost == undefined) {
+            Swal.fire({
+                toast: true,
+                text: 'No products available in your cart to place the order',
+                icon: 'error',
+                showCloseButton: true,
+                position: 'bottom',
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        } else {
+            window.location.href = site_url+'checkout';
+        }
     });
 });

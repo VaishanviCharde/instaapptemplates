@@ -1,70 +1,6 @@
 <?php
     $segment = $this->uri->segment(1);
 ?>
-    <!-- Utilize Cart Menu Start -->
-    <!-- <div id="ltn__utilize-cart-menu" class="ltn__utilize ltn__utilize-cart-menu">
-        <div class="ltn__utilize-menu-inner ltn__scrollbar">
-            <div class="ltn__utilize-menu-head">
-                <span class="ltn__utilize-menu-title">Cart</span>
-                <button class="ltn__utilize-close">×</button>
-            </div>
-            <div class="mini-cart-product-area ltn__scrollbar">
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/product/1.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Red Hot Tomato</a></h6>
-                        <span class="mini-cart-quantity">1 x $65.00</span>
-                    </div>
-                </div>
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/product/2.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Vegetables Juices</a></h6>
-                        <span class="mini-cart-quantity">1 x $85.00</span>
-                    </div>
-                </div>
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/product/3.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Orange Sliced Mix</a></h6>
-                        <span class="mini-cart-quantity">1 x $92.00</span>
-                    </div>
-                </div>
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/product/4.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Orange Fresh Juice</a></h6>
-                        <span class="mini-cart-quantity">1 x $68.00</span>
-                    </div>
-                </div>
-            </div>
-            <div class="mini-cart-footer">
-                <div class="mini-cart-sub-total">
-                    <h5>Subtotal: <span>$310.00</span></h5>
-                </div>
-                <div class="btn-wrapper">
-                    <a href="<?= site_url('cart'); ?>" class="theme-btn-1 btn btn-effect-1">View Cart</a>
-                    <a href="<?= site_url('cart'); ?>" class="theme-btn-2 btn btn-effect-2">Checkout</a>
-                </div>
-                <p>Free Shipping on All Orders Over $100!</p>
-            </div>
-
-        </div>
-    </div> -->
-    <!-- Utilize Cart Menu End -->
-
     <!-- SLIDER AREA START (slider-3) -->
     <div class="ltn__slider-area ltn__slider-3---  section-bg-1--- mt-30">
         <div class="container">
@@ -82,82 +18,9 @@
                                 <ul>
                                     <?php foreach($categoryData as $catData) { ?>
                                         <!-- Submenu Column - unlimited -->
-                                        <li class="ltn__category-menu-item ltn__category-menu-drop">
+                                        <li class="ltn__category-menu-item">
                                             <a href="<?= site_url('product/'.base64_encode($myToken.'_apptoken_'.$catData->category_id)); ?>"><i class="icon-shopping-bags"></i><?php if(isset($catData->category) && $catData->category !== NULL && $catData->category != "") { echo $catData->category; } else { echo ""; } ?></a>
-                                            <!-- <ul class="ltn__category-submenu ltn__category-column-5">
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Handbags</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches Clutches Clutches Clutches </a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Fresh Meat</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Fish and Seafood</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Handbags</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Handbags</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Handbags</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Handbags</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="ltn__category-submenu-title ltn__category-menu-drop"><a href="#">Handbags</a>
-                                                    <ul class="ltn__category-submenu-children">
-                                                        <li><a href="#">Clutches</a></li>
-                                                        <li><a href="#">Cross Body</a></li>
-                                                        <li><a href="#">Satchels</a></li>
-                                                        <li><a href="#">Sholuder</a></li>
-                                                        <li><a href="#">Toter</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul> -->
+                                            
                                         </li>
                                         <!-- Single menu end -->
                                     <?php }  ?>
@@ -245,7 +108,7 @@
                             </div>
                             <div class="ltn__feature-info">
                                 <h4>Free shipping</h4>
-                                <p>On all orders over $49.00</p>
+                                <p>On all orders over <?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?>450.00</p>
                             </div>
                         </div>
                         <div class="ltn__feature-item ltn__feature-item-8">

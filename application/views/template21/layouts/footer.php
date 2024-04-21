@@ -129,6 +129,7 @@
         <input type="hidden" id="site_url" name="site_url" value="<?= site_url(); ?>" />
         <input type="hidden" id="base_url" name="base_url" value="<?= base_url(); ?>" />
         <input type="hidden" id="TempName" name="TempName" value="<?= TEMPNAME; ?>" />
+        <input type="hidden" id="totalAmount" name="totalAmount" value="<?php if(isset($_SESSION['total_cost'])) { echo number_format($_SESSION['total_cost'], 2, '.', ''); } else { echo '0.00'; } ?>" />
         <?php
             $customerId = isset($_SESSION['login_data']['customer_id']) ? $_SESSION['login_data']['customer_id'] : 0;
             $cartId = isset($_SESSION['cartId']) ? $_SESSION['cartId'] : '';
@@ -554,6 +555,9 @@
                                             </div>
                                             <div class="modal-product-meta ltn__product-details-menu-1">
                                                 <ul>
+                                                    <li class="modal-product-meta1">
+                                                        <p id="prdDesc"></p>
+                                                    </li>
                                                     <li>
                                                         <textarea class="textarea" id="prdInstruction" name="prdInstruction" placeholder="Enter Instructions" rows="2"></textarea>
                                                     </li>
@@ -632,7 +636,7 @@
     <!-- MODAL AREA END -->
 </div>
 <!-- Body main wrapper end -->    
-
+                                
     <!-- preloader area start -->
     <div class="preloader d-none" id="preloader">
         <div class="preloader-inner">

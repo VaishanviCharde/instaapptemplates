@@ -1,5 +1,6 @@
 <?php 
     $segment2 = $this->uri->segment(2);
+    $segment1 = $this->uri->segment(1);
     $catId = base64_decode($segment2);
     $parts = explode('_', $catId);
     // Get the last part (which is the last digit)
@@ -190,8 +191,8 @@
                                                         </ul>
                                                     </div> -->
                                                     <div class="product-price">
-                                                        <span>₹<?php if(isset($prdData->price)) { echo $prdData->price; } else { echo '0.00'; } ?></span>
-                                                        <del>₹<?php if(isset($prdData->MRP)) { echo $prdData->MRP; } else { echo '0.00'; } ?></del>
+                                                        <span>₹<?php if(isset($prdData->price)) { echo number_format($prdData->price, 2, '.', ''); } else { echo '0.00'; } ?></span>
+                                                        <del>₹<?php if(isset($prdData->MRP)) { echo number_format($prdData->MRP, 2, '.', ''); } else { echo '0.00'; } ?></del>
                                                     </div>
                                                     <?php if(isset($extra) && $extra != NULL && $extra != '') { ?>
                                                     <div class="product-brief">
@@ -259,10 +260,10 @@
                                     <?php $i=1; foreach($categoryData as $catData) {
                                         $cls = '';
                                         if($lastCatId == "") {
-                                            if($i == 1) {
+                                            if($i == 1 && $segment1 == 'product') {
                                                 $cls = 'active'; 
                                             }
-                                        }if($lastCatId == $catData->category_id) { 
+                                        }else if($lastCatId == $catData->category_id) { 
                                             $cls = 'active'; 
                                         } ?>
                                         <li class="categoryClass <?= $cls?>" my-cat="<?php if(isset($catData->category_id) && $catData->category_id !== NULL && $catData->category_id != "") { echo base64_encode($catData->category_id); } else { echo ""; } ?>"><a href="javascript:void(0);"><?php if(isset($catData->category) && $catData->category !== NULL && $catData->category != "") { echo $catData->category; } else { echo ""; } ?> <span><i class="fas fa-long-arrow-alt-right <?= $cls?>"></i></span></a></li>

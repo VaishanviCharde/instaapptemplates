@@ -275,11 +275,61 @@
                                                     <b style="width: 25%;color:#699403;" class="mt-1">Use shipping address for billing</b>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <button class="place-order-btn2 deliveryButtton btn btn-transparent text-color-primary font-weight-700 d-flex float-end" type="submit">Next</button>
+                                        </div>
+                                        <div class="col-md-12 ">
+                                            <h4 class="title-2 mt-20 billingAddForm">Billing Address</h4>
+
+                                            <h6 class="billingAddForm">Personal Information</h6>
+                                            <div class="input-item input-item-name ltn__custom-icon billingAddForm">
+                                                <input type="text" name="bill_Name" id="bill_Name" placeholder="Full name">
+                                            </div>
+                                            <h6 class="billingAddForm">Address</h6>
+                                            <div class="row billingAddForm">
+                                                <div class="col-md-6">
+                                                    <div class="input-item">
+                                                        <input type="text" name="bill_Address" id="bill_Address"
+                                                            placeholder="Address">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-item">
+                                                        <input type="text" name="bill_Apartment" id="bill_Apartment"
+                                                            placeholder="Apartment, suite, unit etc." maxlength="12">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row billingAddForm">
+                                                <div class="col-lg-3 col-md-6">
+                                                    <h6>Town / City</h6>
+                                                    <div class="input-item">
+                                                        <input type="text" name="bill_City" id="bill_City" placeholder="City">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <h6>State </h6>
+                                                    <div class="input-item">
+                                                        <input type="text" name="bill_State" id="bill_State" placeholder="State">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <h6>Country</h6>
+                                                    <div class="input-item">
+                                                        <input type="text" name="bill_Country" id="bill_Country" placeholder="Country">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <h6>Zip / Postal code</h6>
+                                                    <div class="input-item">
+                                                        <input type="text" name="bill_Zip" id="bill_Zip" placeholder="Zip">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="place-order-btn2 deliveryButtton btn btn-transparent text-color-primary font-weight-700 d-flex float-end mt-30" type="submit">Next</button>
+                                                </div>
                                             </div>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -329,7 +379,7 @@
                                             </table>
 
                                             <input type="hidden" class="app_name" name="app_name" id="app_name" value="<?= APP_NAME; ?>">
-                                            <input type="hidden" class="total_cost" name="total_cost" id="total_cost" value="<?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?>">
+                                            <input type="hidden" name="total_cost" id="total_cost" value="<?php if(isset($_SESSION['total_cost'])) { echo $_SESSION['total_cost']; } else { echo '0.00'; } ?>">
                                             <input type="hidden" name="testKey" id="testKey" value="<?= RAZOR_PAY_TEST_KEY ?>">
                                             <input type="hidden" name="ordId" id="ordId" value="<?= $ordId; ?>">
                                             <input type="hidden" name="cName" id="cName" value="<?= $this->session->userdata('pre_login_data')['appName']; ?>">

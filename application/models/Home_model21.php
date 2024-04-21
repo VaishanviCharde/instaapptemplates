@@ -38,7 +38,7 @@ class Home_model21 extends CI_Model
 
         // print_r($result);echo "<pre>";
         // print_r($res);echo "<pre>";
-        // print_r($err);echo "<pre>";exit;
+        // print_r($err);echo "<pre>";echo "<pre>";
         $response['status'] = $result;
         $response['response'] = json_decode($res);
         $response['err'] = $err;

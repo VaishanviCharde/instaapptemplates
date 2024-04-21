@@ -7,12 +7,12 @@
                     <div class="ltn__breadcrumb-inner ltn__breadcrumb-inner-2 justify-content-between">
                         <div class="section-title-area ltn__section-title-2">
                             <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6>
-                            <h1 class="section-title white-color">Orders Details</h1>
+                            <h1 class="section-title white-color">Order Details</h1>
                         </div>
                         <div class="ltn__breadcrumb-list">
                             <ul>
                                 <li><a href="<?= site_url(); ?>">Home</a></li>
-                                <li>Orders Details</li>
+                                <li>Order Details</li>
                             </ul>
                         </div>
                     </div>
@@ -47,85 +47,61 @@
                 <br/><br/>
                 </div>
                 <div class="col-lg-12">
-                    <div class="shoping-cart-inner">
-                        <div class="shoping-cart-table table-responsive text-center">
-                            <table class="table" id="cartListPageHtml">
+                    <div class="ltn__myaccount-tab-content-inner">
+                        <div class="table-responsive text-center">
+                            <table class="table">
                                 <thead>
+                                    <tr>
                                     <th width="5%">#</th>
-                                    <th width="25%" class="cart-product-info">Product Name</th>
-                                    <th width="25%" class="cart-product-price">Price</th>
-                                    <th width="20%" class="cart-product-quantity">Quantity</th>
-                                    <th width="25%" class="cart-product-subtotal">Subtotal</th>
+                                    <th width="25%">Product Name</th>
+                                    <th width="25%">Price</th>
+                                    <th width="20%">Quantity</th>
+                                    <th width="25%">Subtotal</th>
+                                    </tr>
                                 </thead>
                                 <?php if(isset($orderitem) && $orderitem != '') { ?>
-                                <tbody>
-                                    <?php $i = 1; foreach($orderitem as $ordList) {?>
-                                        <tr>
-                                            <td width="5%"><?php echo $i; ?></td>
-                                            <td width="25%" class="cart-product-info"><?php echo $ordList->product->product_name;?></td>
-                                            <td width="25%" class="cart-product-price"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php echo $ordList->product_price;?></td>
-                                            <td width="20%" class="cart-product-quantity"><?php echo $ordList->quantity;?></td>
-                                            <td width="25%" class="cart-product-subtotal"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php echo $ordList->price;?></td>
-                                        </tr>
-                                    <?php $i++; } ?>
-                                        <tr>
-                                            <td width="5%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="20%" style="text-align:right;"><b>Subtotal:</b></td>
-                                            <td width="25%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $sub_total; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="20%" class="error" style="text-align:right;"><b>Discount:</b></td>
-                                            <td width="25%" class="cart-product-subtotal text-center error"  id="totalPrdPrice">-<?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $discount; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="20%" style="text-align:right;"><b>Delivery Fee:</b></td>
-                                            <td width="25%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $shipping_fee; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="5%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="25%">&nbsp;</td>
-                                            <td width="20%" style="text-align:right;"><b>Total:</b></td>
-                                            <td width="25%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $total; ?></td>
-                                        </tr>
-                                </tbody>
+                                    <tbody>
+                                        <?php $i = 1; foreach($orderitem as $ordList) {?>
+                                            <tr>
+                                                <td width="5%"><?php echo $i; ?></td>
+                                                <td width="25%"><?php echo $ordList->product->product_name;?></td>
+                                                <td width="25%"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php echo $ordList->product_price;?></td>
+                                                <td width="20%"><?php echo $ordList->quantity;?></td>
+                                                <td width="25%"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php echo $ordList->price;?></td>
+                                            </tr>
+                                        <?php $i++; } ?>
+                                            <tr>
+                                                <td width="5%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="20%" style="text-align:right;"><b>Subtotal:</b></td>
+                                                <td width="25%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $sub_total; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="5%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="20%" class="error" style="text-align:right;"><b>Discount:</b></td>
+                                                <td width="25%" class="cart-product-subtotal text-center error"  id="totalPrdPrice">-<?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $discount; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="5%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="20%" style="text-align:right;"><b>Delivery Fee:</b></td>
+                                                <td width="25%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $shipping_fee; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="5%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="25%">&nbsp;</td>
+                                                <td width="20%" style="text-align:right;"><b>Total:</b></td>
+                                                <td width="25%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= $total; ?></td>
+                                            </tr>
+                                    </tbody>
                                 <?php } ?>
                             </table>
                         </div>
-                        <!-- <div class="shoping-cart-total mt-50">
-                            <h4>Cart Totals</h4>
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>Cart Subtotal</td>
-                                        <td>$618.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shipping and Handing</td>
-                                        <td>$15.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vat</td>
-                                        <td>$00.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Order Total</strong></td>
-                                        <td><strong>$633.00</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="btn-wrapper text-right text-end">
-                                <a href="checkout.html" class="theme-btn-1 btn btn-effect-1">Proceed to checkout</a>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
                 
