@@ -59,7 +59,7 @@
                                                     <input type="text" value="<?= $cart_list->quantity; ?>" name="cartPageQtybutton" class="cart-plus-minus-box">
                                                 </div>
                                             </td>
-                                            <td width="20%" class="cart-product-subtotal" id="prdPrice1"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= number_format($cart_list->quantity * $cart_list->product->price, 2, '.', '');?></td>
+                                            <td width="20%" class="cart-product-subtotal text-center" id="prdPrice1"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?= number_format($cart_list->quantity * $cart_list->product->price, 2, '.', '');?></td>
                                         </tr>
                                     <?php } ?>
                                         <tr>

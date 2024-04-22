@@ -1,6 +1,7 @@
 
 let uri2 = $("#uri2").val();
 if(uri2 != 'all') {
+    $('#loader').show();
     var activeLi = $('.categoryClass.active');
     var catId = activeLi.attr('my-cat');
     getProductList(catId);

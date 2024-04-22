@@ -708,18 +708,18 @@ class Home21 extends CI_Controller {
 
 				/** Get product list */
 				$productData = array();
-				$method1 = 'GET';
-				$url1 = $api."v2/catalog/?restaurant_id=".$tempId."&category_id=".$catId."&status=ACTIVE";
-				$header1 = array(
-					'Content-Type: application/json',
-					'Authorization:  Token '.$token
-				);
-				$apiResponse1 = $this->Home_model21->CallAPI($method1, $url1, $header1);
-				$apiDecodedResponse1 = json_decode($apiResponse1);
-				if(isset($apiDecodedResponse1->status) && $apiDecodedResponse1->status == 200 && $apiDecodedResponse1->status != NULL && $apiDecodedResponse1->status != ""){
-					$apiResData1 = $apiDecodedResponse1->response;
-					$productData = $apiResData1->results;
-				}
+				// $method1 = 'GET';
+				// $url1 = $api."v2/catalog/?restaurant_id=".$tempId."&category_id=".$catId."&status=ACTIVE";
+				// $header1 = array(
+				// 	'Content-Type: application/json',
+				// 	'Authorization:  Token '.$token
+				// );
+				// $apiResponse1 = $this->Home_model21->CallAPI($method1, $url1, $header1);
+				// $apiDecodedResponse1 = json_decode($apiResponse1);
+				// if(isset($apiDecodedResponse1->status) && $apiDecodedResponse1->status == 200 && $apiDecodedResponse1->status != NULL && $apiDecodedResponse1->status != ""){
+				// 	$apiResData1 = $apiDecodedResponse1->response;
+				// 	$productData = $apiResData1->results;
+				// }
 
 				/** get all search products */
 				$name = '';
@@ -2067,11 +2067,11 @@ class Home21 extends CI_Controller {
 				$total = "";
 				if(isset($apiDecodedResponse->response->error)) {
 					$response['success'] = 0;
-					$response['message'] = $apiDecodedResponse->response->error;
+					$response['message'] = str_replace("$", "₹", $apiDecodedResponse->response->error);
 				} else {
 					if(isset($apiDecodedResponse->response->status) && $apiDecodedResponse->response->status == "error") {
 						$response['success'] = 0;
-						$response['message'] = $apiDecodedResponse->response->msg;
+						$response['message'] = str_replace("$", "₹", $apiDecodedResponse->response->msg);
 					} else {
 						$tax = "0.00";
 						if($apiDecodedResponse->response->tax != 0) 
