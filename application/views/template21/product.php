@@ -13,7 +13,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__breadcrumb-inner ltn__breadcrumb-inner-2 justify-content-between">
                         <div class="section-title-area ltn__section-title-2">
-                            <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6>
+                            <!-- <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6> -->
                             <h1 class="section-title white-color">Product</h1>
                         </div>
                         <div class="ltn__breadcrumb-list">
@@ -33,8 +33,37 @@
     <div class="ltn__product-area ltn__product-gutter mb-120" id="productPageContainer">
         <div class="container">
             <div class="row">
+
+                <div class="col-lg-4">
+                    <aside class="sidebar ltn__shop-sidebar ltn__left-sidebar">
+                        <!-- Category Widget -->
+                        <?php if(isset($categoryData) && $categoryData !== NULL && $categoryData != "") { ?>
+                            <div class="widget ltn__menu-widget">
+                                <h4 class="ltn__widget-title ltn__widget-title-border">Product categories</h4>
+                                <ul id="catList">
+                                    <?php $i=1; foreach($categoryData as $catData) {
+                                        $cls = '';
+                                        if($lastCatId == "") {
+                                            if($i == 1 && $segment1 == 'product') {
+                                                $cls = 'active'; 
+                                            }
+                                        }else if($lastCatId == $catData->category_id) { 
+                                            $cls = 'active'; 
+                                        } ?>
+                                        <li class="categoryClass <?= $cls?>" my-cat="<?php if(isset($catData->category_id) && $catData->category_id !== NULL && $catData->category_id != "") { echo base64_encode($catData->category_id); } else { echo ""; } ?>"><a href="javascript:void(0);"><?php if(isset($catData->category) && $catData->category !== NULL && $catData->category != "") { echo $catData->category; } else { echo ""; } ?> <span><i class="fas fa-long-arrow-alt-right <?= $cls?>"></i></span></a></li>
+                                    <?php $i++; } ?>
+                                </ul>
+                            </div>
+                        <?php } ?>
+                        <!-- Banner Widget -->
+                        <div class="widget ltn__banner-widget">
+                            <a href="<?= site_url('product'); ?>"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/banner/banner-2.jpg" alt="#"></a>
+                        </div>
+
+                    </aside>
+                </div>
                 <div class="col-lg-8">
-                    <div class="ltn__shop-options">
+                    <!-- <div class="ltn__shop-options">
                         <ul>
                             <li>
                                 <div class="ltn__grid-list-tab-menu ">
@@ -44,24 +73,8 @@
                                     </div>
                                 </div>
                             </li>
-                            <!-- <li>
-                               <div class="showing-product-number text-right text-end">
-                                    <span>Showing 1–12 of 18 results</span>
-                                </div> 
-                            </li> -->
-                            <!-- <li>
-                               <div class="short-by text-center">
-                                    <select class="nice-select">
-                                        <option>Default Sorting</option>
-                                        <option>Sort by popularity</option>
-                                        <option>Sort by new arrivals</option>
-                                        <option>Sort by price: low to high</option>
-                                        <option>Sort by price: high to low</option>
-                                    </select>
-                                </div> 
-                            </li> -->
                         </ul>
-                    </div>
+                    </div> -->
                     <div class="tab-content">
 
                         <div class="loading" id="loader" style="display:none;"></div>
@@ -236,47 +249,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="ltn__pagination-area text-center">
-                        <div class="ltn__pagination">
-                            <ul>
-                                <li><a href="javascript:void(0);"><i class="fas fa-angle-double-left"></i></a></li>
-                                <li><a href="javascript:void(0);">1</a></li>
-                                <li class="active"><a href="javascript:void(0);">2</a></li>
-                                <li><a href="javascript:void(0);">3</a></li>
-                                <li><a href="javascript:void(0);">...</a></li>
-                                <li><a href="javascript:void(0);">10</a></li>
-                                <li><a href="javascript:void(0);"><i class="fas fa-angle-double-right"></i></a></li>
-                            </ul>
-                        </div>
-                    </div> -->
-                </div>
-                <div class="col-lg-4">
-                    <aside class="sidebar ltn__shop-sidebar ltn__right-sidebar">
-                        <!-- Category Widget -->
-                        <?php if(isset($categoryData) && $categoryData !== NULL && $categoryData != "") { ?>
-                            <div class="widget ltn__menu-widget">
-                                <h4 class="ltn__widget-title ltn__widget-title-border">Product categories</h4>
-                                <ul id="catList">
-                                    <?php $i=1; foreach($categoryData as $catData) {
-                                        $cls = '';
-                                        if($lastCatId == "") {
-                                            if($i == 1 && $segment1 == 'product') {
-                                                $cls = 'active'; 
-                                            }
-                                        }else if($lastCatId == $catData->category_id) { 
-                                            $cls = 'active'; 
-                                        } ?>
-                                        <li class="categoryClass <?= $cls?>" my-cat="<?php if(isset($catData->category_id) && $catData->category_id !== NULL && $catData->category_id != "") { echo base64_encode($catData->category_id); } else { echo ""; } ?>"><a href="javascript:void(0);"><?php if(isset($catData->category) && $catData->category !== NULL && $catData->category != "") { echo $catData->category; } else { echo ""; } ?> <span><i class="fas fa-long-arrow-alt-right <?= $cls?>"></i></span></a></li>
-                                    <?php $i++; } ?>
-                                </ul>
-                            </div>
-                        <?php } ?>
-                        <!-- Banner Widget -->
-                        <div class="widget ltn__banner-widget">
-                            <a href="<?= site_url('product'); ?>"><img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/banner/banner-2.jpg" alt="#"></a>
-                        </div>
-
-                    </aside>
                 </div>
             </div>
         </div>

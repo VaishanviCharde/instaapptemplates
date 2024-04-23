@@ -6,7 +6,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__breadcrumb-inner ltn__breadcrumb-inner-2 justify-content-between">
                         <div class="section-title-area ltn__section-title-2">
-                            <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6>
+                            <!-- <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6> -->
                             <h1 class="section-title white-color">My Profile</h1>
                         </div>
                         <div class="ltn__breadcrumb-list">
@@ -43,7 +43,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                             <label>Username <span class="error">*&nbsp;</span></label>
-                                <input type="text" name="pro_username" id="pro_username" value="<?php if(isset($customers[0]->customer->username)) { echo $customers[0]->customer->username; } ?>" placeholder="Enter your username" class="form-control" onkeydown="restrictSpaces(event)" required>
+                                <input type="text" name="pro_username" id="pro_username" value="<?php if(isset($customers[0]->customer->username)) { echo $customers[0]->customer->username; } ?>" placeholder="Enter your username" class="form-control" onkeydown="restrictSpaces(event)" readonly required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -61,7 +61,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                             <label>Email <span class="error">*&nbsp;</span></label>
-                                <input type="email" name="pro_email" id="pro_email" value="<?php if(isset($customers[0]->customer->email)) { echo $customers[0]->customer->email; } ?>" placeholder="Enter your email" class="form-control" required>
+                                <input type="email" name="pro_email" id="pro_email" value="<?php if(isset($customers[0]->customer->email)) { echo $customers[0]->customer->email; } ?>" placeholder="Enter your email" class="form-control" readonly required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -76,6 +76,14 @@
                             <button type="submit" class="theme-btn-1 default-btn" id="profileSubmitButton">
                                 <b>Update Profile</b>
                             </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 mt-30">
+                            <a href="<?= site_url('change-password'); ?>"><b>Change Password</b></a>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 mt-30">
+                            <a href="javascript:void(0);" class="error float-right" id="deleteAccount"><b>Delete Account</b></a>
                         </div>
                     </div>
                 </form>

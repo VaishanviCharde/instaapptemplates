@@ -2320,6 +2320,102 @@ class Home21 extends CI_Controller {
 		}
 		/** /. Profile Update */
 
+		/** Change Password */
+		public function changePassword() {
+			$appCommData = $this->checklogin();
+
+			$api = $this->session->userdata('pre_login_data')['url'];
+			$token = $this->session->userdata('pre_login_data')['token'];
+			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+
+			$customerId = 0;
+			if(isset($_SESSION['login_data']['customer_id'])) {
+				$customerId = $_SESSION['login_data']['customer_id'];
+			}
+			
+			if($customerId != 0) {
+					
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/layouts/header');
+				$this->load->view(TEMP_1['TEMP_VIEW_PATH'].'/change_password');
+			} else {
+				redirect("");
+			}
+		}
+
+		public function changePasswordAction() {
+			$old_pass = $this->input->post('old_pass');
+			$new_pass = $this->input->post('new_pass');
+			$conf_pass = $this->input->post('conf_pass');
+
+			$api = $this->session->userdata('pre_login_data')['url'];
+			$token = $this->session->userdata('pre_login_data')['token'];
+			$tempId = $this->session->userdata('pre_login_data')['tempId'];
+			$username = '';
+			if(isset($_SESSION['login_data']['customer_name'])) {
+				$username = $_SESSION['login_data']['customer_name'];
+			}
+			/* Change Password Api */
+			$method = 'POST';
+			$url = $api.'rest-auth/password/reset/confirm/v1/';
+			$header = array(
+				'Content-Type: application/json',
+				'Authorization:  Token '.$token
+			);
+			$data = array("username"=> $username,"old_password"=>$old_pass,"new_password1"=>$new_pass,"new_password2"=>$conf_pass);
+			$details = $this->Home_model21->CallAPI($method, $url, $header, json_encode($data));
+			$apiDecodedResponse = json_decode($details);
+			if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status != 200) {
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 400) {
+					$response['success'] = 2;
+					$response['message'] = 'Old password does not match';
+				} else {
+					$response['success'] = 0;
+					$response['message'] = 'Password does not changed';
+				}
+			} else {
+				$response['success'] = 1;
+				$response['message'] = 'Password changed successfully';
+			}
+			echo json_encode($response);
+		}
+
+		/** /. Change Password */
+
+		/** Delete Account */
+			public function deleteAccountAction() {
+				$api = $this->session->userdata('pre_login_data')['url'];
+				$token = $this->session->userdata('pre_login_data')['token'];
+				$tempId = $this->session->userdata('pre_login_data')['tempId'];
+				$customerId = '';
+				if(isset($_SESSION['login_data']['customer_id'])) {
+					$customerId = $_SESSION['login_data']['customer_id'];
+				}
+
+				/* Change Password Api */
+				$method = 'DELETE';
+				$url = $api.'delete-account/'.$customerId;
+				$header = array(
+					'Content-Type: application/json',
+					'Authorization:  Token '.$token
+				);
+				$details = $this->Home_model21->CallAPI($method, $url, $header);
+				$apiDecodedResponse = json_decode($details);
+				if(isset($apiDecodedResponse->status) && $apiDecodedResponse->status == 200) {
+					$this->session->unset_userdata('total_cost');
+					$this->session->unset_userdata('cartCount');
+					$this->session->unset_userdata('cartId');
+					$this->session->unset_userdata('login_data');
+					
+					$response['success'] = 1;
+					$response['message'] = 'Account deleted successfully';
+				} else {
+					$response['success'] = 0;
+					$response['message'] = 'Failed to delete account';
+				}
+				echo json_encode($response);
+			}
+		/** /. Delete Account */
+
 		/** Logout */
 			public function logout() {
 				// Unset specific userdata items

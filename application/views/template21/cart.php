@@ -6,7 +6,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__breadcrumb-inner ltn__breadcrumb-inner-2 justify-content-between">
                         <div class="section-title-area ltn__section-title-2">
-                            <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6>
+                            <!-- <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6> -->
                             <h1 class="section-title white-color">Cart</h1>
                         </div>
                         <div class="ltn__breadcrumb-list">
@@ -71,6 +71,10 @@
                                             <td width="20%" class="cart-product-subtotal text-center" id="totalPrdPrice"><?= $_SESSION['pre_login_data']['appCurrencySymbol']; ?><?php if(isset($_SESSION['total_cost'])) { echo number_format($_SESSION['total_cost'], 2, '.', ''); } else { echo '0.00'; } ?></td>
                                         </tr>
                                 </tbody>
+                                <?php } else { ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center">No Listings Available</td>
+                                    </tr>
                                 <?php } ?>
                             </table>
                         </div>

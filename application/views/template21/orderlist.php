@@ -6,7 +6,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__breadcrumb-inner ltn__breadcrumb-inner-2 justify-content-between">
                         <div class="section-title-area ltn__section-title-2">
-                            <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6>
+                            <!-- <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6> -->
                             <h1 class="section-title white-color">Orders</h1>
                         </div>
                         <div class="ltn__breadcrumb-list">
@@ -61,7 +61,7 @@
                                     </tr>
                                     <?php $i++; } } else { ?>
                                     <tr>
-                                    <td colspan="6" style="text-align: center;">No Record Found</td>
+                                    <td colspan="7" style="text-align: center;">No Record Found</td>
                                     </tr>
                                     <?php } ?>
                                 </tr>

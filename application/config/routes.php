@@ -91,7 +91,6 @@ $route['delete-cart-item'] = $route['default_controller'].'/deleteCartItem';
 $route['cart'] = $route['default_controller'].'/cartView';
 $route['update-qty'] = $route['default_controller'].'/updateQuantity';
 
-
 $route['checkout'] = $route['default_controller'].'/checkout';
 $route['add-billing-address'] = $route['default_controller'].'/addBillingAddress';
 $route['add-shipping-address'] = $route['default_controller'].'/addShippingAddress';
@@ -101,8 +100,14 @@ $route['orders'] = $route['default_controller'].'/OrderList';
 $route['order-detail/(:any)/(:any)/(:any)/(:any)'] = $route['default_controller'].'/orderDetail/$1/$2/$3/$4';
 
 $route['save-location'] = $route['default_controller'].'/saveLocation';
+
 $route['profile'] = $route['default_controller'].'/profile';
 $route['profile-action'] = $route['default_controller'].'/profileUpdate';
+
+$route['change-password'] = $route['default_controller'].'/changePassword';
+$route['change-password-action'] = $route['default_controller'].'/changePasswordAction';
+
+$route['delete-account-action'] = $route['default_controller'].'/deleteAccountAction';
 
 // $route['book-now-action'] = $route['default_controller'].'/placeOrder';
 /** /. MY Routes */

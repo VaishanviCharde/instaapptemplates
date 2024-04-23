@@ -100,7 +100,7 @@ $(document).ready(function(){
 
     // Sign Up Action
     $("form[name='signup-form']").validate({
-        ignore: "#salutation [value='']",
+        ignore: '',
         rules: {
             salutation: {
                 required: true
@@ -243,7 +243,6 @@ $(document).ready(function(){
                 }
             });
         },
-        focusInvalid: true,
     });
 
     $('#sign_in_modal').on('show.bs.modal', function() {
@@ -752,7 +751,7 @@ $(document).ready(function(){
                     $('#cartCount').html('0');
                     $('.total_cost').html('0.00');
                     $("#totalAmount").val('0.00');
-
+                    window.location.href = site_url;
                 } else {
                     Swal.fire({
                         toast: true,
@@ -838,21 +837,6 @@ $(document).ready(function(){
             }
         });
     });
-
-    // Capture scroll position before opening modal
-    // $('.tab-content').on('click', '.quick_view_button', function() {
-    //     var scrollPosition = $(window).scrollTop();
-    //     // Show the modal
-    //     $('#quick_view_modal').modal('show');
-        
-    //     // Set the scroll position to the current position to prevent scrolling
-    //     $(window).scrollTop(scrollPosition);
-    // });
-
-    // $('#quick_view_modal').on('hidden.bs.modal', function () {
-    //     var scrollPosition = $(window).scrollTop();
-    //     $(window).scrollTop(scrollPosition);
-    // });
 
     /** Quick View Appended Html */
     $('.tab-content').on('click', '.quick_view_button', function() {
@@ -2097,6 +2081,179 @@ $(document).ready(function(){
             });
         } else {
             window.location.href = site_url+'checkout';
+        }
+    });
+
+    // Change Password
+    $("form[name='change-pass-form']").validate({
+        ignore: "#salutation [value='']",
+        rules: {
+            old_pass: {
+                required: true,
+                minlength: 8
+            },
+            new_pass: {
+                required: true,
+                minlength: 8
+            },
+            conf_pass: {
+                required: true,
+                minlength: 8,
+                equalTo: "#new_pass"
+            }
+        },
+        messages: {
+            old_pass: {
+                required: "Please enter a password",
+                minlength: "Password must be at least 8 characters long"
+            },
+            new_pass: {
+                required: "Please enter a new password",
+                minlength: "Password must be at least 8 characters long"
+            },
+            conf_pass: {
+                required: "Please enter the confirm password",
+                minlength: "Password must be at least 8 characters long",
+                equalTo: "Confirm passwords do not match with new password"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        },
+        submitHandler: function(form) {
+            var site_url = $("#site_url").val();
+            var formData = $(form).serialize();
+            $.ajax({
+                url: site_url+"change-password-action",  
+                type: "post", 
+                dataType: 'json',
+                data: formData,
+                success:function(response){
+                    if(response.success == 1) {
+                        $(form).trigger("reset");
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'success',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else if(response.success == 2) {
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            toast: true,
+                            text: response.message,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        toast: true,
+                        text: 'Could not reach server, please try again later.  - '+error,
+                        icon: 'error',
+                        showCloseButton: true,
+                        position: 'bottom',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+    });
+
+    // Delete Account 
+    $(document).on("click", "#deleteAccount", function() {
+        Swal.fire({
+            text: "Are you sure you want to delete your account?",
+            icon: 'error',
+            showCloseButton: true,
+            showConfirmButton: true, // Show the OK button
+            confirmButtonText: 'Delete', // Customize the OK button text
+            position: 'center',
+            timerProgressBar: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let site_url = $("#site_url").val();
+                $.ajax({
+                    url: site_url+"delete-account-action",  
+                    type: "post", 
+                    dataType: 'json',
+                    data: [],
+                    success:function(response){
+                        if(response.success == 1) {
+                            Swal.fire({
+                                toast: true,
+                                text: response.message,
+                                icon: 'success',
+                                showCloseButton: true,
+                                position: 'bottom',
+                                timer: 5000,
+                                timerProgressBar: true,
+                                showConfirmButton: false
+                            });
+                            window.location.href = site_url;
+                        } else {
+                            Swal.fire({
+                                toast: true,
+                                text: response.message,
+                                icon: 'error',
+                                showCloseButton: true,
+                                position: 'bottom',
+                                timer: 5000,
+                                timerProgressBar: true,
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            toast: true,
+                            text: 'Could not reach server, please try again later.  - '+error,
+                            icon: 'error',
+                            showCloseButton: true,
+                            position: 'bottom',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Password toggle
+    $(document).on("click", '.password-toggle', function() {
+        var passwordId = $(this).parent('div').find('input').attr('id');
+        var fieldType = $("#"+passwordId).attr('type');
+        if (fieldType === 'password') {
+            $("#"+passwordId).attr('type', 'text');
+            $(this).removeClass('fa fa-eye');
+            $(this).addClass('fa fa-eye-slash');
+        } else {
+            $("#"+passwordId).attr('type', 'password');
+            $(this).removeClass('fa fa-eye-slash');
+            $(this).addClass('fa fa-eye');
         }
     });
 });

@@ -6,7 +6,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__breadcrumb-inner ltn__breadcrumb-inner-2 justify-content-between">
                         <div class="section-title-area ltn__section-title-2">
-                            <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6>
+                            <!-- <h6 class="section-subtitle ltn__secondary-color">//  Welcome to our company</h6> -->
                             <h1 class="section-title white-color">About Us</h1>
                         </div>
                         <div class="ltn__breadcrumb-list">
@@ -41,7 +41,7 @@
                         <p>sellers who aspire to be good, do good, and spread goodness. We
                                 democratic, self-sustaining, two-sided marketplace which thrives
                                 on trust and is built on community and quality content.</p>
-                        <div class="about-author-info d-flex">
+                        <!-- <div class="about-author-info d-flex">
                             <div class="author-name-designation  align-self-center">
                                 <h4 class="mb-0">Jerry Henson</h4>
                                 <small>/ Shop Director</small>
@@ -49,7 +49,7 @@
                             <div class="author-sign">
                                 <img src="<?= base_url(); ?>assets/<?= TEMPNAME; ?>/img/icons/icon-img/author-sign.png" alt="#">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
