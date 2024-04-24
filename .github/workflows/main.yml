@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      apk_name: shipstore
+      apk_name: Vegestest2
       company_Name: Veggies
-      restaurant_id: 986
-      email: vaishnavi.charde@tissatech.com
+      restaurant_id: 988
+      email: dnyaneshwari.mitkar@tissatech.com,dnyaneshwari.mitkar@tissatech.com
       
     steps:
     - name: 🚚 Get latest code
@@ -24,7 +24,7 @@ jobs:
         server: 148.72.26.110
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: '/shipstore/'
+        server-dir: '/Vegestest2/'
 
     - name: Call API
       run: |
