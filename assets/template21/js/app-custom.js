@@ -502,7 +502,10 @@ $(document).ready(function(){
                         $(form).trigger("reset");
                         $("#cartId").val(response.cartDataId);
                         $('#custId').val(response.customer_id);
-                        $("#loginUsername").html(response.customer_name);
+                        var customerName = response.customer_name;
+                        var truncatedName = customerName.length > 10 ? customerName.substring(0, 10) + "..." : customerName;
+                        $("#loginUsername").html(truncatedName);
+                        // $("#loginUsername").html(response.customer_name);
                         $('#cartCount').html(response.cartCount);
                         $('.total_cost').html(response.total_cost);
                         $("#totalAmount").val(response.total_cost);

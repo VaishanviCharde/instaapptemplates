@@ -719,27 +719,27 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const otpInputs = document.querySelectorAll('.otp-field input');
-            
-            otpInputs.forEach(function (input, index) {
-                input.addEventListener('input', function () {
-                    if (input.value && index < otpInputs.length - 1) {
-                        otpInputs[index + 1].removeAttribute('disabled');
-                        otpInputs[index + 1].focus();
-                    }
-                });
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const otpInputs = document.querySelectorAll('.otp-field input');
+        //     alert(otpInputs);
+        //     otpInputs.forEach(function (input, index) {
+        //         input.addEventListener('input', function () {
+        //             if (input.value && index < otpInputs.length - 1) {
+        //                 otpInputs[index + 1].removeAttribute('disabled');
+        //                 otpInputs[index + 1].focus();
+        //             }
+        //         });
 
-                input.addEventListener('keydown', function (e) {
-                    if (e.key === 'Backspace' && index > 0 && !input.value) {
-                        otpInputs[index - 1].focus();
-                    }
-                });
-            });
+        //         input.addEventListener('keydown', function (e) {
+        //             if (e.key === 'Backspace' && index > 0 && !input.value) {
+        //                 otpInputs[index - 1].focus();
+        //             }
+        //         });
+        //     });
             
-            // Focus on the first input by default
-            otpInputs[0].focus();
-        });
+        //     // Focus on the first input by default
+        //     otpInputs[0].focus();
+        // });
 
         $('#quick_view_modal').on('hidden.bs.modal', function () {
             $(this).find('form').trigger('reset');
@@ -779,5 +779,30 @@
         // Call the function to get location when the page loads
         $(document).ready(function() {
             getLocation();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const otpInputs = document.querySelectorAll('.otp-field input');
+            console.log(otpInputs); // Check if otpInputs is empty or not
+            
+            otpInputs.forEach(function (input, index) {
+                input.addEventListener('input', function () {
+                    if (input.value && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].removeAttribute('disabled');
+                        otpInputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', function (e) {
+                    if (e.keyCode === 8 && index > 0 && !input.value) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+            });
+            
+            // Focus on the first input by default
+            if (otpInputs.length > 0) {
+                otpInputs[0].focus();
+            }
         });
     </script>
